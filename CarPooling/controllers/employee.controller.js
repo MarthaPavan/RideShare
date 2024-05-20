@@ -11,8 +11,7 @@ async function getEmployees(req, res)
             mobilenumber:mobilenumber,
             vehiclemodel:vehiclemodel,
             vehiclenumber:vehiclenumber,
-            verified:verified,
-            active:active
+            verified:verified
         });
         console.log("Inserted to employee collection");
         res.status(200).json(employee);
@@ -21,5 +20,4 @@ async function getEmployees(req, res)
     {
         res.status(404).json({message:"Error in inserting document to employee collection"});
     }
-
 }
