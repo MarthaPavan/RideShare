@@ -2,13 +2,13 @@ import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log('Email:', email, 'Password:', password);
+        console.log('Email:', user, 'Password:', password);
         navigate('/Home');
     };
 
@@ -18,13 +18,13 @@ const Login = () => {
                 <h3 className="card-title text-center">Login</h3>
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">
-                        <label htmlFor="email" className="form-label">Email address</label>
+                        <label htmlFor="email" className="form-label">UserName</label>
                         <input
-                            type="email"
+                            type="text"
                             className="form-control"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            id="user"
+                            value={user}
+                            onChange={(e) => setUser(e.target.value)}
                             required
                         />
                     </div>
