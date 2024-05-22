@@ -5,9 +5,8 @@ async function saveEmployee(req, res)
 {
     try
     {
-        const {_id,userName, password, email, mobileNumber, vehicleModel, vehicleNumber, verified, active} = req.body;
+        const {userName, password, email, mobileNumber, vehicleModel, vehicleNumber, verified, active} = req.body;
         const employee = await employeeModel.create({
-            _id:_id,
             userName:userName,
             password:password,
             email:email,

@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const routeSchema = mongoose.Schema({
-    routeid:{
+    routeId:{
         type:Number,
         required:true
     },
-    startpoint:{
+    startPoint:{
         type:String,
         required:true
     },
-    endpoint:{
+    endPoint:{
         type:String,
         required:true
     },

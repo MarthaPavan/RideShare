@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const employeeSchema = mongoose.Schema({
-    username: {
+    userName: {
         type: String,
         required: true
     },
@@ -12,25 +12,24 @@ const employeeSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    mobilenumber: {
+    mobileNumber: {
         type: Number,
         required: true
     },
-    vehiclemodel: {
+    vehicleModel: {
         type: String,
         required: true
     },
-    vehiclenumber: {
+    vehicleNumber: {
         type: String,
         required: true
     },
     verified: {
         type: Boolean,
-        required: true
+       default : false
     },
     active: {
         type: Boolean,
-        required: true,
         default: false
     }
 });

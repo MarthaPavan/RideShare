@@ -1,24 +1,23 @@
 const mongoose = require("mongoose");
 const customerSchema = mongoose.Schema({
-   customerid:{
+   customerId:{
         type:String,
         required:true
     },
-    customername:{
+    customerName:{
         type:String,
         required:true
     },
-    emailid:{
+    emailId:{
         type:String,
         required:true
     },
-    mobilenumber:{
+    mobileNumber:{
         type:Number,
         required:true
     },
     status:{
         type:Boolean,
-        required:true,
         default:false
     },
 });

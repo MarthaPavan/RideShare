@@ -4,12 +4,12 @@ const Customer = require('../customer.model/customer.model');
 
 
 const bookingSchema = new mongoose.Schema({
-    bookingid: {
+    bookingId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         unique: true
     },
-    customerid: {
+    customerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer'
     },
