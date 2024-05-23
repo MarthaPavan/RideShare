@@ -8,7 +8,7 @@ const NavBar = () => {
 
     return (
         <>
-            <header className="p-3 text-bg-dark">
+            <header className="p-1 text-bg-dark">
                 <div className="container-fluid mb-container">
                     <div className="d-flex align-items-center justify-content-between atstart">
                         <Link to="/" className="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">

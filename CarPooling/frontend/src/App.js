@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './NavBar';
-import Home from './Home';
+import Home from './components/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Login from './Login';
+import Login from './components/Login';
 
 const App = () => {
   return (
