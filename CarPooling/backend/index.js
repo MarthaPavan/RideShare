@@ -3,7 +3,9 @@ const app = express()
 const port = process.env.PORT || 1000
 const connection = require(`./connection/database.connection.js`)
 const gettingStarted = require("./routes/getstarted")
+const cors = require('cors');
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
