@@ -1,15 +1,37 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 const Login = () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log('Email:', user, 'Password:', password);
-        navigate('/Home');
+        setLoading(true);
+        setError('');
+
+        axios.post('http://localhost:1000/get-started/login', {
+            userName: user,
+            password: password
+        }).then((res) => {
+            setLoading(false);
+            console.log('Response:', res);
+
+            if (res.status === 200 && res.data.status === 'success') {
+                localStorage.setItem('token', res.data.token);
+                navigate('/');
+            } else {
+                setError(res.data.msg || 'Login failed');
+            }
+        }).catch(err => {
+            setLoading(false);
+            setError('Error in login');
+            console.log(err);
+        });
     };
 
     return (
@@ -18,7 +40,7 @@ const Login = () => {
                 <h3 className="card-title text-center">Login</h3>
                 <form onSubmit={handleLogin}>
                     <div className="mb-3">
-                        <label htmlFor="email" className="form-label">UserName</label>
+                        <label htmlFor="user" className="form-label">UserName</label>
                         <input
                             type="text"
                             className="form-control"
@@ -39,8 +61,11 @@ const Login = () => {
                             required
                         />
                     </div>
+                    {error && <div className="alert alert-danger">{error}</div>}
                     <div className="d-grid">
-                        <button type="submit" className="btn btn-primary">Login</button>
+                        <button type="submit" className="btn btn-primary" disabled={loading}>
+                            {loading ? 'Logging in...' : 'Login'}
+                        </button>
                     </div>
                 </form>
             </div>
