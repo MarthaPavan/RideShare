@@ -5,42 +5,46 @@ const Home = () => {
             <div className="container ">
                     <br />
                     <br />
-                <div className="row ">
+                    <div className="row">
                     <div className="col-sm-6 city-banner hyd p-5">
                         <h2 className="display-4 text-light mb-5 pb-5">Hyderabad.</h2>
                         <h4 className="text-light">Daily 44000+ People <br />Carpool in Hyderabad</h4>
                         <h6 className="text-light">The future of commuting is here.</h6>
                     </div>
-                <div className="col-sm-6 city-page-data p-5">
-            <div className="row pl-5">
-                <div className="col-sm-3 " align="left" style={{ width: '50%' }}>
-                    <i class="bi bi-car-front-fill qr-opac-50"></i>
+                    <div className="col-sm-6 city-page-data p-5">
+                        <div className="row pl-5">
+                            <div className="col-sm-3" align="left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-people-fill qr-opac-50" viewBox="0 0 16 16">
+                                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                                </svg>
+                            </div>
+                            <div className="col-sm-9">
+                                <h4 className="qr-regular">20 Million +</h4>
+                                <h6 className="qr-green qr-bold">Rides Shared</h6>
+                            </div>
+                        </div>
+                        <div className="row mt-3 pl-5">
+                            <div className="col-sm-3" align="left">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-car-front-fill qr-opac-50" viewBox="0 0 16 16">
+                                    <path d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z"/>
+                                </svg>
+                            </div>
+                            <div className="col-sm-9">
+                                <h4 className="qr-regular">1 Million +</h4>
+                                <h6 className="qr-green qr-bold">Users</h6>
+                            </div>
+                        </div>
+                        <div className="row mt-3 pl-5">
+                            <div className="col-sm-3" align="left">
+                                <img src="https://storage.googleapis.com/quickride-in/images/co2 icon.png" alt="CO2 Icon" className="qr-opac-50" style={{ width: '80%' }} />
+                            </div>
+                            <div className="col-sm-9">
+                                <h4 className="qr-regular">41000 + Tons</h4>
+                                <h6 className="qr-green qr-bold">CO2 Prevented</h6>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="col-sm-9" style={{ width: '50%' }}>
-                <h4 className="qr-regular">20 Million +</h4>
-                <h6 className="qr-green qr-bold">Rides Shared</h6>
-                </div>
-            </div>
-            <div className="row mt-3 pl-5" style={{ marginTop: '50px' }}>
-                <div className="col-sm-3" align="left" style={{ width: '50%' }}>
-                    
-                </div>
-                <div className="col-sm-9" style={{ width: '50%' }}>
-                <h4 className="qr-regular">1 Million +</h4>
-                <h6 className="qr-green qr-bold">Users</h6>
-                </div>
-            </div>
-            <div className="row mt-3 pl-5" style={{ marginTop: '50px' }}>
-                <div className="col-sm-3" align="left" style={{ width: '50%' }}>
-                <img src="https://storage.googleapis.com/quickride-in/images/co2 icon.png" alt="CO2 Icon" className="qr-opac-50" style={{ width: '80%' }} />
-                </div>
-                <div className="col-sm-9" style={{ width: '50%' }}>
-                <h4 className="qr-regular">41000 + Tons</h4>
-                <h6 className="qr-green qr-bold">CO2 Prevented</h6>
-                </div>
-            </div>
-            </div>
-            </div>
             <div className="col-sm-12">
                 <h1 className="mt-5" style={{ fontSize: '32px' }}>Carpooling in Hyderabad</h1>
                 <br />
@@ -229,6 +233,49 @@ const Home = () => {
                     </div>
 
                 </div>
+                <div className="row">
+      <h4 className="col-sm-12 mb-5 mt-5" align="center">Companies Who Support Carpool</h4>
+      <div className="row col-sm-12">
+        <div className="col-sm-2"></div>
+        <div className="col-sm-8">
+          <div className="row">
+            <div className="col-sm-3" align="center">
+              <img src="https://storage.googleapis.com/quickride-in/images/Wipro1.png" alt="Wipro" />  
+            </div> 
+            <div className="col-sm-3" align="center">
+              <img src="https://storage.googleapis.com/quickride-in/images/TCS1.png" alt="TCS" />
+            </div> 
+            <div className="col-sm-3" align="center">
+              <img src="https://storage.googleapis.com/quickride-in/images/Cognizant1.png" alt="Cognizant" />
+            </div>
+            <div className="col-sm-3" align="center">
+              <img src="https://storage.googleapis.com/quickride-in/images/IBM1.png" alt="IBM" />
+            </div> 
+          </div>         
+        </div>
+        <div className="col-sm-2"></div>
+      </div>
+            <div className="row col-sm-12 mt-5">
+                <div className="col-sm-2"></div>
+                <div className="col-sm-8">
+                <div className="row">
+                    <div className="col-sm-3" align="center">
+                    <img src="https://storage.googleapis.com/quickride-in/images/Infosys1.png" alt="Infosys" />  
+                    </div> 
+                    <div className="col-sm-3" align="center">
+                    <img src="https://storage.googleapis.com/quickride-in/images/hcl.jpg" alt="HCL" />
+                    </div> 
+                    <div className="col-sm-3" align="center">
+                    <img src="https://storage.googleapis.com/quickride-in/images/philips.jpg" alt="Philips" />
+                    </div>
+                    <div className="col-sm-3" align="center">
+                    <img src="https://storage.googleapis.com/quickride-in/images/capegemini.jpg" alt="Capegemini" />
+                    </div> 
+                </div>         
+                </div>
+                <div className="col-sm-2"></div>
+            </div>
+            </div>
             </div>
         </div>
         

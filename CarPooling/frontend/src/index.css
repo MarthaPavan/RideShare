@@ -41,9 +41,10 @@ code {
 .hyd{
   background-image: url('../public/images/hyd.jpeg');
   background-position: 0%;
-  box-shadow: black;
+  background-size: cover;
 }
 .hyd:hover{
+  
   opacity: 0.6;
   font-weight: 900;
 }
@@ -57,4 +58,7 @@ code {
 .lead {
   font-size: 1.25rem;
   font-weight: 300;
+}
+.qr-green{
+  color: #25a360;
 }

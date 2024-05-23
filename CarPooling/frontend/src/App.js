@@ -5,6 +5,7 @@ import Home from './components/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons';
 import Login from './components/Login';
+import Footer from './Footer';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Footer/>
     </Router>
   );
 }
