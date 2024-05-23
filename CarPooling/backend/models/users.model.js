@@ -7,7 +7,7 @@ const employeeSchema = new mongoose.Schema({
     required: true,
     default: "",
   },
-  vehicleNumber: {
+  registrationNumber: {
     type: String,
     required: true,
     default: "",
@@ -38,9 +38,9 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isEmployee: {
-    type: Boolean,
-    default: false,
+  isEmployee:{
+    type:Boolean,
+    default:false
   },
   employeeDetails: {
     type: this.isEmployee ? employeeSchema : {},
