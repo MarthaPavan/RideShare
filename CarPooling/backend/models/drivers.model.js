@@ -9,7 +9,11 @@ const driverSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  regNumber: {
+  emailId:{
+    type:String,
+    required:true
+  },
+  registrationNumber: {
     type: String,
     required: true,
   },

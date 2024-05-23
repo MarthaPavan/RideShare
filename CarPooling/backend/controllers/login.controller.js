@@ -1,6 +1,7 @@
 const userModel = require("../models/users.model");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { driverSchema, driverModel } = require("../models/drivers.model");
 //const verifyToken = require("../TokenVerification/token.verification");
 
 class LoginController {
@@ -20,7 +21,7 @@ class LoginController {
         console.log(token);
         const compare = await bcryptjs.compare(password, user.password);
         console.log(compare)
-        if (compare) {
+        if (compare){
              return res.status(200).json({ status: "success", token: token });
         }
         return res.status(200).json({ status: "fail", msg: "Incorrect password" });
@@ -39,7 +40,7 @@ class LoginController {
       const {registrationNumber} = req.body;
       console.log(registrationNumber);
       const valid = await userModel.findOne({'employeeDetails.registrationNumber':registrationNumber});
-      console.log(valid)
+     
       if(valid)
       {
          console.log("vehicle number already exists with other user");
@@ -49,6 +50,16 @@ class LoginController {
         vehicleModel: req.body.vehicleModel,
         registrationNumber: req.body.registrationNumber,
       };
+      const driver = await driverModel.create({
+        driverName:req.body.userName,
+        phoneNumber:req.body.phoneNumber,
+        emailId:req.body.emailId,
+        registrationNumber:req.employeeDetails.registrationNumber,
+        vehicleModel:req.employeeDetails.vehicleModel,
+      });
+      console.log(driver);
+      
+
     }
     try {
       const user = await userModel.findOne({
