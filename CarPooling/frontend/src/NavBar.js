@@ -29,7 +29,7 @@ const NavBar = () => {
 
                             <div className="text-end">
                                 <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>Login</button>
-                                <button type="button" className="btn btn-warning">Sign-up</button>
+                                <button type="button" className="btn btn-warning" onClick={()=> navigate("/SignUp")}>Sign-up</button>
                             </div>
                         </div>
                     </div>

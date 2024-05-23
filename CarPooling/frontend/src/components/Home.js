@@ -6,10 +6,12 @@ const Home = () => {
                     <br />
                     <br />
                     <div className="row">
-                    <div className="col-sm-6 city-banner hyd p-5">
-                        <h2 className="display-4 text-light mb-5 pb-5">Hyderabad.</h2>
-                        <h4 className="text-light">Daily 44000+ People <br />Carpool in Hyderabad</h4>
-                        <h6 className="text-light">The future of commuting is here.</h6>
+                    <div className="col-sm-6 city-banner image-wrapper p-5">
+                        <div className="hyd">
+                            <h2 className="display-4 text-light mb-5 pb-5">Hyderabad.</h2>
+                            <h4 className="text-light">Daily 44000+ People <br />Carpool in Hyderabad</h4>
+                            <h6 className="text-light">The future of commuting is here.</h6>
+                        </div>
                     </div>
                     <div className="col-sm-6 city-page-data p-5">
                         <div className="row pl-5">
@@ -64,7 +66,7 @@ const Home = () => {
                 </div>
                 <div className="col-sm-6 pt-3 pb-3">
                 <div className="card">
-						<p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;
+						<p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;&nbsp;<i class="fas fa-route" style={{fontSize:"25px",color:"green"}}></i>
                         &nbsp;&nbsp;&nbsp;Charminar&nbsp;
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
@@ -78,7 +80,8 @@ const Home = () => {
                 </div>
                 <div className="col-sm-6 pt-3 pb-3">
                     <div className="card">
-						<p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;
+
+						<p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;&nbsp;<i class="fas fa-route" style={{fontSize:"25px",color:"green"}}></i>
                         &nbsp;&nbsp;&nbsp;HayathNagar&nbsp;
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
@@ -92,7 +95,7 @@ const Home = () => {
                 </div>
                 <div className="col-sm-6 pt-3 pb-3">
                     <div className="card">
-                            <p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;
+                            <p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;&nbsp;<i class="fas fa-route" style={{fontSize:"25px",color:"green"}}></i>
                             &nbsp;&nbsp;&nbsp;LB Nagar&nbsp;
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
@@ -106,7 +109,7 @@ const Home = () => {
                 </div>
                 <div className="col-sm-6 pt-3 pb-3">
                 <div className="card">
-						<p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;
+						<p style={{fontWeight:"bold",paddingTop:"20px",fontSize:"20px"}}>&nbsp;&nbsp;&nbsp;<i class="fas fa-route" style={{fontSize:"25px",color:"green"}}></i>
                         &nbsp;&nbsp;&nbsp;Punjagutta&nbsp;
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
@@ -270,10 +273,12 @@ const Home = () => {
                     </div>
                     <div className="col-sm-3" align="center">
                     <img src="https://storage.googleapis.com/quickride-in/images/capegemini.jpg" alt="Capegemini" />
-                    </div> 
-                </div>         
+                    </div>
+
+                </div>  
+                <br />
+                <br />       
                 </div>
-                <div className="col-sm-2"></div>
             </div>
             </div>
             </div>
