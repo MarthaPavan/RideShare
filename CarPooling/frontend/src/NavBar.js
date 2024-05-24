@@ -1,9 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-
-
-const NavBar = () => {
+import { Link, useNavigate } from 'react-router-dom';
+import './App.css';
+const NavBar = ({ status, setStatus }) => {
     const navigate = useNavigate();
 
     return (
@@ -19,23 +17,38 @@ const NavBar = () => {
                         </Link>
 
                         <div className="d-flex align-items-center">
-                            <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                                <li><Link to="/" className="nav-link text-white fs-4">Home</Link></li>
+                            <ul className="nav col-12 col-lg-auto me-lg-auto  justify-content-center mb-md-0">
+                                <li><Link to="/" className="nav-link text-white fs-5 mr-2">Home</Link></li>
+                                <br />
+                                <li><Link to="/About" className="nav-link text-white fs-5 mr-2">About</Link></li>
+                                
                             </ul>
-
-                            <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                           
+                            <form className="col-12 col-lg-auto mb-3 mb-lg-0 ml-5 pl-5 me-lg-3" role="search">
                                 <input type="search" className="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search" />
                             </form>
 
                             <div className="text-end">
-                                <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>Login</button>
-                                <button type="button" className="btn btn-warning">Sign-up</button>
+                                {!status && (
+                                    <>
+                                        <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>
+                                            Login
+                                        </button>
+                                        <button type="button" className="btn btn-warning" onClick={() => navigate("/GetStarted")}>
+                                            Sign-up
+                                        </button>
+                                    </>
+                                )}
+                                {status && (
+                                    <button type="button" className="btn btn-outline-light me-2" onClick={() => setStatus(false)}>
+                                        LogOut
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
-            
         </>
     );
 };

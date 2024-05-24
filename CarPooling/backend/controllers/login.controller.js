@@ -3,30 +3,32 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { driverSchema, driverModel } = require("../models/drivers.model");
 //const verifyToken = require("../TokenVerification/token.verification");
-
+const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
+require("dotenv").config();
 class LoginController {
-  
- // Middleware function to verify JWT token
+  // Middleware function to verify JWT token
   async userLogin(req, res) {
-    try{
+    try {
       const { userName, password } = req.body;
       const user = await userModel.findOne({ userName });
-     // console.log(req.body)
+      // console.log(req.body)
       if (user) {
         //console.log(user);
-        // JWT secret key (should be securely stored)
-        const secretKey = 'MN@1234';
         // Generate JWT
-        const token = jwt.sign({user}, secretKey, { expiresIn: '24h' });
+        const token = jwt.sign({ user }, secretKey, { expiresIn: "24h" });
         console.log(token);
         const compare = await bcryptjs.compare(password, user.password);
-        console.log(compare)
-        if (compare){
-             return res.status(200).json({ status: "success", token: token });
+        console.log(compare);
+        if (compare) {
+          return res.status(200).json({ status: "success", token: token });
         }
-        return res.status(200).json({ status: "fail", msg: "Incorrect password" });
+        return res
+          .status(200)
+          .json({ status: "fail", msg: "Incorrect password" });
       }
-      return res.status(200).json({ status: "fail", msg: "Incorrect username or password" });
+      return res
+        .status(200)
+        .json({ status: "fail", msg: "Incorrect username or password" });
     } catch (err) {
       res.status(500).json({ status: "error", msg: err.message });
     }
@@ -37,29 +39,30 @@ class LoginController {
     console.log(req.body);
     if (req.body.isEmployee) {
       console.log(req.body);
-      const {registrationNumber} = req.body;
+      const { registrationNumber } = req.body;
       console.log(registrationNumber);
-      const valid = await userModel.findOne({'employeeDetails.registrationNumber':registrationNumber});
-     
-      if(valid)
-      {
-         console.log("vehicle number already exists with other user");
-         return res.status(404).json({msg:"vehicle number already exists with other user"});
-       }
+      const valid = await userModel.findOne({
+        "employeeDetails.registrationNumber": registrationNumber,
+      });
+
+      if (valid) {
+        console.log("vehicle number already exists with other user");
+        return res
+          .status(404)
+          .json({ msg: "vehicle number already exists with other user" });
+      }
       req.employeeDetails = {
         vehicleModel: req.body.vehicleModel,
         registrationNumber: req.body.registrationNumber,
       };
       const driver = await driverModel.create({
-        driverName:req.body.userName,
-        phoneNumber:req.body.phoneNumber,
-        emailId:req.body.emailId,
-        registrationNumber:req.employeeDetails.registrationNumber,
-        vehicleModel:req.employeeDetails.vehicleModel,
+        driverName: req.body.userName,
+        phoneNumber: req.body.phoneNumber,
+        emailId: req.body.emailId,
+        registrationNumber: req.employeeDetails.registrationNumber,
+        vehicleModel: req.employeeDetails.vehicleModel,
       });
       console.log(driver);
-      
-
     }
     try {
       const user = await userModel.findOne({
@@ -70,7 +73,10 @@ class LoginController {
         ],
       });
 
-      if (user) return res.status(200).json({ status: "fail", msg: "User already exists" });
+      if (user)
+        return res
+          .status(200)
+          .json({ status: "fail", msg: "User already exists" });
 
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(req.body.password, salt);
