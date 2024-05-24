@@ -5,6 +5,11 @@ class RouteControllers {
 
   //Only admin has the access
   async saveRoute(req, res) {
+    
+    try{
+      const newRoute = routeModel.create(req.body);
+    }
+      
   }
   async editRoute(req, res) { }
 
