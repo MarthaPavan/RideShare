@@ -1,8 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
-    <footer className="footer  mt-auto py-3 bg-dark text-light">
+    <footer className="footer navbar-fixed-bottom mt-auto mb-0 pt-3 bg-dark text-light">
       <div className="container">
         <div className="row">
           {/* About Section */}
@@ -19,6 +19,7 @@ const Footer = () => {
             <ul className="list-unstyled">
               <li><Link href="/home" className="nav-link text-white mr-2">Home</Link></li>
               <li><Link href="/home" className="nav-link text-white mr-2">About</Link></li>
+
             </ul>
           </div>
 
