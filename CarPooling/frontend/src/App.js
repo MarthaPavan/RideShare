@@ -13,6 +13,7 @@ import GetStarted from "./components/GetStarted";
 import ForgotPassword from "./components/ForgotPassword";
 import CreateAccount from "./components/CreateAccount";
 import SignUpSuccess from "./components/SignUpSuccess";
+import JoinUs from "./components/JoinUs";
 const App = () => {
   const [status, setStatus] = useState(false);
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route exact path='/Forgot' element={<ForgotPassword/>}/>
         <Route exact path="/create-account" element={<CreateAccount/>}/>
         <Route exact path="/SignUpSuccess" element={<SignUpSuccess/>}/>
+          <Route exact path="/join" element={<JoinUs/>}/>
       </Routes>
       <Footer />
     </Router>

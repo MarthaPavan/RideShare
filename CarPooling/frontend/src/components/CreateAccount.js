@@ -41,7 +41,9 @@ function CreateAccount() {
         console.log(err);
       });
   };
-  const handleSelect = () => {};
+  const handleSelect = () => {
+    navigate("/Login");
+  };
   return (
     <Container>
       <Row>
@@ -110,7 +112,7 @@ function CreateAccount() {
           <br />
           <p>
             Already an existing user?
-            <Link onClick={handleSelect()}>Login Here</Link>
+            <Link to = "/" onClick={handleSelect}>Login Here</Link>
           </p>
         </Col>
 
