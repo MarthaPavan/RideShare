@@ -8,6 +8,7 @@ import 'bootstrap-icons/font/bootstrap-icons';
 import Login from './components/Login';
 import Footer from './Footer';
 import SignUp from './components/SignUp';
+import About from './components/About';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route exact path='/About' element={<About/>}/>
         <Route exact path="/Login" element={<Login />} />
         <Route exact path='/SignUp' element={<SignUp/>}/>
       </Routes>
