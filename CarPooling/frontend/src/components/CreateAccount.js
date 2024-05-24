@@ -29,10 +29,11 @@ function CreateAccount() {
     await axios
       .post("http://localhost:1000/get-started/signup", form)
       .then((res) => {
-        // console.log("Response:", res);
+        console.log("Response:", res);
         if (res.status === 200 && res.data.status === "success") {
           navigate("/SignUpSuccess");
         } else {
+          alert("FAIL")
           navigate("/");
         }
       })
@@ -44,7 +45,7 @@ function CreateAccount() {
   return (
     <Container>
       <Row>
-        <Col>
+        <Col className="m-3 p-3">
           <form onSubmit={handleSubmit}>
             <h2>Sign Up</h2>
             <p>It's quick and easy.</p>
@@ -54,8 +55,8 @@ function CreateAccount() {
                 name="fullName"
                 placeholder="Full Name"
                 className="form-control"
-                // value={form.fullName}
-                // onChange={handleChange}
+                value={form.fullName}
+                onChange={handleChange}
               />
             </div>
             <div className="mb-3">
@@ -106,6 +107,7 @@ function CreateAccount() {
               Sign Up
             </button>
           </form>
+          <br />
           <p>
             Already an existing user?
             <Link onClick={handleSelect()}>Login Here</Link>

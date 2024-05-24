@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import '../App.css';
 
 const Login = ({ status, setStatus }) => {
     const [user, setUser] = useState('');
@@ -25,6 +26,8 @@ const Login = ({ status, setStatus }) => {
                 localStorage.setItem('token', res.data.token);
                 setStatus(true);
                 navigate('/');
+                
+                
             } else {
                 setError(res.data.msg || 'Login failed');
             }
@@ -36,41 +39,57 @@ const Login = ({ status, setStatus }) => {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center vh-100">
-            <div className="card p-4 shadow" style={{ width: '20rem' }}>
-                <h3 className="card-title text-center">Login</h3>
-                <form onSubmit={handleLogin}>
-                    <div className="mb-3">
-                        <label htmlFor="user" className="form-label">UserName</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="user"
-                            value={user}
-                            onChange={(e) => setUser(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    {error && <div className="alert alert-danger">{error}</div>}
-                    <div className="d-grid">
-                        <button type="submit" className="btn btn-primary" disabled={loading}>
-                            {loading ? 'Logging in...' : 'Login'}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <Container fluid className="d-flex align-items-center justify-content-center vh-100">
+            <Row>
+                <Col className='m-5 p-5'>
+                    <h1>Image here</h1>
+                </Col>
+                
+                <Col className='mt-4 pt-3'>
+                    <h1 className='display-6 h1-border'>Login</h1>
+                    <br />
+                    <Form onSubmit={handleLogin}>
+                        <Form.Group controlId="user" className="mb-3">
+                            <Form.Label>UserName</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={user}
+                                onChange={(e) => setUser(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="password" className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <p>
+                                <Link to="/forgot" className="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
+                                    Forgot Password?
+                                </Link>
+                            </p>
+                        </Form.Group>
+                        {error && <Alert variant="danger">{error}</Alert>}
+                        <div className="d-grid">
+                            <Button type="submit" variant="primary" disabled={loading}>
+                                {loading ? 'Logging in...' : 'Login'}
+                            </Button>
+                        </div>
+                        <Form.Group>
+                            <p className="text-dark m-2">Don't have an account?</p>
+                            <Link to="/signup" className="d-flex align-items-center m-2 mb-lg-0 text-decoration-none">
+                                Sign Up
+                            </Link>
+                        </Form.Group>
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

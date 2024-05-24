@@ -27,10 +27,10 @@ const Footer = () => {
           <div className="col-md-4 mb-3">
             <br />
             <h5>Follow Us</h5>
-            <Link to="https://facebook.com" className="nav-link text-white mr-2"><i className="fab fa-facebook"></i> Facebook</Link><br />
-            <Link href="https://twitter.com" className="nav-link text-white mr-2"><i className="fab fa-twitter"></i> Twitter</Link><br />
-            <Link href="https://instagram.com" className="nav-link text-white mr-2"><i className="fab fa-instagram"></i> Instagram</Link><br />
-            <Link href="https://linkedin.com" className="nav-link text-white mr-2"><i className="fab fa-linkedin"></i> LinkedIn</Link>
+            <Link to="https://facebook.com" className="nav-link text-white mr-2 mb-1"><i className="fab fa-facebook"></i> Facebook</Link>
+            <Link href="https://twitter.com" className="nav-link text-white mr-2 mb-1"><i className="fab fa-twitter"></i> Twitter</Link>
+            <Link href="https://instagram.com" className="nav-link text-white mr-2 mb-1"><i className="fab fa-instagram"></i> Instagram</Link>
+            <Link href="https://linkedin.com" className="nav-link text-white mr-2 mb-1"><i className="fab fa-linkedin"></i> LinkedIn</Link>
           </div>
         </div>
 
