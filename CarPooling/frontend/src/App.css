@@ -3,3 +3,14 @@
     background-color: #e9ecef; 
     border-color: #000;
   }
+  Link{
+    text-decoration: none;
+    text-align: center;
+}
+.h1-border {
+  margin-top: 0;
+  padding-bottom: 8px;
+  border-bottom: 5px solid #343a40;
+  display: inline-block; 
+  margin-bottom: 20px;
+}
