@@ -48,6 +48,28 @@ const Home = () => {
         <Col>
             <h3>Why choose us?</h3>
         </Col>
+        <Row className='mb-5 pb-3'>
+            <Col>
+                <Image src='/images/person_leaving_car.jpg' fluid/>
+            </Col>
+            <Col>
+                <p className='mt-5 pt-5'>
+                    We are one of the biggest carpool network in hyderabad and in Telangana.
+                </p>
+            </Col>
+
+        </Row>
+        <hr className='custom-hr'/>
+        <Row>
+            <Col className='m-5 p-5'>
+                <h1 >
+                    RideShare is one platform where you can earn and have a chance to make connections with various people.
+                </h1>
+            </Col>
+            <Col>
+                <Image src='/images/rent.jpg' fluid/>
+            </Col>
+        </Row>
       </Row>
     </Container>
   );
