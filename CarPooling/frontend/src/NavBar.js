@@ -2,8 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-
-const NavBar = () => {
+const NavBar = ({ status, setStatus }) => {
     const navigate = useNavigate();
 
     return (
@@ -29,14 +28,26 @@ const NavBar = () => {
                             </form>
 
                             <div className="text-end">
-                                <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>Login</button>
-                                <button type="button" className="btn btn-warning" onClick={() => navigate("/GetStarted")}>Sign-up</button>
+                                {!status && (
+                                    <>
+                                        <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>
+                                            Login
+                                        </button>
+                                        <button type="button" className="btn btn-warning" onClick={() => navigate("/GetStarted")}>
+                                            Sign-up
+                                        </button>
+                                    </>
+                                )}
+                                {status && (
+                                    <button type="button" className="btn btn-outline-light me-2" onClick={() => setStatus(false)}>
+                                        LogOut
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
-
         </>
     );
 };

@@ -35,8 +35,9 @@ const Footer = () => {
         </div>
 
         <div className="row">
-          <div className="col-12 text-center mt-3">
-            <span className="text-muted">RideShare &copy; {new Date().getFullYear()}</span>
+          <div className="col-12 text-center mt-2 mb-4">
+            <span className="text-light">RideShare &copy; {new Date().getFullYear()}</span>
+            
           </div>
         </div>
       </div>
