@@ -18,6 +18,7 @@ import AdminDashBoard from "./components/AdminDashBoard";
 import EmployeeDashBoard from "./components/EmployeeDashBoard";
 import UserDashBoard from "./components/UserDashBoard";
 
+import JoinUs from "./components/JoinUs";
 const App = () => {
   const [status, setStatus] = useState(false);
   return (
@@ -34,6 +35,7 @@ const App = () => {
         <Route exact path="/AdminDashBoard" element={<AdminDashBoard/>}/>
         <Route exact path="/EmployeeDashBoard" element={<EmployeeDashBoard/>}/>
         <Route exact path="/UserDashBoard" element={<UserDashBoard/>}/>
+          <Route exact path="/join" element={<JoinUs/>}/>
       </Routes>
       <Footer />
     </Router>
