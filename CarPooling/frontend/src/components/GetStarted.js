@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState} from "react";
+import { useNavigate,Link } from "react-router-dom";
 import { Container, Row, Col, ListGroup, Button } from "react-bootstrap";
+import '../App.css'; 
 
 export default function GetStarted() {
     const [select, setSelect] = useState(-1);
     const navigate = useNavigate();
 
-    const handleSelect = (index) => {
-        setSelect(index);
-        console.log(select)
-    };
+    
 
     const handleClick = () => {
-        if (select === -1)
-            navigate("/")
-        const link = "/" + (select === 0 ? "join" : "create-account");
-        navigate(link);
+        if (select === -1) {
+            navigate("/");
+        } else {
+            const link = "/" + (select === 0 ? "join" : "create-account");
+            navigate(link);
+        }
     };
 
     return (
@@ -27,30 +27,24 @@ export default function GetStarted() {
                     <ListGroup as="ul" className="mb-5">
                         <ListGroup.Item
                             as="li"
-                            className={`d-flex justify-content-between align-items-start ${select === 0 ? "selected" : ""
-                                }`}
-                            onClick={() => handleSelect(0)}
+                            className={`d-flex justify-content-between align-items-start ${select === 0 ? "selected" : ""}`}
+                            onClick={() => setSelect(0)}
                         >
-                            <Link to="#" className="text-decoration-none text-dark">
-                                <div className="ms-2 me-auto">
-                                    <div className="fw-bold p-1">I am here to give a ride</div>
-                                    Help us in creating an impact
-                                </div>
-                            </Link>
+                            <div className="ms-2 me-auto">
+                                <div className="fw-bold p-1">I am here to give a ride</div>
+                                <Link to="#" className="text-decoration-none text-dark">Help us in creating an impact</Link>
+                            </div>
                         </ListGroup.Item>
                         <br />
                         <ListGroup.Item
                             as="li"
-                            className={`d-flex justify-content-between align-items-start `}
-                            style={{ border: "1px solid black" }}
-                            onClick={() => handleSelect(1)}
+                            className={`d-flex justify-content-between align-items-start ${select === 1 ? "selected" : ""}`}
+                            onClick={() => setSelect(1)}
                         >
-                            <Link to="#" className="text-decoration-none text-dark">
-                                <div className="ms-2 me-auto">
-                                    <div className="fw-bold p-1">I want a ride</div>
-                                    Sign Up to ride
-                                </div>
-                            </Link>
+                            <div className="ms-2 me-auto">
+                                <div className="fw-bold p-1">I want a ride</div>
+                                <Link to="#" className="text-decoration-none text-dark">Sign Up to ride</Link>
+                            </div>
                         </ListGroup.Item>
                     </ListGroup>
                     <div className="d-flex align-items-end">

@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons';
 import Login from './components/Login';
 import Footer from './Footer';
-import SignUp from './components/SignUp';
 import About from './components/About';
 import GetStarted from './components/GetStarted';
 const App = () => {

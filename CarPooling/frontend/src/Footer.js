@@ -18,6 +18,7 @@ const Footer = () => {
             <h5>Quick Links</h5>
             <ul className="list-unstyled">
               <li><Link href="/home" className="nav-link text-white mr-2">Home</Link></li>
+              <li><Link href="/home" className="nav-link text-white mr-2">About</Link></li>
 
             </ul>
           </div>

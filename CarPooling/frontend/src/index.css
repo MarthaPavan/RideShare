@@ -8,9 +8,7 @@
 
 }
 
-.selected {
-  border: 20px solid black;
-}
+
 
 .title {
   margin-top: 20px;
@@ -112,8 +110,13 @@ code {
   opacity: 1;
   visibility: visible;
 }
-
-Link {
-  text-decoration: none;
-  text-align: center;
+Link{
+    text-decoration: none;
+    text-align: center;
 }
+.custom-hr {
+  border-top: 1px solid slategray;
+}
+
+
+

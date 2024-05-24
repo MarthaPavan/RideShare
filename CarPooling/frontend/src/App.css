@@ -1,1 +1,5 @@
 
+.selected {
+    background-color: #e9ecef; 
+    border-color: #000;
+  }
