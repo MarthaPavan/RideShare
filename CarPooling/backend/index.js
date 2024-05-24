@@ -9,9 +9,12 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/get-started",gettingStarted);
 
+
+app.use("/get-started",gettingStarted);
 app.get("/",(req,res)=>{
     res.send("<h1>HomePage</h1>");
-})
+});
+
+
 app.listen(port,()=>console.log(`Server running on port ${port}`));
