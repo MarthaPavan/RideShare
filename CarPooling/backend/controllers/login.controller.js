@@ -15,9 +15,7 @@ class LoginController {
       if (user) {
         //console.log(user);
         // Generate JWT
-        const token = jwt.sign({ user }, SECRET_KEY, {
-          expiresIn: "24h",
-        });
+        const token = jwt.sign({ user }, secretKey, { expiresIn: "24h" });
         console.log(token);
         const compare = await bcryptjs.compare(password, user.password);
         console.log(compare);

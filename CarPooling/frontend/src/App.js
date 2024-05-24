@@ -9,21 +9,16 @@ import Login from "./components/Login";
 import Footer from "./Footer";
 import About from "./components/About";
 import GetStarted from "./components/GetStarted";
-import CreateAccount from "./components/PassengerSignUp";
-import JoinUs from "./components/JoinUs";
-import SignUpSuccess from "./components/SignUpSuccess";
 const App = () => {
+  const [status, setStatus] = useState(false);
   return (
     <Router>
-      <NavBar />
+      <NavBar status={status} setStatus={setStatus} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route exact path="/About" element={<About />} />
         <Route exact path="/Login" element={<Login />} />
         <Route exact path="/GetStarted" element={<GetStarted />} />
-        <Route exact path="/create-account" element={<CreateAccount />} />
-        <Route exact path="/join" element={<JoinUs />} />
-        <Route exact path="/SignUpSuccess" element={<SignUpSuccess />} />
       </Routes>
       <Footer />
     </Router>
