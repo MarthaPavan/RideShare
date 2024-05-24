@@ -9,18 +9,18 @@ import Login from './components/Login';
 import Footer from './Footer';
 import SignUp from './components/SignUp';
 import About from './components/About';
-
+import GetStarted from './components/GetStarted';
 const App = () => {
   return (
     <Router>
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route exact path='/About' element={<About/>}/>
+        <Route exact path='/About' element={<About />} />
         <Route exact path="/Login" element={<Login />} />
-        <Route exact path='/SignUp' element={<SignUp/>}/>
+        <Route exact path='/GetStarted' element={<GetStarted />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </Router>
   );
 }

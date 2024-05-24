@@ -22,6 +22,5 @@ const routeSchema = mongoose.Schema({
     default: [],
   },
 });
-
 const routeModel = mongoose.model("route", routeSchema);
 module.exports = routeModel;
