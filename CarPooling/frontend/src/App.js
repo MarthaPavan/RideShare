@@ -46,7 +46,7 @@ const App = () => {
           <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
           {/* Protected Admin Routes */}
           <Route element={<AdminRoutes />}>
-            
+
           </Route>
 
           {/* Protected Employee Routes */}
