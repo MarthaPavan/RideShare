@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './App.css';
-const NavBar = ({ status, setStatus }) => {
+const NavBar = () => {
     const navigate = useNavigate();
 
     return (
         <>
             <header className="p-1 text-bg-dark">
                 <div className="container-fluid mb-container">
+                    
                     <div className="d-flex align-items-center justify-content-between atstart">
                         <Link to="/" className="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-car-front-fill slide-in" viewBox="0 0 16 16">
@@ -29,7 +30,7 @@ const NavBar = ({ status, setStatus }) => {
                             </form>
 
                             <div className="text-end">
-                                {!status && (
+                                
                                     <>
                                         <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>
                                             Login
@@ -38,12 +39,8 @@ const NavBar = ({ status, setStatus }) => {
                                             Sign-up
                                         </button>
                                     </>
-                                )}
-                                {status && (
-                                    <button type="button" className="btn btn-outline-light me-2" onClick={() => setStatus(false)}>
-                                        LogOut
-                                    </button>
-                                )}
+                                
+                                
                             </div>
                         </div>
                     </div>

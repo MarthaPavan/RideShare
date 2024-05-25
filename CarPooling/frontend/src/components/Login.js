@@ -1,48 +1,51 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
+import { Container, Row, Col, Form, Button, Alert,Image } from 'react-bootstrap';
+import { useAuth } from '../routes/AuthContext';
 import '../App.css';
 
-const Login = ({ status, setStatus }) => {
+const Login = () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const auth = useAuth();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
-        axios.post('http://localhost:1000/get-started/login', {
-            userName: user,
-            password: password,
-        })
-        .then((res) => {
-            setLoading(false);
-            if (res.status === 200 && res.data.status === 'success') {
-                localStorage.setItem('token', res.data.token);
-                setStatus(true);
-                navigate('/');
-                
-                
-            } else {
-                setError(res.data.msg || 'Login failed');
+        try {
+            await auth.loginAction({ user, password });
+            const link = ()=>{
+                if(localStorage.role === "admin"){
+                    return "/AdminDashBoard"; 
+                }
+                else if(localStorage.role === "driver"){
+                    return "/EmployeeDashBoard";
+                }
+                else if(localStorage.role === "customer"){
+                    return "/UserDashBoard";
+                }
             }
-        })
-        .catch((err) => {
+            navigate(link); 
+        } catch (err) {
+            setError('Invalid username or password');
             setLoading(false);
-            setError('Error in login');
-        });
+        }
     };
 
     return (
         <Container fluid className="d-flex align-items-center justify-content-center vh-100">
             <Row>
                 <Col className='m-5 p-5'>
-                    <h1>Image here</h1>
+                        <Image
+                    src={"/images/login_page_image.jpg"}
+                    alt="People around a car"
+                    fluid
+                />
                 </Col>
                 
                 <Col className='mt-4 pt-3'>
@@ -82,7 +85,7 @@ const Login = ({ status, setStatus }) => {
                         </div>
                         <Form.Group>
                             <p className="text-dark m-2">Don't have an account?</p>
-                            <Link to="/signup" className="d-flex align-items-center m-2 mb-lg-0 text-decoration-none">
+                            <Link to="/GetStarted" className="d-flex align-items-center m-2 mb-lg-0 text-decoration-none">
                                 Sign Up
                             </Link>
                         </Form.Group>

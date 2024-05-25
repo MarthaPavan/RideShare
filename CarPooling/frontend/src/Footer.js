@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return (
     <footer className="footer navbar-fixed-bottom mt-auto mb-0 pt-3 bg-dark text-light">
@@ -17,9 +18,10 @@ const Footer = () => {
             <br />
             <h5>Quick Links</h5>
             <ul className="list-unstyled">
-              <li><Link href="/home" className="nav-link text-white mr-2">Home</Link></li>
-              <li><Link href="/home" className="nav-link text-white mr-2">About</Link></li>
-
+              <li><Link to={"/Home"} className="nav-link text-white mr-2 mb-1">Home</Link></li>
+              <li><Link to={"/About"} className="nav-link text-white mr-2 mb-1">About</Link></li>
+              <li><Link to={"/Login"} className="nav-link text-white mr-2 mb-1">Login</Link></li>
+              <li><Link to={"/GetStarted"} className="nav-link text-white mr-2 mb-1">SignUp</Link></li>
             </ul>
           </div>
 
