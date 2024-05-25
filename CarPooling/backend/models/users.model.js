@@ -1,54 +1,24 @@
 const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
 
-const employeeSchema = new mongoose.Schema({
-  vehicleModel: {
+const userSchema = mongoose.Schema({
+  fullName: {
     type: String,
-    required: true,
-    default: "",
-  },
-  registrationNumber: {
-    type: String,
-    required: true,
-    default: "",
-  },
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const usersSchema = new mongoose.Schema({
-  userName: {
-    type: String,
-    required: true,
-    unique: true,
+    required: true
   },
   emailId: {
     type: String,
     required: true,
-    unique: true,
+    unique: [true, "emailId already exists"]
   },
   phoneNumber: {
     type: Number,
     required: true,
-    unique: true,
+    unique: [true, "phone number already exists"]
   },
   password: {
     type: String,
-    required: true,
-  },
-  isEmployee:{
-    type:Boolean,
-    default:false
-  },
-  employeeDetails: {
-    type: this.isEmployee ? employeeSchema : {},
-  },
+    required: true
+  }
 });
-
-
-const userModel = mongoose.model("user", usersSchema);
-
-
+const userModel = mongoose.model("user", userSchema);
 module.exports = userModel;

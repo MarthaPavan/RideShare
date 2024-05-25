@@ -22,12 +22,12 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route exact path="/About" element={<About />} />
-        <Route exact path="/Login" element={<Login status={status} setStatus={setStatus}/>} />
+        <Route exact path="/Login" element={<Login status={status} setStatus={setStatus} />} />
         <Route exact path="/GetStarted" element={<GetStarted />} />
-        <Route exact path='/Forgot' element={<ForgotPassword/>}/>
-        <Route exact path="/create-account" element={<CreateAccount/>}/>
-        <Route exact path="/SignUpSuccess" element={<SignUpSuccess/>}/>
-          <Route exact path="/join" element={<JoinUs/>}/>
+        <Route exact path='/Forgot' element={<ForgotPassword />} />
+        <Route exact path="/create-account" element={<CreateAccount />} />
+        <Route exact path="/SignUpSuccess" element={<SignUpSuccess />} />
+        <Route exact path="/join" element={<JoinUs />} />
       </Routes>
       <Footer />
     </Router>

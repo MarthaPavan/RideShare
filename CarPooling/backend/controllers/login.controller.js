@@ -1,99 +1,205 @@
-const userModel = require("../models/users.model");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { driverSchema, driverModel } = require("../models/drivers.model");
-//const verifyToken = require("../TokenVerification/token.verification");
+
+
+const existingUsers = require("../middlewares/existinguser")
+const userModel = require("../models/users.model");
+const driverModel = require("../models/drivers.model");
+const adminModel = require("../models/admin.model");
+
+
+
+
 const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
 require("dotenv").config();
+
+
 class LoginController {
-  // Middleware function to verify JWT token
+
+
+
+
   async userLogin(req, res) {
+
+    const { emailId, password } = req.body;
+
+
     try {
-      const { userName, password } = req.body;
-      const user = await userModel.findOne({ userName });
-      // console.log(req.body)
-      if (user) {
-        //console.log(user);
-        // Generate JWT
-        const token = jwt.sign({ user }, secretKey, { expiresIn: "24h" });
-        console.log(token);
-        const compare = await bcryptjs.compare(password, user.password);
-        console.log(compare);
+
+
+      if (req.body.isAdmin) {
+        //if admin
+
+        const admin = await adminModel.findOne({ emailId: emailId });
+        console.log(admin)
+        console.log(admin.password);
+
+        const compare = await bcryptjs.compare(password, admin.password);
+
         if (compare) {
-          return res.status(200).json({ status: "success", token: token });
+
+
+          const token = jwt.sign({ admin }, SECRET_KEY, { expiresIn: "24h" });
+
+          console.log(token);
+
+          return res.status(200).json({ role: "admin", token: token });
         }
-        return res
-          .status(200)
-          .json({ status: "fail", msg: "Incorrect password" });
+        else {
+          return res.status(500).json({ msg: "admin does not exists" });
+        }
+
       }
-      return res
-        .status(200)
-        .json({ status: "fail", msg: "Incorrect username or password" });
-    } catch (err) {
-      res.status(500).json({ status: "error", msg: err.message });
+      else if (req.body.isEmployee) {
+        //if driver
+
+        const user = await driverModel.findOne({ emailId });
+
+        const compare = await bcryptjs.compare(password, user.password);
+
+        if (compare) {
+
+          const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: "24h" });
+
+          console.log(token);
+
+          return res.status(200).json({ role: "driver", token: token });
+
+        }
+        else {
+
+          return res.status(500).json({ msg: "driver does not exists" });
+
+        }
+
+      }
+      else {
+        //user
+
+        const user = await userModel.findOne({ emailId: emailId });
+        console.log(user);
+        const compare = await bcryptjs.compare(password, user.password);
+
+        if (compare) {
+
+          const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: "24h" });
+
+          console.log(token);
+
+          return res.status(200).json({ role: "user", token: token });
+
+        }
+        else {
+
+          return res.status(500).json({ msg: "user does not exists" });
+
+        }
+
+      }
+
     }
+    catch (err) {
+
+      res.status(500).json({ msg: err.message });
+
+    }
+
   }
 
+
+
   async userRegister(req, res) {
-    req.employeeDetails = {};
-    console.log(req.body);
-    if (req.body.isEmployee) {
-      console.log(req.body);
-      const { registrationNumber } = req.body;
-      console.log(registrationNumber);
-      const valid = await userModel.findOne({
-        "employeeDetails.registrationNumber": registrationNumber,
-      });
-
-      if (valid) {
-        console.log("vehicle number already exists with other user");
-        return res
-          .status(404)
-          .json({ msg: "vehicle number already exists with other user" });
-      }
-      req.employeeDetails = {
-        vehicleModel: req.body.vehicleModel,
-        registrationNumber: req.body.registrationNumber,
-      };
-      const driver = await driverModel.create({
-        driverName: req.body.userName,
-        phoneNumber: req.body.phoneNumber,
-        emailId: req.body.emailId,
-        registrationNumber: req.employeeDetails.registrationNumber,
-        vehicleModel: req.employeeDetails.vehicleModel,
-      });
-      console.log(driver);
-    }
     try {
-      const user = await userModel.findOne({
-        $or: [
-          { userName: req.body.userName },
-          { emailId: req.body.emailId },
-          { phoneNumber: req.body.phoneNumber },
-        ],
-      });
 
-      if (user)
-        return res
-          .status(200)
-          .json({ status: "fail", msg: "User already exists" });
+      //if user is Admin
+      if (req.body.isAdmin) {
 
-      const salt = await bcryptjs.genSalt(10);
-      const hashedPassword = await bcryptjs.hash(req.body.password, salt);
 
-      const newUser = await userModel.create({
-        userName: req.body.userName,
-        emailId: req.body.emailId,
-        phoneNumber: req.body.phoneNumber,
-        password: hashedPassword,
-        isEmployee: req.body.isEmployee,
-        employeeDetails: req.employeeDetails,
-      });
-      return res.status(200).json({ status: "success", user: newUser });
-    } catch (err) {
-      res.status(500).json({ status: "error", msg: err.message });
+        if (existingUsers.existingAdmin) {
+
+
+          const { fullName, emailId, phoneNumber, password } = req.body;
+          const salt = await bcryptjs.genSalt(10);
+          const hashedPassword = await bcryptjs.hash(password, salt);
+
+          const admin = await adminModel.create({
+
+            fullName: fullName,
+            emailId: emailId,
+            phoneNumber: phoneNumber,
+            password: hashedPassword
+
+          });
+
+          return res.status(200).json({ msg: "success", admin: admin });
+
+
+        }
+
+
+      }
+      //if user is driver
+      else if (req.body.isEmployee) {
+
+
+        if (existingUsers.existingDriver) {
+
+
+          const { fullName, emailId, phoneNumber, password, registrationNumber, vehicleModel, isVerified } = req.body;
+          const salt = await bcryptjs.genSalt(10);
+          const hashedPassword = await bcryptjs.hash(password, salt);
+
+          const driver = await driverModel.create({
+
+            fullName: fullName,
+            emailId: emailId,
+            phoneNumber: phoneNumber,
+            password: hashedPassword,
+            registrationNumber: registrationNumber,
+            vehicleModel: vehicleModel,
+            isVerified: isVerified
+
+          });
+
+          return res.status(200).json({ msg: "success", driver: driver });
+
+
+        }
+      }
+      else {
+
+
+        if (existingUsers.existingUser) {
+
+
+          const { fullName, emailId, phoneNumber, password } = req.body;
+          const salt = await bcryptjs.genSalt(10);
+          const hashedPassword = await bcryptjs.hash(password, salt);
+
+          const user = await userModel.create({
+
+            fullName: fullName,
+            emailId: emailId,
+            phoneNumber: phoneNumber,
+            password: hashedPassword
+
+          });
+
+          return res.status(200).json({ msg: "success", user: user });
+
+        }
+
+
+      }
+
+
+
+    }
+    catch (err) {
+      return res.status(500).json({ msg: err.message });
     }
   }
 }
 
-module.exports = new LoginController();
+
+module.exports = new LoginController()
