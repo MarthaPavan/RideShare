@@ -1,18 +1,27 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Row, Col, Button, FormControl, InputGroup, Form } from "react-bootstrap";
+import { Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  FormControl,
+  InputGroup,
+  Form,
+} from "react-bootstrap";
 import axios from "axios";
 
 const JoinUs = () => {
   const [form, setForm] = React.useState({
-    // fullName: "",
+    fullName: "",
     userName: "",
     emailId: "",
     isEmployee: true,
     password: "",
     phoneNumber: "",
     vehicleType: "",
-    vehicleNumber: ""
+    vehicleNumber: "",
   });
 
   const navigate = useNavigate();
@@ -59,7 +68,7 @@ const JoinUs = () => {
                 name="fullName"
                 placeholder="Enter full name"
                 value={form.fullName}
-                //onChange={handleChange}
+                onChange={handleChange}
               ></Form.Control>
               <br />
               <Form.Control
@@ -119,16 +128,23 @@ const JoinUs = () => {
           <br />
           <div className={"text-start"}>
             Already an existing user{" "}
-            <Link to="#" onClick={handleClick}>
+            <Link to="/Login" onClick={handleClick}>
               Login Here
             </Link>
           </div>
           <br />
-          <Button variant="primary" className="align-items-end" onClick={handleSignUp} type="submit">
+          <Button
+            variant="primary"
+            className="align-items-end"
+            onClick={handleSignUp}
+            type="submit"
+          >
             Register
           </Button>
         </Col>
-        <Col></Col>
+        <Col className="align-middle">
+          <Image src="/images/driver_signup_page.jpg" fluid />
+        </Col>
       </Row>
     </Container>
   );

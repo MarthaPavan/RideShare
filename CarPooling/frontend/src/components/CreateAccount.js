@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Image } from "react-bootstrap";
+
 import axios from "axios";
+
 function CreateAccount() {
   // const [error, setError] = useState("");
   // const [loading, setLoading] = useState(false);
@@ -33,7 +35,7 @@ function CreateAccount() {
         if (res.status === 200 && res.data.status === "success") {
           navigate("/SignUpSuccess");
         } else {
-          alert("FAIL")
+          alert("FAIL");
           navigate("/");
         }
       })
@@ -41,11 +43,8 @@ function CreateAccount() {
         console.log(err);
       });
   };
-  const handleSelect = () => {
-    navigate("/Login");
-  };
   return (
-    <Container>
+    <Container fluid>
       <Row>
         <Col className="m-3 p-3">
           <form onSubmit={handleSubmit}>
@@ -112,11 +111,12 @@ function CreateAccount() {
           <br />
           <p>
             Already an existing user?
-            <Link to = "/" onClick={handleSelect}>Login Here</Link>
+            <Link to="/Login">Login Here</Link>
           </p>
         </Col>
-
-        <Col>Hello</Col>
+        <Col>
+          <Image src="/images/user_signup.jpg" fluid />
+        </Col>
       </Row>
     </Container>
   );

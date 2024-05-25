@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert,Image } from 'react-bootstrap';
 import { useAuth } from '../routes/AuthContext';
 import '../App.css';
 
@@ -41,7 +41,11 @@ const Login = () => {
         <Container fluid className="d-flex align-items-center justify-content-center vh-100">
             <Row>
                 <Col className='m-5 p-5'>
-                    <h1>Image here</h1>
+                        <Image
+                    src={"/images/login_page_image.jpg"}
+                    alt="People around a car"
+                    fluid
+                />
                 </Col>
                 
                 <Col className='mt-4 pt-3'>
