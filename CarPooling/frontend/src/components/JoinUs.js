@@ -142,8 +142,10 @@ const JoinUs = () => {
             Register
           </Button>
         </Col>
-        <Col className="align-middle">
-          <Image src="/images/driver_signup_page.jpg" fluid />
+        <Col className=" m-4 p-3">
+          <br />
+          <br />
+          <Image className="m-5 =-5"  src="/images/driver_signup_page.jpg" fluid />
         </Col>
       </Row>
     </Container>

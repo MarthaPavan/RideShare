@@ -1,14 +1,11 @@
 import React, { useState} from "react";
 import { useNavigate,Link } from "react-router-dom";
 import { Container, Row, Col, ListGroup, Button } from "react-bootstrap";
-import '../GetStarted.css';
+import './GetStarted.css';
 
 export default function GetStarted() {
     const [select, setSelect] = useState(-1);
     const navigate = useNavigate();
-
-    
-
     const handleClick = () => {
         if (select === -1) {
             navigate("/");

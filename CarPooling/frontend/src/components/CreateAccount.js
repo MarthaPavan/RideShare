@@ -114,7 +114,7 @@ function CreateAccount() {
             <Link to="/Login">Login Here</Link>
           </p>
         </Col>
-        <Col>
+        <Col className="m-5 p-5">
           <Image src="/images/user_signup.jpg" fluid />
         </Col>
       </Row>

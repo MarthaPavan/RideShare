@@ -38,11 +38,40 @@ Link{
   transform: scaleX(1 );
   transform-origin: bottom left;
 }
-/* App.css */
-.full-height {
-  height: 100vh;
-}
+
 
 .stack-full-height {
   height: 100%;
+  position: relative;
+}
+
+/* App.css */
+.full-height {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-left: 200px; /* Adjust based on the width of your sidebar */
+}
+
+.fixed-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 200px; /* Adjust width based on your sidebar's width */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.footer {
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  padding-left: 200px; /* Adjust based on the width of your sidebar */
+  background-color: #343a40;
+  color: white;
+  text-align: center;
 }
