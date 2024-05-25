@@ -20,6 +20,9 @@ import UserRoutes from "./routes/UserRoutes";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import '@coreui/coreui/dist/css/coreui.min.css'
+import '@coreui/icons-react';
+import '@coreui/icons';
 import { Navigate } from "react-router-dom";
 
 const App = () => {
