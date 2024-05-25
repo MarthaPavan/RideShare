@@ -3,23 +3,27 @@ import { Col, ListGroup, Row, Stack } from "react-bootstrap";
 import "../App.css";
 
 const AdminDashBoard = () => {
+  const handleClick = () => {
+    alert("Activate the profile");
+  };
+
   return (
     <>
-      <Row className="no-gutters">
-        <Col xs={2} className="sidebar-column">
-          <Stack gap={2}>
-            <ListGroup variant="flush">
-              <ListGroup.Item className="text-bg-dark">
-                Cras justo odio
+      <Row className="full-height">
+        <Col xs={2} className="full-height">
+          <Stack gap={3} className="stack-full-height">
+            <ListGroup variant="flush" className="text-bg-dark" defaultActiveKey="#link1">
+              <ListGroup.Item action onClick={handleClick}>
+                Profile
               </ListGroup.Item>
-              <ListGroup.Item className="text-bg-dark">
-                Dapibus ac facilisis in
+              <ListGroup.Item action onClick={handleClick}>
+                Employees 
               </ListGroup.Item>
-              <ListGroup.Item className="text-bg-dark">
-                Morbi leo risus
+              <ListGroup.Item action onClick={handleClick}>
+                Routes 
               </ListGroup.Item>
-              <ListGroup.Item className="text-bg-dark">
-                Porta ac consectetur ac
+              <ListGroup.Item action>
+                SignOut
               </ListGroup.Item>
             </ListGroup>
           </Stack>

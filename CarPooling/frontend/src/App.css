@@ -38,3 +38,11 @@ Link{
   transform: scaleX(1 );
   transform-origin: bottom left;
 }
+/* App.css */
+.full-height {
+  height: 100vh;
+}
+
+.stack-full-height {
+  height: 100%;
+}

@@ -38,9 +38,11 @@ const App = () => {
           <Route path="/SignUpSuccess" element={<SignUpSuccess />} />
           <Route path="/join" element={<JoinUs />} />
 
+          {/* Temporary admin route to develop dashboard */}
+          <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
           {/* Protected Admin Routes */}
           <Route element={<AdminRoutes />}>
-            <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
+            
           </Route>
 
           {/* Protected Employee Routes */}
