@@ -1,41 +1,40 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
+import { useAuth } from '../routes/AuthContext';
 import '../App.css';
 
-const Login = ({ status, setStatus }) => {
+const Login = () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const auth = useAuth();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
-        axios.post('http://localhost:1000/get-started/login', {
-            userName: user,
-            password: password,
-        })
-        .then((res) => {
-            setLoading(false);
-            if (res.status === 200 && res.data.status === 'success') {
-                localStorage.setItem('token', res.data.token);
-                setStatus(true);
-                navigate('/');
-                
-                
-            } else {
-                setError(res.data.msg || 'Login failed');
+        try {
+            await auth.loginAction({ user, password });
+            const link = ()=>{
+                if(localStorage.role === "admin"){
+                    return "/AdminDashBoard"; 
+                }
+                else if(localStorage.role === "driver"){
+                    return "/EmployeeDashBoard";
+                }
+                else if(localStorage.role === "customer"){
+                    return "/UserDashBoard";
+                }
             }
-        })
-        .catch((err) => {
+            navigate(link); 
+        } catch (err) {
+            setError('Invalid username or password');
             setLoading(false);
-            setError('Error in login');
-        });
+        }
     };
 
     return (

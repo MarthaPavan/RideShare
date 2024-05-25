@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './App.css';
-const NavBar = ({ status, setStatus }) => {
+const NavBar = () => {
     const navigate = useNavigate();
 
     return (
@@ -30,7 +30,7 @@ const NavBar = ({ status, setStatus }) => {
                             </form>
 
                             <div className="text-end">
-                                {!status && (
+                                
                                     <>
                                         <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>
                                             Login
@@ -39,12 +39,8 @@ const NavBar = ({ status, setStatus }) => {
                                             Sign-up
                                         </button>
                                     </>
-                                )}
-                                {status && (
-                                    <button type="button" className="btn btn-outline-light me-2" onClick={() => setStatus(false)}>
-                                        LogOut
-                                    </button>
-                                )}
+                                
+                                
                             </div>
                         </div>
                     </div>
