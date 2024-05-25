@@ -2,7 +2,7 @@ const userModel = require("../models/users.model");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { driverSchema, driverModel } = require("../models/drivers.model");
-//const verifyToken = require("../TokenVerification/token.verification");
+// const verifyToken = require("../TokenVerification/token.verification");
 const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
 require("dotenv").config();
 class LoginController {
@@ -11,11 +11,11 @@ class LoginController {
     try {
       const { userName, password } = req.body;
       const user = await userModel.findOne({ userName });
-      // console.log(req.body)
+      console.log(req.body,user)
       if (user) {
-        //console.log(user);
+        console.log(user);
         // Generate JWT
-        const token = jwt.sign({ user }, secretKey, { expiresIn: "24h" });
+        const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: "24h" });
         console.log(token);
         const compare = await bcryptjs.compare(password, user.password);
         console.log(compare);
@@ -48,7 +48,7 @@ class LoginController {
       if (valid) {
         console.log("vehicle number already exists with other user");
         return res
-          .status(404)
+          .status(200)
           .json({ msg: "vehicle number already exists with other user" });
       }
       req.employeeDetails = {

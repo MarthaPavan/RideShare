@@ -81,7 +81,7 @@ const Login = () => {
                         </div>
                         <Form.Group>
                             <p className="text-dark m-2">Don't have an account?</p>
-                            <Link to="/signup" className="d-flex align-items-center m-2 mb-lg-0 text-decoration-none">
+                            <Link to="/GetStarted" className="d-flex align-items-center m-2 mb-lg-0 text-decoration-none">
                                 Sign Up
                             </Link>
                         </Form.Group>
