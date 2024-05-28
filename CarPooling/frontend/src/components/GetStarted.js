@@ -1,11 +1,17 @@
-import React, { useState} from "react";
-import { useNavigate,Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Container, Row, Col, ListGroup, Button } from "react-bootstrap";
-import './GetStarted.css';
+//import './GetStarted.css';
+
+const selected = {
+    backgroundColor: "#e9ecef",
+    borderColor: "#000",
+};
 
 export default function GetStarted() {
     const [select, setSelect] = useState(-1);
     const navigate = useNavigate();
+
     const handleClick = () => {
         if (select === -1) {
             navigate("/");
@@ -24,7 +30,8 @@ export default function GetStarted() {
                     <ListGroup as="ul" className="mb-5">
                         <ListGroup.Item
                             as="li"
-                            className={`d-flex justify-content-between align-items-start ${select === 0 ? "selected" : ""}`}
+                            style={select === 0 ? selected : {}}
+                            className="d-flex justify-content-between align-items-start"
                             onClick={() => setSelect(0)}
                         >
                             <div className="ms-2 me-auto">
@@ -35,7 +42,8 @@ export default function GetStarted() {
                         <br />
                         <ListGroup.Item
                             as="li"
-                            className={`d-flex justify-content-between align-items-start ${select === 1 ? "selected" : ""}`}
+                            style={select === 1 ? selected : {}}
+                            className="d-flex justify-content-between align-items-start"
                             onClick={() => setSelect(1)}
                         >
                             <div className="ms-2 me-auto">

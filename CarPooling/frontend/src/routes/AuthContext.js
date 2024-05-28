@@ -11,7 +11,9 @@ const AuthProvider = ({ children }) => {
     const loginAction = async (data) => {
         try {
             const response = await axios.post("http://localhost:1000/get-started/login", { ...data });
+            console.log(response)
             if (response.data.status === "success" && response.status === 200) {
+                console.log(response,1);
                 setToken(response.data.token);
                 setUser(response.data.user);
                 setRole(response.data.role);
