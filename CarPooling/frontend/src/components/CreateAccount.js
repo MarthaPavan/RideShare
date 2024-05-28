@@ -9,12 +9,11 @@ function CreateAccount() {
   // const [error, setError] = useState("");
   // const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    // fullName: "",
-    userName: "",
-    phoneNumber: "",
+    fullName: "",
     emailId: "",
     password: "",
-    isEmployee: false,
+    phoneNumber: "",
+    role: "user"
   });
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -32,7 +31,7 @@ function CreateAccount() {
       .post("http://localhost:1000/get-started/signup", form)
       .then((res) => {
         console.log("Response:", res);
-        if (res.status === 200 && res.data.status === "success") {
+        if (res.status === 200 && res.data.msg === "success") {
           navigate("/SignUpSuccess");
         } else {
           alert("FAIL");
@@ -62,11 +61,11 @@ function CreateAccount() {
             </div>
             <div className="mb-3">
               <input
-                type="text"
-                name="userName"
-                placeholder="Choose a username"
+                type="email"
+                name="emailId"
+                placeholder="Email"
                 className="form-control"
-                value={form.userName}
+                value={form.emailId}
                 onChange={handleChange}
                 required
               />
@@ -78,17 +77,6 @@ function CreateAccount() {
                 placeholder="Phone"
                 className="form-control"
                 value={form.phoneNumber}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="email"
-                name="emailId"
-                placeholder="Email"
-                className="form-control"
-                value={form.emailId}
                 onChange={handleChange}
                 required
               />

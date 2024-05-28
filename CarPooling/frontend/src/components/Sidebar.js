@@ -7,9 +7,9 @@ import {
     CNavItem,
     CNavTitle,
     CNavGroup
-  } from "@coreui/react";
-  import CIcon from "@coreui/icons-react";
-  import * as icon from "@coreui/icons";
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import * as icon from "@coreui/icons";
  
 
 const Sidebar = () => {

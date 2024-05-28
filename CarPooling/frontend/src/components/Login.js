@@ -20,7 +20,7 @@ const Login = () => {
         try {
             await auth.loginAction({ emailId, password });
             const role = localStorage.getItem("role");
-
+            console.log(role);
             let link;
             switch (role) {
                 case 'admin':
@@ -30,14 +30,14 @@ const Login = () => {
                     link = "/EmployeeDashBoard";
                     break;
                 case 'user':
-                    link = "/UserDashBoard";
+                    navigate("/UserDashBoard");
                     break;
                 default:
                     link = "/";
                     break;
             }
-
-            navigate(link);
+            console.log(link);
+            ;
         } catch (err) {
             setError('Invalid username or password');
             setLoading(false);

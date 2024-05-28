@@ -10,12 +10,15 @@ const AuthProvider = ({ children }) => {
     const loginAction = async (data) => {
         try {
             const response = await axios.post("http://localhost:1000/get-started/login", { ...data });
-            if (response.data.status === "success" && response.status === 200) {
-                setToken(response.data.token);
-                setUser(response.data.user);
+            if (response.status === 200) {
+                const { role, token, user } = response.data;
+                setToken(token);
+                setUser(user);
+                
 
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem("role", response.data.user.role);
+                localStorage.setItem("token", token);
+                localStorage.setItem("role", role);
+                
             }
         } catch (error) {
             console.error("Login failed", error);
@@ -28,6 +31,7 @@ const AuthProvider = ({ children }) => {
 
         localStorage.removeItem("token");
         localStorage.removeItem("role");
+        
     };
 
     return (
