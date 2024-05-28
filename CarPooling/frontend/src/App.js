@@ -9,9 +9,9 @@ import GetStarted from "./components/GetStarted";
 import ForgotPassword from "./components/ForgotPassword";
 import CreateAccount from "./components/CreateAccount";
 import SignUpSuccess from "./components/SignUpSuccess";
-import AdminDashBoard from "./components/AdminDashBoard";
-import EmployeeDashBoard from "./components/EmployeeDashBoard";
-import UserDashBoard from "./components/UserDashBoard";
+import AdminDashBoard from "./components/admindashboard/AdminDashBoard";
+import EmployeeDashBoard from "./components/employeedashboard/EmployeeDashBoard";
+import UserDashBoard from "./components/userdashboard/UserDashBoard";
 import JoinUs from "./components/JoinUs";
 import { AuthProvider } from "./routes/AuthContext";
 import AdminRoutes from "./routes/AdminRoutes";
@@ -44,20 +44,22 @@ const App = () => {
 
           {/* Temporary admin route to develop dashboard */}
           <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
+          <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />
+          <Route path="/UserDashBoard" element={<UserDashBoard />} />
           {/* Protected Admin Routes */}
           <Route element={<AdminRoutes />}>
 
           </Route>
 
           {/* Protected Employee Routes */}
-          <Route element={<EmployeeRoutes />}>
-            <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />
-          </Route>
+          {/*<Route element={<EmployeeRoutes />}>*/}
+          {/*  <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />*/}
+          {/*</Route>*/}
 
-          {/* Protected User Routes */}
-          <Route element={<UserRoutes />}>
-            <Route path="/UserDashBoard" element={<UserDashBoard />} />
-          </Route>
+          {/*/!* Protected User Routes *!/*/}
+          {/*<Route element={<UserRoutes />}>*/}
+          {/*  <Route path="/UserDashBoard" element={<UserDashBoard />} />*/}
+          {/*</Route>*/}
 
           {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/" />} />
