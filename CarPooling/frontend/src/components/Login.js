@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Container, Row, Col, Form, Button, Alert,Image } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert, Image } from 'react-bootstrap';
 import { useAuth } from '../routes/AuthContext';
 import '../App.css';
 
 const Login = () => {
-    const [user, setUser] = useState('');
+    const [emailId, setEmailId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -18,19 +18,26 @@ const Login = () => {
         setError('');
 
         try {
-            await auth.loginAction({ user, password });
-            const link = ()=>{
-                if(localStorage.role === "admin"){
-                    return "/AdminDashBoard"; 
-                }
-                else if(localStorage.role === "driver"){
-                    return "/EmployeeDashBoard";
-                }
-                else if(localStorage.role === "customer"){
-                    return "/UserDashBoard";
-                }
+            await auth.loginAction({ emailId, password });
+            const role = localStorage.getItem("role");
+
+            let link;
+            switch (role) {
+                case 'admin':
+                    link = "/AdminDashBoard";
+                    break;
+                case 'driver':
+                    link = "/EmployeeDashBoard";
+                    break;
+                case 'user':
+                    link = "/UserDashBoard";
+                    break;
+                default:
+                    link = "/";
+                    break;
             }
-            navigate(link); 
+
+            navigate(link);
         } catch (err) {
             setError('Invalid username or password');
             setLoading(false);
@@ -41,11 +48,11 @@ const Login = () => {
         <Container fluid className="d-flex align-items-center justify-content-center vh-100">
             <Row>
                 <Col className='m-5 p-5'>
-                        <Image
-                    src={"/images/login_page_image.jpg"}
-                    alt="People around a car"
-                    fluid
-                />
+                    <Image
+                        src={"/images/login_page_image.jpg"}
+                        alt="People around a car"
+                        fluid
+                    />
                 </Col>
                 
                 <Col className='mt-4 pt-3'>
@@ -53,11 +60,11 @@ const Login = () => {
                     <br />
                     <Form onSubmit={handleLogin}>
                         <Form.Group controlId="user" className="mb-3">
-                            <Form.Label>UserName</Form.Label>
+                            <Form.Label>Email</Form.Label>
                             <Form.Control
-                                type="text"
-                                value={user}
-                                onChange={(e) => setUser(e.target.value)}
+                                type="email"
+                                value={emailId}
+                                onChange={(e) => setEmailId(e.target.value)}
                                 required
                             />
                         </Form.Group>

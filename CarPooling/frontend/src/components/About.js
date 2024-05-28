@@ -22,7 +22,7 @@ const About = () => {
                             </div>
                             <div className="col-sm-9">
                                 <h4 className="qr-regular">20 Million +</h4>
-                                <h6 className="qr-green qr-bold">Rides Shared</h6>
+                                <h6 className="qr-green qr-bold">Rides Share Expected</h6>
                             </div>
                         </div>
                         <div className="row mt-3 pl-5">
@@ -33,7 +33,7 @@ const About = () => {
                             </div>
                             <div className="col-sm-9">
                                 <h4 className="qr-regular">1 Million +</h4>
-                                <h6 className="qr-green qr-bold">Users</h6>
+                                <h6 className="qr-green qr-bold">Users Expected</h6>
                             </div>
                         </div>
                         <div className="row mt-3 pl-5">
@@ -42,7 +42,7 @@ const About = () => {
                             </div>
                             <div className="col-sm-9">
                                 <h4 className="qr-regular">41000 + Tons</h4>
-                                <h6 className="qr-green qr-bold">CO2 Prevented</h6>
+                                <h6 className="qr-green qr-bold">CO<sub>2</sub> can be Prevented in a year</h6>
                             </div>
                         </div>
                     </div>

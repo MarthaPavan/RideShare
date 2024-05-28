@@ -5,20 +5,17 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [token, setToken] = useState("");
-    const [role, setRole] = useState("");
     const [user, setUser] = useState(null);
 
     const loginAction = async (data) => {
         try {
             const response = await axios.post("http://localhost:1000/get-started/login", { ...data });
-            console.log(response)
             if (response.data.status === "success" && response.status === 200) {
-                console.log(response,1);
                 setToken(response.data.token);
                 setUser(response.data.user);
-                setRole(response.data.role);
+
                 localStorage.setItem("token", response.data.token);
-                localStorage.setItem("role", response.data.role);
+                localStorage.setItem("role", response.data.user.role);
             }
         } catch (error) {
             console.error("Login failed", error);
@@ -28,13 +25,13 @@ const AuthProvider = ({ children }) => {
     const logOut = () => {
         setToken("");
         setUser(null);
-        setRole("");
+
         localStorage.removeItem("token");
         localStorage.removeItem("role");
     };
 
     return (
-        <AuthContext.Provider value={{ token, role, user, loginAction, logOut }}>
+        <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
             {children}
         </AuthContext.Provider>
     );

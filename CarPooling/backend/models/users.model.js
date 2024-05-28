@@ -8,20 +8,20 @@ const userSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     required: true,
-    unique: [true, "phone number already exists"]
+    unique: [true, "Phone number already exists"]
   },
   emailId: {
     type: String,
     required: true,
-    unique: [true, "emailId already exists"]
+    unique: [true, "Email ID already exists"]
   },
   password: {
     type: String,
     required: true
   },
-  role:{
-    type:String,
-    required:true
+  role: {
+    type: String,
+    required: true
   },
   registrationNumber: {
     type: String,
@@ -33,9 +33,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-
 });
 
-const userModel = new mongoose.model("user", userSchema);
+const userModel = mongoose.model("user", userSchema);
 
 module.exports = userModel;

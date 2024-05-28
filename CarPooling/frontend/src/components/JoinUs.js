@@ -1,48 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Image } from "react-bootstrap";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  FormControl,
-  InputGroup,
-  Form,
-} from "react-bootstrap";
+import { Container, Row, Col, Button, FormControl, InputGroup, Form, Image } from "react-bootstrap";
 import axios from "axios";
 
 const JoinUs = () => {
-  const [form, setForm] = React.useState({
+  const [form, setForm] = useState({
     fullName: "",
-    userName: "",
     emailId: "",
-    isEmployee: true,
     password: "",
     phoneNumber: "",
-    vehicleType: "",
-    vehicleNumber: "",
+    role: "driver",
+    vehicleModel: "",
+    registrationNumber: "",
   });
 
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
+    e.preventDefault();
+
+    // Validation check
+    if (!form.fullName || !form.emailId || !form.password || !form.phoneNumber) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
     form.phoneNumber = parseInt(form.phoneNumber);
-    console.log(form);
-    await axios
-      .post("http://localhost:1000/get-started/signup", form)
-      .then((res) => {
-        console.log("Response:", res);
-        if (res.status === 200 && res.data.status === "success") {
-          navigate("/SignUpSuccess");
-        } else {
-          alert("FAIL");
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    try {
+      console.log(form);
+      const response = await axios.post("http://localhost:1000/get-started/signup", form);
+      console.log(response);
+      console.log("Response:", response);
+      if (response.status === 200 && response.data.msg === "success") {
+        navigate("/SignUpSuccess");
+      } else {
+        alert("Signup failed. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred during signup. Please try again.");
+    }
   };
 
   const handleChange = (e) => {
@@ -61,7 +59,7 @@ const JoinUs = () => {
         <Col className="m-4 p-3">
           <h1 className="mb-2 display-6">Join us</h1>
           <h2 className="mb-2 lead">Create Account</h2>
-          <Form>
+          <Form onSubmit={handleSignUp}>
             <Form.Group>
               <Form.Control
                 type="text"
@@ -69,15 +67,8 @@ const JoinUs = () => {
                 placeholder="Enter full name"
                 value={form.fullName}
                 onChange={handleChange}
-              ></Form.Control>
-              <br />
-              <Form.Control
-                type="text"
-                name="userName"
-                placeholder="Enter Username"
-                value={form.userName}
-                onChange={handleChange}
-              ></Form.Control>
+                required
+              />
               <br />
               <InputGroup>
                 <FormControl
@@ -86,14 +77,16 @@ const JoinUs = () => {
                   placeholder="Email Address"
                   value={form.emailId}
                   onChange={handleChange}
-                ></FormControl>
+                  required
+                />
                 <Form.Control
                   type="tel"
                   name="phoneNumber"
                   placeholder="Mobile Number"
                   value={form.phoneNumber}
                   onChange={handleChange}
-                ></Form.Control>
+                  required
+                />
               </InputGroup>
               <br />
               <Form.Control
@@ -102,12 +95,13 @@ const JoinUs = () => {
                 placeholder="Password"
                 value={form.password}
                 onChange={handleChange}
-              ></Form.Control>
+                required
+              />
               <br />
               <Form.Select
                 aria-label="Default select example"
-                name="vehicleType"
-                value={form.vehicleType}
+                name="vehicleModel"
+                value={form.vehicleModel}
                 onChange={handleChange}
               >
                 <option value="">Select Your Vehicle Model</option>
@@ -118,34 +112,29 @@ const JoinUs = () => {
               <br />
               <Form.Control
                 type="text"
-                name="vehicleNumber"
+                name="registrationNumber"
                 placeholder="Your Vehicle's Registration Number"
-                value={form.vehicleNumber}
+                value={form.registrationNumber}
                 onChange={handleChange}
-              ></Form.Control>
+              />
             </Form.Group>
+            <br />
+            <div className="text-start">
+              Already an existing user{" "}
+              <Link to="/Login" onClick={handleClick}>
+                Login Here
+              </Link>
+            </div>
+            <br />
+            <Button variant="primary" className="align-items-end" type="submit">
+              Register
+            </Button>
           </Form>
-          <br />
-          <div className={"text-start"}>
-            Already an existing user{" "}
-            <Link to="/Login" onClick={handleClick}>
-              Login Here
-            </Link>
-          </div>
-          <br />
-          <Button
-            variant="primary"
-            className="align-items-end"
-            onClick={handleSignUp}
-            type="submit"
-          >
-            Register
-          </Button>
         </Col>
-        <Col className=" m-4 p-3">
+        <Col className="m-4 p-3">
           <br />
           <br />
-          <Image className="m-5 =-5"  src="/images/driver_signup_page.jpg" fluid />
+          <Image className="m-5 =-5" src="/images/driver_signup_page.jpg" fluid />
         </Col>
       </Row>
     </Container>
