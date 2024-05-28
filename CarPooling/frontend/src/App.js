@@ -41,25 +41,21 @@ const App = () => {
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/SignUpSuccess" element={<SignUpSuccess />} />
           <Route path="/join" element={<JoinUs />} />
-
-          {/* Temporary admin route to develop dashboard */}
-          <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
-          <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />
-          <Route path="/UserDashBoard" element={<UserDashBoard />} />
+          
           {/* Protected Admin Routes */}
           <Route element={<AdminRoutes />}>
-
+            <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
           </Route>
 
           {/* Protected Employee Routes */}
-          {/*<Route element={<EmployeeRoutes />}>*/}
-          {/*  <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />*/}
-          {/*</Route>*/}
+          <Route element={<EmployeeRoutes />}>
+           <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />
+          </Route>
 
-          {/*/!* Protected User Routes *!/*/}
-          {/*<Route element={<UserRoutes />}>*/}
-          {/*  <Route path="/UserDashBoard" element={<UserDashBoard />} />*/}
-          {/*</Route>*/}
+          {/* Protected User Routes */}
+          <Route element={<UserRoutes />}>
+           <Route path="/UserDashBoard" element={<UserDashBoard />} />
+          </Route>
 
           {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/" />} />
