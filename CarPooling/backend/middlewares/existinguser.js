@@ -2,7 +2,9 @@ const userModel = require("../models/users.model");
 // const driverModel = require("../models/drivers.model");
 // const adminModel = require("../models/admin.model");
 
-//middleware to check existing admin
+
+
+//middleware to check existing user
 class ExistingUsers {
     async existingUser(req, res, next) {
         try {

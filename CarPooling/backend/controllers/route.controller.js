@@ -1,9 +1,7 @@
 const routeModel = require("../models/route.model");
 
-class RouteControllers {
-  isAdmin(req, res, next) {
 
-  }
+class RouteControllers {
 
 
   async saveRoute(req, res) {
@@ -11,10 +9,10 @@ class RouteControllers {
       const { routeId, startPoint, endPoint, distance } = req.body;
       const route = await routeModel.create({ routeId, startPoint, endPoint, distance });
       console.log("Inserted successfully");
-      res.status(200).json({ msg: "success" });
+      res.status(200).json(route );
     }
     catch (err) {
-      res.status(404).json({ msg: "failed" });
+      res.status(404).json({ msg: err.message });
     }
   }
 
@@ -26,10 +24,10 @@ class RouteControllers {
       console.log(req.body);
       await routeModel.findOneAndUpdate({ routeId: routeId }, { ...body });
       const route = routeModel.findOne({ routeId });
-      res.status(200).json({ msg: "successfully updated" });
+      res.status(200).json(route);
     }
     catch (err) {
-      res.status(404).json({ msg: "falied to update" });
+      res.status(404).json({ msg: err.message });
     }
   }
 
@@ -39,13 +37,12 @@ class RouteControllers {
       const routeId = parseInt(req.params.routeId);
       console.log(req.body);
       const route = await routeModel.findOneAndDelete({ routeId: routeId });
-      res.status(200).json({ msg: "successfully deleted" });
+      res.status(200).json(route);
     }
     catch (err) {
-      res.status(404).json({ msg: "falied to delete" });
+      res.status(404).json({ msg: err.message });
     }
   }
-
 
 
   async getRoute(req, res) {
@@ -55,24 +52,22 @@ class RouteControllers {
       res.status(200).json(route);
     }
     catch (err) {
-      res.status(404).json({ msg: "falied to fetch routes" });
+      res.status(404).json({ msg: err.message });
     }
   }
-
 
 
   async getRouteById(req, res) {
     try {
       const { routeId } = req.body;
       const oldRoute = await routeModel.findOne({ routeId });
-      res.status(200).json({ msg: "successfully fetched" });
+      res.status(200).json(oldRoute);
     }
     catch (err) {
-      res.status(404).json({ msg: "falied to fetch route" });
+      res.status(404).json({ msg: err.message });
     }
   }
 }
-
 
 
 module.exports = new RouteControllers();

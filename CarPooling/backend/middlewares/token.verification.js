@@ -1,29 +1,45 @@
-const { verify } = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/users.model");
+require("dotenv").config();
+const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
 
 verifyToken = (req, res, next) => {
-    // Get auth header value (token will typically be sent in the Authorization header)
-    const bearerHeader = req.headers['authorization'];
-    console.log(req.headers.authorization);
-    // Check if bearer is undefined
-    if (typeof bearerHeader !== 'undefined') {
-      // Split token from "Bearer <token>"
-      const bearer = bearerHeader.split(' ');
-      const token = bearer[1];
-      // Verify token
-      jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-          // Token is not valid
-          return res.status(403).json({ error: 'Unauthorized' });
-        } else {
-          // Token is valid, attach the decoded user payload to the request object
-          console.log("You are authorised user");
-          req.user = decoded.user;
-          next(); // Move to the next middleware
-        }
-      });
-    } else {
-      // Forbidden if token is missing
-      res.status(403).json({ error: 'Token is missing' });
-    }
+
+  const bearerHeader = req.headers['authorization'];
+  //console.log(req.headers.authorization);
+  const token = bearerHeader.split(' ')[1];
+
+  // if token is undefined
+  if (token == null)
+  {
+    return res.status(500).json({ msg: "Token is missing" });
   }
+
+
+  jwt.verify(token, SECRET_KEY, async (err, verifiedToken) => {
+    if (err)
+    {
+      return res.status(500).json({ msg: err.message });
+    }
+    else
+    {
+      //if token is verified successfully
+      const user = await userModel.findOne({ emailId: verifiedToken.user.emailId });
+      console.log(user);
+      //if the user is admin
+      if (user.role === "admin")
+      {
+        next();
+      }
+      else {
+        return res.status(500).json({ msg: "you are unauthorized" });
+      }
+      
+    }
+  });
+
+
+}
+
+
 module.exports = verifyToken;

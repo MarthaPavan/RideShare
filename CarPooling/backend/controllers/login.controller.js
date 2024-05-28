@@ -6,18 +6,13 @@ const existingUsers = require("../middlewares/existinguser")
 const userModel = require("../models/users.model");
 // const driverModel = require("../models/drivers.model");
 // const adminModel = require("../models/admin.model");
-
-
-
+require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
-require("dotenv").config();
+
 
 
 class LoginController {
-
-
-
 
   async userLogin(req, res) {
 
@@ -27,14 +22,12 @@ class LoginController {
       const user = await userModel.findOne({ emailId });
       
       const compare = await bcryptjs.compare(password, user.password);
-      //console.log(password + " " + user.password);
+
       console.log(compare);
 
       if (compare) {
       
         const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: "24h" });
-
-        console.log(token);
 
         return res.status(200).json({ role: user.role, token: token });
       }
@@ -62,8 +55,8 @@ class LoginController {
         //console.log(req.body);
       if (role === "admin")
       {
-        console.log(req.body);
 
+        console.log(req.body);
         const {fullName,emailId,password,phoneNumber} = req.body;
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
@@ -78,37 +71,39 @@ class LoginController {
         });
 
 
-        return  res.status(200).json({ msg: "success", admin: admin });
-        
+        return  res.status(200).json({ msg: "success", user:admin });
       
       }
       else if (role === "user")
       {
-          console.log(req.body);
+        console.log(req.body);
 
         const { fullName, emailId, phoneNumber, password } = req.body;
 
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
         
-        const user =await userModel.create({
+        const user = await userModel.create({
+          
           fullName: fullName,
           emailId: emailId,
           phoneNumber: phoneNumber,
           password: hashedPassword,
-          role:role
+          role: role
+          
         });
         return res.status(200).json({ msg: "success", user:user });
 
       }
       else
       {
-        const {fullName,emailId,password,phoneNumber,registrationNumber,vehicleModel,isVerified} = req.body;
         
+        const {fullName,emailId,password,phoneNumber,registrationNumber,vehicleModel,isVerified} = req.body;
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
         
         const driver = await userModel.create({
+
           fullName: fullName,
           emailId: emailId,
           phoneNumber: phoneNumber,
@@ -116,11 +111,11 @@ class LoginController {
           role: role,
           registrationNumber: registrationNumber,
           vehicleModel: vehicleModel,
-          isVerified:isVerified
+          isVerified: isVerified
+          
         });
 
-        return res.status(200).json({ msg: "success", driver:driver });
-
+        return res.status(200).json({ msg: "success", user:driver });
 
       }
 
