@@ -39,18 +39,28 @@ class LoginController {
 
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(password, salt);
-
-      const user = await userModel.create({
-        fullName,
-        emailId,
-        phoneNumber,
-        password: hashedPassword,
-        role,
-        registrationNumber,
-        vehicleModel
-      });
-      
-      return res.status(200).json({ msg: "success", user });
+      if(role=="driver"){
+        const user = await userModel.create({
+          fullName,
+          emailId,
+          phoneNumber,
+          password: hashedPassword,
+          role,
+          registrationNumber,
+          vehicleModel
+        });
+        return res.status(200).json({ msg: "success", user });
+      }
+      if(role=="user"){
+        const user = await userModel.create({
+          fullName,
+          emailId,
+          phoneNumber,
+          password: hashedPassword,
+          role
+        });
+        return res.status(200).json({ msg: "success", user });
+      }
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
