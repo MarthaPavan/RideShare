@@ -37,7 +37,6 @@ const Login = () => {
                     break;
             }
             console.log(link);
-            ;
         } catch (err) {
             setError('Invalid username or password');
             setLoading(false);
