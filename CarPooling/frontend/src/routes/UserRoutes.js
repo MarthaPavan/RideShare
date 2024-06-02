@@ -6,7 +6,7 @@ const UserRoutes = () => {
     if(!user.token){
         <Navigate to={"/Login"}/>
     }
-    if (user && user.role === "driver") {
+    if (user && user.role === "user") {
         return <Outlet />;
     } else {
         return <Navigate to="/login" />;
