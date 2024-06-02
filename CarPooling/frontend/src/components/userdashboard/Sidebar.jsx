@@ -36,5 +36,4 @@ const Sidebar = () => {
 </CSidebar>
   );
 };
-
 export default Sidebar;

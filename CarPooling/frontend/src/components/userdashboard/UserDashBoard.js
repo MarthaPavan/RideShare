@@ -14,7 +14,6 @@ const UserDashBoard = () => {
         <Col xs={10} className="p-0">
         </Col>
       </Row>
-
     </>
   );
 };
