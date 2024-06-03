@@ -5,8 +5,6 @@ import {
     CSidebarHeader,
     CSidebarNav,
     CNavItem,
-    CNavTitle,
-    CNavGroup
   } from "@coreui/react";
   import CIcon from "@coreui/icons-react";
   import * as icon from "@coreui/icons";
