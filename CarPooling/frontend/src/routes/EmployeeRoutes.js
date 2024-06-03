@@ -1,12 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+
 
 const EmployeeRoutes = () => {
-    const { user } = useAuth();
-    if(!user.token){
+    //const { user } = useAuth();
+    const user = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if(user===null){
         <Navigate to={"/Login"}/>
     }
-    if (user && user.role === "driver") {
+    if (user && role === "driver") {
         return <Outlet />;
     } else {
         return <Navigate to="/login" />;
