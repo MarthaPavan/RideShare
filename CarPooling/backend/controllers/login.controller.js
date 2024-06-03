@@ -31,46 +31,31 @@ class LoginController {
 
   async userRegister(req, res) {
     try {
-      const {
-        fullName,
-        emailId,
-        password,
-        phoneNumber,
-        role,
-        registrationNumber,
-        vehicleModel,
-      } = req.body;
-
-      // Check if user already exists
+      const { emailId, password, role, fullName, phoneNumber, registrationNumber, vehicleModel } = req.body;
+      
       const existingUser = await userModel.findOne({ emailId });
       if (existingUser) {
         return res.status(400).json({ msg: "User already exists" });
       }
-
+      console.log(req.body);
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(password, salt);
-      if (role == "driver") {
-        const user = await userModel.create({
-          fullName,
-          emailId,
-          phoneNumber,
-          password: hashedPassword,
-          role,
-          registrationNumber,
-          vehicleModel,
-        });
-        return res.status(200).json({ msg: "success", user });
+
+      const newUser = {
+        fullName,
+        emailId,
+        phoneNumber,
+        password: hashedPassword,
+        role
+      };
+
+      if (role === "driver") {
+        newUser.registrationNumber = registrationNumber;
+        newUser.vehicleModel = vehicleModel;
       }
-      if (role == "user") {
-        const user = await userModel.create({
-          fullName,
-          emailId,
-          phoneNumber,
-          password: hashedPassword,
-          role,
-        });
-        return res.status(200).json({ msg: "success", user });
-      }
+
+      const user = await userModel.create(newUser);
+      return res.status(200).json({ msg: "success", user });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

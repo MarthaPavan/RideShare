@@ -25,9 +25,11 @@ const userSchema = new mongoose.Schema({
   },
   registrationNumber: {
     type: String,
+    required:false
   },
   vehicleModel: {
     type: String,
+    required:false
   },
   isVerified: {
     type: Boolean,
