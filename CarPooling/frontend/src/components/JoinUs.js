@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Row, Col, Button, FormControl, InputGroup, Form, Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  FormControl,
+  InputGroup,
+  Form,
+  Image,
+} from "react-bootstrap";
 import axios from "axios";
-
+import toast, { Toaster } from "react-hot-toast";
 const JoinUs = () => {
   const [form, setForm] = useState({
     fullName: "",
@@ -20,7 +29,12 @@ const JoinUs = () => {
     e.preventDefault();
 
     // Validation check
-    if (!form.fullName || !form.emailId || !form.password || !form.phoneNumber) {
+    if (
+      !form.fullName ||
+      !form.emailId ||
+      !form.password ||
+      !form.phoneNumber
+    ) {
       alert("Please fill all required fields.");
       return;
     }
@@ -29,13 +43,16 @@ const JoinUs = () => {
 
     try {
       console.log(form);
-      const response = await axios.post("http://localhost:1000/get-started/signup", form);
+      const response = await axios.post(
+        "http://localhost:1000/get-started/signup",
+        form
+      );
       console.log(response);
       console.log("Response:", response);
       if (response.status === 200 && response.data.msg === "success") {
         navigate("/SignUpSuccess");
       } else {
-        alert("Signup failed. Please try again.");
+        toast("Here is your toast.");
       }
     } catch (err) {
       console.error(err);
@@ -134,7 +151,11 @@ const JoinUs = () => {
         <Col className="m-4 p-3">
           <br />
           <br />
-          <Image className="m-5 =-5" src="/images/driver_signup_page.jpg" fluid />
+          <Image
+            className="m-5 =-5"
+            src="/images/driver_signup_page.jpg"
+            fluid
+          />
         </Col>
       </Row>
     </Container>
