@@ -11,8 +11,9 @@ class LoginController {
 
     try {
       const user = await userModel.findOne({ emailId });
+      // console.log(user);
       if (!user) {
-        return res.status(401).json({ msg: "User not found" });
+        return res.status(401).json({ msg: "Account doesn't exist.Register" });
       }
       console.log(user);
       const compare = await bcryptjs.compare(password, user.password);

@@ -21,6 +21,11 @@ const UserDashBoard = () => {
     setIndex(e);
     console.log(e);
   };
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    window.location.href = "/login";
+  };
   const components = [<Profile />, <Dashboard />, <Rides />];
   return (
     <>
@@ -86,10 +91,11 @@ const UserDashBoard = () => {
                 ></CIcon>
                 Contact Us
               </CNavItem>
-              <CNavItem href="/">
+              <CNavItem href="#">
                 <CIcon
                   customClassName="nav-icon"
                   icon={icon.cilAccountLogout}
+                  onClick={handleLogOut}
                 />
                 Log out
               </CNavItem>
