@@ -14,11 +14,13 @@ class LoginController {
       if (!user) {
         return res.status(401).json({ msg: "User not found" });
       }
-      console.log(user)
+      console.log(user);
       const compare = await bcryptjs.compare(password, user.password);
       if (compare) {
         const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: "24h" });
-        return res.status(200).json({ role: user.role, token: token, user: user });
+        return res
+          .status(200)
+          .json({ role: user.role, token: token, user: user });
       } else {
         return res.status(401).json({ msg: "Incorrect emailId or password" });
       }
@@ -29,7 +31,15 @@ class LoginController {
 
   async userRegister(req, res) {
     try {
-      const { fullName, emailId, password, phoneNumber, role, registrationNumber, vehicleModel } = req.body;
+      const {
+        fullName,
+        emailId,
+        password,
+        phoneNumber,
+        role,
+        registrationNumber,
+        vehicleModel,
+      } = req.body;
 
       // Check if user already exists
       const existingUser = await userModel.findOne({ emailId });
@@ -39,7 +49,7 @@ class LoginController {
 
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(password, salt);
-      if(role=="driver"){
+      if (role == "driver") {
         const user = await userModel.create({
           fullName,
           emailId,
@@ -47,17 +57,17 @@ class LoginController {
           password: hashedPassword,
           role,
           registrationNumber,
-          vehicleModel
+          vehicleModel,
         });
         return res.status(200).json({ msg: "success", user });
       }
-      if(role=="user"){
+      if (role == "user") {
         const user = await userModel.create({
           fullName,
           emailId,
           phoneNumber,
           password: hashedPassword,
-          role
+          role,
         });
         return res.status(200).json({ msg: "success", user });
       }

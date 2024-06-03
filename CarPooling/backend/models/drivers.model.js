@@ -8,31 +8,30 @@ const driverSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     required: true,
-    unique: [true, "phone number already exists"]
+    unique: [true, "phone number already exists"],
   },
   emailId: {
     type: String,
     required: true,
-    unique: [true, "emailId already exists"]
+    unique: [true, "emailId already exists"],
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   registrationNumber: {
     type: String,
     required: true,
-    unique: [true, "registration number already exists"]
+    unique: [true, "registration number already exists"],
   },
   vehicleModel: {
     type: String,
-    required: true
+    required: true,
   },
   isVerified: {
     type: Boolean,
-    default: false
-  }
-
+    default: false,
+  },
 });
 
 const driverModel = new mongoose.model("driver", driverSchema);
