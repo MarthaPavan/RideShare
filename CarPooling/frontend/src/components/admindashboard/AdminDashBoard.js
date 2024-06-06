@@ -10,6 +10,7 @@ import {
   CNavItem,
 } from "@coreui/react";
 import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useAuth } from "../../routes/AuthContext";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
@@ -44,7 +45,6 @@ const AdminDashBoard = () => {
               </CSidebarBrand>
             </CSidebarHeader>
             <CSidebarNav variant="pills" layout="fill">
-              {/* <CNavTitle>Nav Title</CNavTitle> */}
               <CNavItem
                 href="#"
                 active={index === 0}
@@ -94,6 +94,22 @@ const AdminDashBoard = () => {
           {components[index]}
         </Col>
       </Row>
+      <Toaster
+        containerStyle={{
+          top: 80,
+          right: 20,
+          bottom: 20,
+          left: 20,
+        }}
+        toastOptions={{
+          style: {
+            height: "60px",
+            width: "200px",
+            fontFamily: "Inter sans-serif",
+            fontWeight: "bold",
+          },
+        }}
+      />
     </>
   );
 };

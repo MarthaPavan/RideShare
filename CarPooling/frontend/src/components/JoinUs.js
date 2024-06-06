@@ -11,7 +11,6 @@ import {
   Image,
 } from "react-bootstrap";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
 const JoinUs = () => {
   const [form, setForm] = useState({
     fullName: "",
@@ -51,8 +50,6 @@ const JoinUs = () => {
       console.log("Response:", response);
       if (response.status === 200 && response.data.msg === "success") {
         navigate("/SignUpSuccess");
-      } else {
-        toast("Here is your toast.");
       }
     } catch (err) {
       console.error(err);
