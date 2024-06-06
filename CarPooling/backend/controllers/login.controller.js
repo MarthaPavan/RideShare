@@ -51,7 +51,7 @@ class LoginController {
         });
         return res.status(200).json({ msg: "success", user });
       }
-      if(role=="user"){
+      
         const user = await userModel.create({
           fullName,
           emailId,
@@ -60,7 +60,7 @@ class LoginController {
           role
         });
         return res.status(200).json({ msg: "success", user });
-      }
+      
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
