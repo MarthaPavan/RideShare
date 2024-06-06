@@ -29,6 +29,7 @@ verifyToken = (req, res, next) => {
       //if the user is admin
       if (user.role === "admin")
       {
+        console.log("admin verified");
         next();
       }
       else {

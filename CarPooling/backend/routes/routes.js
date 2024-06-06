@@ -1,10 +1,20 @@
 const express = require("express");
 const route = express.Router();
 const routeController = require("../controllers/route.controller");
-route.post("/saveRoute", routeController.saveRoute);
-route.get("/getRoute", routeController.getRoute);
-route.get("/getRoute/:routeId", routeController.getRouteById);
-route.patch("/editRoute/:routeId", routeController.editRoute);
-route.delete("/deleteRoute/:routeId", routeController.deleteRoute);
+const {getDriver} = require("../controllers/driver.controller");
+const verifyToken = require("../middlewares/token.verification");
+
+//route controllers
+route.post("/saveRoute",verifyToken, routeController.saveRoute);
+route.get("/getRoute",verifyToken, routeController.getRoute);
+route.get("/getRoute/:routeId",verifyToken, routeController.getRouteById);
+route.patch("/editRoute/:routeId",verifyToken, routeController.editRoute);
+route.delete("/deleteRoute/:routeId",verifyToken, routeController.deleteRoute);
+
+
+//drivers
+route.get("/getDriver",verifyToken,getDriver);
+
+
 
 module.exports = route;
