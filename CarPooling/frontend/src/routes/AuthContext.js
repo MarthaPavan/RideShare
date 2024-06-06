@@ -1,12 +1,12 @@
-import React, { useContext, useState, createContext } from 'react';
-import axios from 'axios';
+import React, { useContext, useState, createContext } from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState("");
-    const [role,setRole] = useState("");
-    const [user, setUser] = useState(null);
+  const [token, setToken] = useState("");
+  const [role, setRole] = useState("");
+  const [user, setUser] = useState(null);
 
     const loginAction = async (data) => {
         try {
@@ -15,10 +15,12 @@ const AuthProvider = ({ children }) => {
                 const { role, token, user } = response.data;
                 setToken(token);
                 setRole(role);
-                console.log(user);
                 setUser(user);
+                console.log(token);
+                console.log(user.fullName);
                 localStorage.setItem("token", token);
                 localStorage.setItem("role", role);
+                localStorage.setItem("name",user.fullName);
                 
             }
         } catch (error) {
@@ -26,24 +28,23 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    const logOut = () => {
-        setToken("");
-        setUser(null);
+  const logOut = () => {
+    setToken("");
+    setUser(null);
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
-        
-    };
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+  };
 
-    return (
-        <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 const useAuth = () => {
-    return useContext(AuthContext);
+  return useContext(AuthContext);
 };
 
 export { AuthProvider, useAuth };

@@ -1,21 +1,21 @@
 const routeModel = require("../models/route.model");
 
-
 class RouteControllers {
-
-
   async saveRoute(req, res) {
     try {
       const { routeId, startPoint, endPoint, distance } = req.body;
-      const route = await routeModel.create({ routeId, startPoint, endPoint, distance });
+      const route = await routeModel.create({
+        routeId,
+        startPoint,
+        endPoint,
+        distance,
+      });
       console.log("Inserted successfully");
-      res.status(200).json(route );
-    }
-    catch (err) {
+      res.status(200).json(route);
+    } catch (err) {
       res.status(404).json({ msg: err.message });
     }
   }
-
 
   async editRoute(req, res) {
     try {
@@ -25,12 +25,10 @@ class RouteControllers {
       await routeModel.findOneAndUpdate({ routeId: routeId }, { ...body });
       const route = routeModel.findOne({ routeId });
       res.status(200).json(route);
-    }
-    catch (err) {
+    } catch (err) {
       res.status(404).json({ msg: err.message });
     }
   }
-
 
   async deleteRoute(req, res) {
     try {
@@ -38,36 +36,31 @@ class RouteControllers {
       console.log(req.body);
       const route = await routeModel.findOneAndDelete({ routeId: routeId });
       res.status(200).json(route);
-    }
-    catch (err) {
+    } catch (err) {
       res.status(404).json({ msg: err.message });
     }
   }
-
 
   async getRoute(req, res) {
     try {
+      // const {}
       const { routeId } = req.body;
-      const route = await routeModel.find({});
-      res.status(200).json(route);
-    }
-    catch (err) {
+      const routes = await routeModel.find();
+      res.status(200).json(routes);
+    } catch (err) {
       res.status(404).json({ msg: err.message });
     }
   }
-
 
   async getRouteById(req, res) {
     try {
       const { routeId } = req.body;
       const oldRoute = await routeModel.findOne({ routeId });
       res.status(200).json(oldRoute);
-    }
-    catch (err) {
+    } catch (err) {
       res.status(404).json({ msg: err.message });
     }
   }
 }
-
 
 module.exports = new RouteControllers();

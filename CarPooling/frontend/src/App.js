@@ -1,4 +1,5 @@
 import React from "react";
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./NavBar";
 import Home from "./components/Home";
@@ -20,10 +21,10 @@ import UserRoutes from "./routes/UserRoutes";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import '@coreui/coreui/dist/css/coreui.min.css'
-import '@coreui/icons-react';
-import '@coreui/icons';
-import '@coreui/react-chartjs';
+import "@coreui/coreui/dist/css/coreui.min.css";
+import "@coreui/icons-react";
+import "@coreui/icons";
+import "@coreui/react-chartjs";
 import { Navigate } from "react-router-dom";
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
     <AuthProvider>
       <Router>
         <NavBar />
+
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -41,7 +43,7 @@ const App = () => {
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/SignUpSuccess" element={<SignUpSuccess />} />
           <Route path="/join" element={<JoinUs />} />
-          
+
           {/* Protected Admin Routes */}
           <Route element={<AdminRoutes />}>
             <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
@@ -49,18 +51,34 @@ const App = () => {
 
           {/* Protected Employee Routes */}
           <Route element={<EmployeeRoutes />}>
-           <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />
+            <Route path="/EmployeeDashBoard" element={<EmployeeDashBoard />} />
           </Route>
 
           {/* Protected User Routes */}
           <Route element={<UserRoutes />}>
-           <Route path="/UserDashBoard" element={<UserDashBoard />} />
+            <Route path="/UserDashBoard" element={<UserDashBoard />} />
           </Route>
 
           {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
+        <Toaster
+          containerStyle={{
+            top: 80,
+            right: 20,
+            bottom: 20,
+            left: 20,
+          }}
+          toastOptions={{
+            style: {
+              height: "60px",
+              width: "200px",
+              fontFamily: "Inter sans-serif",
+              fontWeight: "bold",
+            },
+          }}
+        />
       </Router>
     </AuthProvider>
   );
