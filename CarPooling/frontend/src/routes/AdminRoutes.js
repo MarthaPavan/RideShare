@@ -1,12 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+
 
 const AdminRoutes = () => {
-    const { user } = useAuth();
+    // const { user } = useAuth();
+    const user = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
     if(!user.token){
         <Navigate to={"/Login"}/>
     }
-    if (user && user.role === "admin") {
+    if (user && role === "admin") {
         return <Outlet />;
     } else {
         return <Navigate to="/login" />;

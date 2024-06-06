@@ -1,12 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+
 
 const UserRoutes = () => {
-    const { user } = useAuth();
+    const user = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
     if(!user.token){
         <Navigate to={"/Login"}/>
     }
-    if (user && user.role === "user") {
+    if (user && role === "user") {
         return <Outlet />;
     } else {
         return <Navigate to="/login" />;

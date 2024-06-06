@@ -62,14 +62,7 @@ class LoginController {
         return res.status(200).json({ msg: "success", user });
       }
       
-        const user = await userModel.create({
-          fullName,
-          emailId,
-          phoneNumber,
-          password: hashedPassword,
-          role
-        });
-        return res.status(200).json({ msg: "success", user });
+        
       
       if(role=="driver"){
         const user = await userModel.create({
