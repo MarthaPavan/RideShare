@@ -2,46 +2,41 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col, Container, Image } from "react-bootstrap";
-
 import axios from "axios";
 
 function CreateAccount() {
-  // const [error, setError] = useState("");
-  // const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     fullName: "",
     emailId: "",
     password: "",
     phoneNumber: "",
-    role: "user"
+    role: "user",
   });
+
   const navigate = useNavigate();
+
   const handleChange = (e) => {
-    setForm((previousState) => {
-      return { ...previousState, [e.target.name]: e.target.value };
-    });
+    const { name, value } = e.target;
+    setForm((previousState) => ({ ...previousState, [name]: value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setLoading(true);
-    // setError("");
 
-    // Handle API call to create account
-    await axios
-      .post("http://localhost:1000/get-started/signup", form)
-      .then((res) => {
-        console.log("Response:", res);
-        if (res.status === 200 && res.data.msg === "success") {
-          navigate("/SignUpSuccess");
-        } else {
-          alert("FAIL");
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await axios.post("http://localhost:1000/get-started/signup", form);
+      console.log(res);
+      if (res.status === 200 && res.data.msg === "success") {
+        navigate("/SignUpSuccess");
+      } else {
+        alert("Registration failed. Please try again.");
+      }
+    } catch (err) {
+      console.log(err);
+      alert("An error occurred during registration. Please try again later.");
+    }
   };
+
   return (
     <Container fluid>
       <Row>
@@ -98,8 +93,7 @@ function CreateAccount() {
           </form>
           <br />
           <p>
-            Already an existing user?
-            <Link to="/Login">Login Here</Link>
+            Already an existing user? <Link to="/Login">Login Here</Link>
           </p>
         </Col>
         <Col className="m-5 p-5">

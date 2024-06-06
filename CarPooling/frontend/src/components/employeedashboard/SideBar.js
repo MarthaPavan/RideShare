@@ -12,7 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCarSide } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../routes/AuthContext";
 const Sidebar = () => {
-  const { logOut, user } = useAuth();
+  const { logOut} = useAuth();
+  const user = localStorage.getItem("name");
   const [index, setIndex] = React.useState(0);
   const handleLogout = () => {
     logOut();
@@ -27,7 +28,7 @@ const Sidebar = () => {
     <CSidebar className="border-end" style={{ height: "100vh" }}>
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand className="text-decoration-none">
-          Welcome {user ? user.fullName : "Guest"}
+          Welcome {user ? user : "Guest"}
         </CSidebarBrand>
       </CSidebarHeader>
       <CSidebarNav variant="pills" layout="fill">
@@ -47,7 +48,7 @@ const Sidebar = () => {
           />
           Rides
         </CNavItem>
-        <CNavItem onClick={() => handleLogout()} href="/">
+        <CNavItem onClick={() => handleLogout()} href="/Login">
           <CIcon customClassName="nav-icon" icon={icon.cilAccountLogout} />
           Logout
         </CNavItem>

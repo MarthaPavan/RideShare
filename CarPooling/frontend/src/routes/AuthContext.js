@@ -8,28 +8,25 @@ const AuthProvider = ({ children }) => {
   const [role, setRole] = useState("");
   const [user, setUser] = useState(null);
 
-  const loginAction = async (data) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:1000/get-started/login",
-        { ...data }
-      );
-      if (response.status === 200) {
-        const { role, token, user } = response.data;
-        setToken(token);
-        setRole(role);
-        console.log(user);
-        setUser(user);
-        localStorage.setItem("token", token);
-        localStorage.setItem("role", role);
-      }
-      //   } else {
-      //     setRole();
-      //   }
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
+    const loginAction = async (data) => {
+        try {
+            const response = await axios.post("http://localhost:1000/get-started/login", { ...data });
+            if (response.status === 200) {
+                const { role, token, user } = response.data;
+                setToken(token);
+                setRole(role);
+                setUser(user);
+                console.log(token);
+                console.log(user.fullName);
+                localStorage.setItem("token", token);
+                localStorage.setItem("role", role);
+                localStorage.setItem("name",user.fullName);
+                
+            }
+        } catch (error) {
+            console.error("Login failed", error);
+        }
+    };
 
   const logOut = () => {
     setToken("");
