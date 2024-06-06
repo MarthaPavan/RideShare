@@ -3,44 +3,37 @@ const userModel = require("../models/users.model");
 require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
 
-verifyToken = (req, res, next) => {
-
+const verifyToken = async (req, res, next) => {
   const bearerHeader = req.headers['authorization'];
-  //console.log(req.headers.authorization);
-  const token = bearerHeader.split(' ')[1];
 
-  // if token is undefined
-  if (token == null)
-  {
-    return res.status(500).json({ msg: "Token is missing" });
+  if (!bearerHeader) {
+    return res.status(401).json({ msg: "Authorization header is missing" });
   }
 
+  const token = bearerHeader.split(' ')[1];
 
-  jwt.verify(token, SECRET_KEY, async (err, verifiedToken) => {
-    if (err)
-    {
-      return res.status(500).json({ msg: err.message });
+  if (!token) {
+    return res.status(401).json({ msg: "Token is missing" });
+  }
+
+  try {
+    const verifiedToken = jwt.verify(token, SECRET_KEY);
+    const user = await userModel.findOne({ emailId: verifiedToken.user.emailId });
+
+    if (!user) {
+      return res.status(401).json({ msg: "User not found" });
     }
-    else
-    {
-      //if token is verified successfully
-      const user = await userModel.findOne({ emailId: verifiedToken.user.emailId });
-      console.log(user);
-      //if the user is admin
-      if (user.role === "admin")
-      {
-        console.log("admin verified");
-        next();
-      }
-      else {
-        return res.status(500).json({ msg: "you are unauthorized" });
-      }
-      
+
+    if (user.role !== "admin") {
+      return res.status(403).json({ msg: "You are unauthorized" });
     }
-  });
 
-
+    console.log("admin verified");
+    next();
+  } catch (err) {
+    console.error("Token verification error:", err);
+    return res.status(401).json({ msg: "Invalid token" });
+  }
 }
-
 
 module.exports = verifyToken;

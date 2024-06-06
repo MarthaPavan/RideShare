@@ -1,18 +1,26 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useReactTable, getCoreRowModel, flexRender, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table';
 import { Pagination } from 'react-bootstrap';
-import mockData from '../../MOCK_DATA(1).json';
+import axios from 'axios';
+
 const Employees = () => {
+  const [sorting, setSorting] = useState([]);
+  const [data, setData] = useState([]);
 
-    const [sorting, setSorting] = useState([]);
-  const data = useMemo(
-    //api call
-    
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:1000/routes/getDriver");
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
 
-  /**@type import('@tanstack/react-table').ColumnDef<any>[] */
+    fetchData();
+  }, []);
+
   const columns = useMemo(() => [
-    
     {
       header: "Name",
       accessorKey: "fullName",
@@ -49,38 +57,38 @@ const Employees = () => {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel:getSortedRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    state : {
-        sorting : sorting,
+    state: {
+      sorting: sorting,
     },
     initialState: {
-        pagination: {
-          pageSize: 10,
-          pageIndex: 0,
-        }
-      },
+      pagination: {
+        pageSize: 10,
+        pageIndex: 0,
+      }
+    },
     onSortingChange: setSorting,
-
   });
+
   const { pageCount, pageIndex } = table.getState().pagination;
   return (
-        <div className='container flex-column justify-content-center align-content-center'>
-      <table className = "table table-striped table-bordered">
+    <div className='container flex-column justify-content-center align-content-center m-2 p-2'>
+      <table className="table table-striped table-bordered">
         <thead className='thead-dark'>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
                 <th key={header.id}
-                    style={{"cursor" : "pointer"}}
+                    style={{ cursor: "pointer" }}
                     onClick={header.column.getToggleSortingHandler()}
-                    >
+                >
                   {flexRender(header.column.columnDef.header, header.getContext())}
-                  {
-                        { asc: '🔼', desc: '🔽' }[
-                          header.column.getIsSorted() ?? null
-                        ]
-                    }
+                  {header.column.getIsSorted()
+                    ? header.column.getIsSorted() === 'asc'
+                      ? '🔼'
+                      : '🔽'
+                    : null}
                 </th>
               ))}
             </tr>

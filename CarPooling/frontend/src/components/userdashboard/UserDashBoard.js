@@ -14,31 +14,32 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { Row, Col } from "react-bootstrap";
 import Profile from "./Profile";
 import Dashboard from "./DashBoard";
+import { useAuth } from "../../routes/AuthContext";
 import Rides from "./Rides";
+
 const UserDashBoard = () => {
   const [index, setIndex] = React.useState(0);
+  const user = localStorage.getItem("name");
+  const { logout } = useAuth(); // Destructure logout method properly
   const handleClick = (e) => {
     setIndex(e);
     console.log(e);
   };
   const handleLogOut = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    window.location.href = "/login";
+    logout(); // Call the logout method
   };
   const components = [<Profile />, <Dashboard />, <Rides />];
   return (
     <>
-      <Row>
-        <Col xs={2}>
+      <Row className="gx-4">
+        <Col xs={2} className="px-0">
           <CSidebar className="border-end" style={{ height: "100vh" }}>
             <CSidebarHeader className="border-bottom">
               <CSidebarBrand className="text-decoration-none">
-                Welcome [user name]
+                Welcome {user ? user : "User"}
               </CSidebarBrand>
             </CSidebarHeader>
             <CSidebarNav variant="pills" layout="fill">
-              {/*<CNavTitle>Nav Title</CNavTitle>*/}
               <CNavItem
                 href="#"
                 active={index === 0}
@@ -55,7 +56,7 @@ const UserDashBoard = () => {
                 <CIcon
                   customClassName="nav-icon"
                   icon={icon.cilScreenDesktop}
-                />{" "}
+                />
                 Dashboard
               </CNavItem>
               <CNavItem
@@ -85,24 +86,20 @@ const UserDashBoard = () => {
                 active={index === 4}
                 onClick={() => handleClick(4)}
               >
-                <CIcon
-                  customClassName="nav-icon"
-                  icon={icon.cilContact}
-                ></CIcon>
+                <CIcon customClassName="nav-icon" icon={icon.cilContact} />
                 Contact Us
               </CNavItem>
-              <CNavItem href="#">
+              <CNavItem href="/Login" onClick={handleLogOut}>
                 <CIcon
                   customClassName="nav-icon"
                   icon={icon.cilAccountLogout}
-                  onClick={handleLogOut}
                 />
                 Log out
               </CNavItem>
             </CSidebarNav>
           </CSidebar>
         </Col>
-        <Col xs={10} className="p-5">
+        <Col xs={10} className="px-5 py-3">
           {components[index]}
         </Col>
       </Row>

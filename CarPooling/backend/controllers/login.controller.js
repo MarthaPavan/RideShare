@@ -64,10 +64,8 @@ class LoginController {
           vehicleModel
         });
         return res.status(200).json({ msg: "success", user });
-
-        
       }
-
+      
         const user = await userModel.create({
           fullName,
           emailId,
@@ -75,7 +73,7 @@ class LoginController {
           password: hashedPassword,
           role
         });
-  
+      
         return res.status(200).json({ msg: "success", user });
       
     } catch (err) {

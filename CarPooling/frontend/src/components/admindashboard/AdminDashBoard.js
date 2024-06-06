@@ -19,7 +19,8 @@ import Employees from "./Employees";
 import Profile from "./Profile";
 import Dashboard from "./Dashboard";
 const AdminDashBoard = () => {
-  const { logOut, user } = useAuth();
+  const { logOut } = useAuth();
+  const user = localStorage.getItem("name");
   const [index, setIndex] = React.useState(0);
   const components = [<Profile />, <Dashboard />, <Employees />, <Routes />];
   const handleClick = (e) => {
@@ -36,12 +37,12 @@ const AdminDashBoard = () => {
   }, []);
   return (
     <>
-      <Row>
-        <Col xs={2}>
+      <Row className="gx-4">
+        <Col xs={2} className="px-0">
           <CSidebar className="border-end" style={{ height: "100vh" }}>
             <CSidebarHeader className="border-bottom">
               <CSidebarBrand className="text-decoration-none">
-                Welcome {user ? user.fullName : "Guest"}
+                Welcome {user ? user : "Guest"}
               </CSidebarBrand>
             </CSidebarHeader>
             <CSidebarNav variant="pills" layout="fill">
