@@ -1,6 +1,7 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/users.model");
+const driverModel = require("../models/drivers.model");
 require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
@@ -37,8 +38,39 @@ class LoginController {
         return res.status(400).json({ msg: "User already exists" });
       }
 
+
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(password, salt);
+      if(role=="driver"){
+        const user = await userModel.create({
+          fullName,
+          emailId,
+          phoneNumber,
+          password: hashedPassword,
+          role,
+          registrationNumber,
+          vehicleModel
+        });
+        const driver = await driverModel.create({
+          fullName,
+          emailId,
+          phoneNumber,
+          role,
+          registrationNumber,
+          vehicleModel
+        });
+        return res.status(200).json({ msg: "success", user });
+      }
+      
+        const user = await userModel.create({
+          fullName,
+          emailId,
+          phoneNumber,
+          password: hashedPassword,
+          role
+        });
+        return res.status(200).json({ msg: "success", user });
+      
       if(role=="driver"){
         const user = await userModel.create({
           fullName,

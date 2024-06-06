@@ -19,11 +19,11 @@ class RouteControllers {
 
   async editRoute(req, res) {
     try {
-      const { routeId } = req.body;
+      const routeId  = parseInt(req.params.routeId);
       const { body } = req;
       console.log(req.body);
       await routeModel.findOneAndUpdate({ routeId: routeId }, { ...body });
-      const route = routeModel.findOne({ routeId });
+      const route = await routeModel.findOne({ routeId:routeId });
       res.status(200).json(route);
     } catch (err) {
       res.status(404).json({ msg: err.message });
@@ -54,8 +54,9 @@ class RouteControllers {
 
   async getRouteById(req, res) {
     try {
-      const { routeId } = req.body;
-      const oldRoute = await routeModel.findOne({ routeId });
+      const routeId  = parseInt(req.params.routeId);
+      console.log(routeId);
+      const oldRoute = await routeModel.findOne({ routeId:routeId });
       res.status(200).json(oldRoute);
     } catch (err) {
       res.status(404).json({ msg: err.message });

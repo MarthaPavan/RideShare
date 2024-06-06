@@ -1,5 +1,4 @@
 import React from "react";
-import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./NavBar";
 import Home from "./components/Home";
@@ -43,11 +42,12 @@ const App = () => {
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/SignUpSuccess" element={<SignUpSuccess />} />
           <Route path="/join" element={<JoinUs />} />
-
+          {/*Developmental Routes*/}
+          <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
           {/* Protected Admin Routes */}
-          <Route element={<AdminRoutes />}>
+          {/* <Route element={<AdminRoutes />}>
             <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
-          </Route>
+          </Route> */}
 
           {/* Protected Employee Routes */}
           <Route element={<EmployeeRoutes />}>
@@ -63,22 +63,6 @@ const App = () => {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
-        <Toaster
-          containerStyle={{
-            top: 80,
-            right: 20,
-            bottom: 20,
-            left: 20,
-          }}
-          toastOptions={{
-            style: {
-              height: "60px",
-              width: "200px",
-              fontFamily: "Inter sans-serif",
-              fontWeight: "bold",
-            },
-          }}
-        />
       </Router>
     </AuthProvider>
   );

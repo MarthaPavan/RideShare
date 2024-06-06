@@ -15,10 +15,6 @@ const driverSchema = new mongoose.Schema({
     required: true,
     unique: [true, "emailId already exists"],
   },
-  password: {
-    type: String,
-    required: true,
-  },
   registrationNumber: {
     type: String,
     required: true,
