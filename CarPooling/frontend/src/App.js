@@ -42,11 +42,12 @@ const App = () => {
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/SignUpSuccess" element={<SignUpSuccess />} />
           <Route path="/join" element={<JoinUs />} />
-
+          {/*Developmental Routes*/}
+          <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
           {/* Protected Admin Routes */}
-          <Route element={<AdminRoutes />}>
+          {/* <Route element={<AdminRoutes />}>
             <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
-          </Route>
+          </Route> */}
 
           {/* Protected Employee Routes */}
           <Route element={<EmployeeRoutes />}>

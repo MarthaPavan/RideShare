@@ -46,7 +46,7 @@ const AdminDashBoard = () => {
             </CSidebarHeader>
             <CSidebarNav variant="pills" layout="fill">
               <CNavItem
-                href="#"
+                href="#/profile"
                 active={index === 0}
                 onClick={() => handleClick(0)}
               >
@@ -54,7 +54,7 @@ const AdminDashBoard = () => {
                 Profile
               </CNavItem>
               <CNavItem
-                href="#"
+                href="#/dashboard"
                 active={index === 1}
                 onClick={() => handleClick(1)}
               >
@@ -65,7 +65,7 @@ const AdminDashBoard = () => {
                 Dashboard
               </CNavItem>
               <CNavItem
-                href="#"
+                href="#/employees"
                 active={index === 2}
                 onClick={() => handleClick(2)}
               >
@@ -73,7 +73,7 @@ const AdminDashBoard = () => {
                 Employees
               </CNavItem>
               <CNavItem
-                href="#"
+                href="#/routes"
                 active={index === 3}
                 onClick={() => handleClick(3)}
               >
