@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useReactTable, getCoreRowModel, flexRender, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table';
-import { Pagination } from 'react-bootstrap';
+import { Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 
 const Employees = () => {
@@ -19,7 +19,9 @@ const Employees = () => {
 
     fetchData();
   }, []);
-
+  const handleClick=(id)=>{
+      console.log(id);
+  }
   const columns = useMemo(() => [
     {
       header: "Name",
@@ -33,7 +35,7 @@ const Employees = () => {
     },
     {
       header: "Phone",
-      accessorKey: "phone",
+      accessorKey: "phoneNumber",
       cell: info => info.getValue()
     },
     {
@@ -72,9 +74,11 @@ const Employees = () => {
   });
 
   const { pageCount, pageIndex } = table.getState().pagination;
+  
   return (
     <div className='container flex-column justify-content-center align-content-center m-2 p-2'>
-      <table className="table table-striped table-bordered">
+      <h1><i className="fa-regular fa-address-book"></i> Employees List</h1>
+      <Table responsive bordered hover>
         <thead className='thead-dark'>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
@@ -96,7 +100,7 @@ const Employees = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
+            <tr key={row.id} onClick={()=>handleClick(row.original._id)}>
               {row.getVisibleCells().map(cell => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -105,7 +109,7 @@ const Employees = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
       <Pagination className='align-items-end'>
         <Pagination.First onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} />
         <Pagination.Prev onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} />
