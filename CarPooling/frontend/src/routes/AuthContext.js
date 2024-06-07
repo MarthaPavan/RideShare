@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, createContext } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -9,31 +9,29 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(localStorage.getItem("name") || null);
 
   useEffect(() => {
-    // Setup axios interceptor
     axios.interceptors.request.use(
-      config => {
+      (config) => {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
-      error => {
-        return Promise.reject(error);
-      }
+      (error) => Promise.reject(error)
     );
   }, [token]);
 
   const loginAction = async (data) => {
     try {
-      const response = await axios.post("http://localhost:1000/get-started/login", { ...data });
+      const response = await axios.post("http://localhost:1000/get-started/login", data);
       if (response.status === 200) {
         const { role, token, user } = response.data;
         setToken(token);
         setRole(role);
-        setUser(user);
+        setUser(user.fullName);
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         localStorage.setItem("name", user.fullName);
+        localStorage.setItem("status", true);
       }
     } catch (error) {
       console.error("Login failed", error);
@@ -42,11 +40,12 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setToken("");
-    setUser(null);
     setRole("");
+    setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("name");
+    localStorage.setItem("status", false);
   };
 
   return (
@@ -56,8 +55,6 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-const useAuth = () => {
-  return useContext(AuthContext);
-};
+const useAuth = () => useContext(AuthContext);
 
 export { AuthProvider, useAuth };

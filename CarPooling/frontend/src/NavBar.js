@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link,useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './App.css';
 
-const NavBar = ({status}) => {
+const NavBar = () => {
     const navigate = useNavigate();
     return (
         <header className="text-bg-dark">
@@ -21,7 +21,7 @@ const NavBar = ({status}) => {
                             <li><Link to="/About" className="nav-link text-white fs-5 mr-2">About</Link></li>
                         </ul>
                     </div>
-                    { !status &&
+                    { !JSON.parse(localStorage.getItem("status")) &&
                     <div className="text-end">
                         <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate("/Login")}>
                             Login

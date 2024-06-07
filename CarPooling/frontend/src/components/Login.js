@@ -12,7 +12,7 @@ import {
 import { useAuth } from "../routes/AuthContext";
 import "../App.css";
 
-const Login = ({setStatus}) => {
+const Login = () => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,7 +28,8 @@ const Login = ({setStatus}) => {
     try {
       await auth.loginAction({ emailId, password });
       const role = localStorage.getItem("role");
-      setStatus(true);
+      localStorage.setItem("status", true.toString());
+
       console.log(role);
      
       switch (role) {

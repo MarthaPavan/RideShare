@@ -75,7 +75,7 @@ const Dashboard = () => {
     return (
         <Container style={{ height: "100%" }}>
             <Row style={{ height: "100%" }}>
-                <Col className='d-flex align-items-center justify-content-center'>
+                <Col xs={5} className='d-flex py-0  my-0  '>
                     <div className="card">
                         <div className="card-header">
                             <div className='card-body'>
