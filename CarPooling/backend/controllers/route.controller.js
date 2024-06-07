@@ -1,14 +1,18 @@
 const routeModel = require("../models/route.model");
+const driverModel = require("../models/drivers.model");
 
 class RouteControllers {
   async saveRoute(req, res) {
     try {
       const { routeId, startPoint, endPoint, distance } = req.body;
+      const drivers = await driverModel.find({}, { fullName: 1, _id: 0, emailId: 1, phoneNumber: 1, registrationNumber: 1 });
+      console.log(drivers);
       const route = await routeModel.create({
         routeId,
         startPoint,
         endPoint,
         distance,
+        drivers:drivers
       });
       console.log("Inserted successfully");
       res.status(200).json(route);
@@ -22,6 +26,7 @@ class RouteControllers {
       const routeId  = parseInt(req.params.routeId);
       const { body } = req;
       console.log(req.body);
+  
       await routeModel.findOneAndUpdate({ routeId: routeId }, { ...body });
       const route = await routeModel.findOne({ routeId:routeId });
       res.status(200).json(route);
