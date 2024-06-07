@@ -1,125 +1,137 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { useReactTable, getCoreRowModel, flexRender, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table';
-import { Table, Pagination } from 'react-bootstrap';
+import { useTable, useSortBy, usePagination } from 'react-table';
+import { Table, Pagination,Button } from 'react-bootstrap';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import RouteDetails from './RouteDetails';
 
 const Routes = () => {
-  const [sorting, setSorting] = useState([]);
   const [data, setData] = useState([]);
-  const navigate = useNavigate();  // React Router navigate hook
+  const [page, setPage] = useState(false);
+  const [routeId, setRouteId] = useState(1); // Initial routeId set to 1
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:1000/routes/getRoute"); // Adjust URL as needed
+        const response = await axios.get("http://localhost:1000/routes/getRoute");
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
-
     fetchData();
   }, []);
 
   const columns = useMemo(() => [
     {
-      header: "Route ID",
-      accessorKey: "routeId",
-      cell: info => info.getValue()
+      Header: "Route ID",
+      accessor: "routeId",
     },
     {
-      header: "Start Point",
-      accessorKey: "startPoint",
-      cell: info => info.getValue()
+      Header: "Start Point",
+      accessor: "startPoint",
     },
     {
-      header: "End Point",
-      accessorKey: "endPoint",
-      cell: info => info.getValue()
+      Header: "End Point",
+      accessor: "endPoint",
     },
     {
-      header: "Distance (km)",
-      accessorKey: "distance",
-      cell: info => `${info.getValue()} km`
+      Header: "Distance (km)",
+      accessor: "distance",
+      Cell: ({ value }) => `${value} km`,
     },
     {
-      header: "Number of Drivers",
-      accessorKey: "drivers",
-      cell: info => info.getValue().length
-    }
+      Header: "Number of Drivers",
+      accessor: "drivers",
+      Cell: ({ value }) => value.length,
+    },
   ], []);
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    state: {
-      sorting: sorting,
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page: rows,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0 },
     },
-    initialState: {
-      pagination: {
-        pageSize: 10,
-        pageIndex: 0,
-      }
-    },
-    onSortingChange: setSorting,
-  });
+    useSortBy,
+    usePagination
+  );
 
   const handleClick = (id) => {
-    navigate(`/routes/${id}`);  // Navigate to RouteDetails with the selected route ID
-  }
+    setRouteId(id);
+    setPage(true);
+  };
 
-  const { pageCount, pageIndex } = table.getState().pagination;
-
+  const handleBackClick = () => {
+    setPage(false); // Set page to false to display the list again
+  };
+  
   return (
     <div className='container flex-column justify-content-center align-content-center m-2 p-2'>
       <h3 className='display-6'><i className="fa-solid fa-map"></i> Routes</h3>
-      <Table responsive bordered hover>
-        <thead className='thead bg-dark text-white'>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id}
-                    style={{ cursor: "pointer" }}
-                    onClick={header.column.getToggleSortingHandler()}
-                >
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                  {header.column.getIsSorted()
-                    ? header.column.getIsSorted() === 'asc'
-                      ? '🔼'
-                      : '🔽'
-                    : null}
-                </th>
+      {!page && (
+        <>
+          <Table responsive bordered hover {...getTableProps()}>
+            <thead className='thead bg-dark text-white'>
+              {headerGroups.map(headerGroup => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      {column.render('Header')}
+                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id} onClick={() => handleClick(row.original._id)}>
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Pagination className='align-items-end'>
-        <Pagination.First onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} />
-        <Pagination.Prev onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} />
-        {Array.from({ length: pageCount }, (_, i) => (
-          <Pagination.Item key={i} active={i === pageIndex} onClick={() => table.setPageIndex(i)}>
-            {i + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} />
-        <Pagination.Last onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()} />
-      </Pagination>
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map(row => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()} onClick={() => handleClick(row.original.routeId)}>
+                    {row.cells.map(cell => {
+                      return (
+                        <td {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+          <Pagination className='align-items-end'>
+            <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
+            <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
+            {pageOptions.map((page, index) => (
+              <Pagination.Item key={index} active={pageIndex === index} onClick={() => gotoPage(index)}>
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
+            <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
+          </Pagination>
+        </>
+      )}
+      {page && <RouteDetails id={routeId} />}
+      {page && 
+        <Button variant="primary" onClick={handleBackClick}>Back</Button>
+      }
     </div>
   );
 };

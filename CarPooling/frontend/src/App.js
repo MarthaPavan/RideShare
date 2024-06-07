@@ -25,18 +25,19 @@ import "@coreui/icons-react";
 import "@coreui/icons";
 import "@coreui/react-chartjs";
 import { Navigate } from "react-router-dom";
-
+import { useState } from "react";
 const App = () => {
+  const [status,setStatus]=useState(false);
   return (
     <AuthProvider>
       <Router>
-        <NavBar />
+        <NavBar status={status}/>
 
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/About" element={<About />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/Login" element={<Login setStatus={setStatus} />} />
           <Route path="/GetStarted" element={<GetStarted />} />
           <Route path="/Forgot" element={<ForgotPassword />} />
           <Route path="/create-account" element={<CreateAccount />} />

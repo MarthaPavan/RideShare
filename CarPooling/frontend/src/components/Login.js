@@ -12,7 +12,7 @@ import {
 import { useAuth } from "../routes/AuthContext";
 import "../App.css";
 
-const Login = () => {
+const Login = ({setStatus}) => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,8 +28,9 @@ const Login = () => {
     try {
       await auth.loginAction({ emailId, password });
       const role = localStorage.getItem("role");
+      setStatus(true);
       console.log(role);
-
+     
       switch (role) {
         case "admin":
           navigate("/AdminDashBoard");

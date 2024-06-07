@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import "../../App.css";
 
 import {
@@ -20,14 +21,17 @@ import Profile from "./Profile";
 import Dashboard from "./Dashboard";
 const AdminDashBoard = () => {
   const { logOut } = useAuth();
+  const navigate = useNavigate();
   const user = localStorage.getItem("name");
   const [index, setIndex] = React.useState(0);
   const components = [<Profile />, <Dashboard />, <Employees />, <Routes />];
   const handleClick = (e) => {
     setIndex(e);
   };
-  const handleLogout = () => {
+  const handleLogout = (event) => {
+    event.preventDefault();
     logOut();
+    navigate('/');
   };
   useEffect(() => {
     toast("Welcome back", {
@@ -80,13 +84,14 @@ const AdminDashBoard = () => {
               >
                 <CIcon customClassName="nav-icon" icon={icon.cilMap} /> Routes
               </CNavItem>
-              <CNavItem href="/" onClick={() => handleLogout}>
-                <CIcon
-                  customClassName="nav-icon"
-                  icon={icon.cilAccountLogout}
-                />
-                Log out
-              </CNavItem>
+              <CNavItem href="/" onClick={handleLogout}>
+              <CIcon
+                customClassName="nav-icon"
+                icon={icon.cilAccountLogout}
+              />
+              Log out
+            </CNavItem>
+
               {/*<CNavItem href="https://coreui.io/pro/"><CIcon customClassName="nav-icon" icon={icon.cilLayers} /> Try CoreUI PRO</CNavItem>*/}
             </CSidebarNav>
           </CSidebar>
