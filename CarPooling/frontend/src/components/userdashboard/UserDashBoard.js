@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   CSidebar,
   CSidebarBrand,
@@ -17,7 +17,7 @@ import Profile from "./Profile";
 import Dashboard from "./DashBoard";
 import { useAuth } from "../../routes/AuthContext";
 import Rides from "./Rides";
-
+import toast from "react-hot-toast";
 const UserDashBoard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
@@ -27,6 +27,9 @@ const UserDashBoard = () => {
     setIndex(e);
     console.log(e);
   };
+  useEffect(() => {
+    toast.success("Welcome to your dashboard");
+    }, []);
   const handleLogOut = () => {
     logout(); // Call the logout method
   };

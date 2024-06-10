@@ -25,7 +25,7 @@ import "@coreui/icons-react";
 import "@coreui/icons";
 import "@coreui/react-chartjs";
 import { Navigate } from "react-router-dom";
-
+import { Toaster } from "react-hot-toast";
 const App = () => {
 
   localStorage.setItem("status", false.toString());
@@ -64,6 +64,22 @@ const App = () => {
           {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <Toaster
+        containerStyle={{
+          top: 80,
+          right: 20,
+          bottom: 20,
+          left: 20,
+        }}
+        toastOptions={{
+          style: {
+            height: "60px",
+            width: "200px",
+            fontFamily: "Inter sans-serif",
+            fontWeight: "bold",
+          },
+        }}
+      />
         <Footer />
       </Router>
     </AuthProvider>

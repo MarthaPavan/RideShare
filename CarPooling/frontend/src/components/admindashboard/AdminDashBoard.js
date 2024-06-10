@@ -100,22 +100,7 @@ const AdminDashBoard = () => {
           {components[index]}
         </Col>
       </Row>
-      <Toaster
-        containerStyle={{
-          top: 80,
-          right: 20,
-          bottom: 20,
-          left: 20,
-        }}
-        toastOptions={{
-          style: {
-            height: "60px",
-            width: "200px",
-            fontFamily: "Inter sans-serif",
-            fontWeight: "bold",
-          },
-        }}
-      />
+      
     </>
   );
 };

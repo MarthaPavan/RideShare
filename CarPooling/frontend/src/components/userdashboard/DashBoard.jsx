@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faCalendarDays, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { SearchList } from './SearchList';
+import { SearchList } from './SearchList'; // Ensure SearchList is properly implemented
 import axios from 'axios';
 import './dashboard.css';
 
@@ -12,46 +12,38 @@ const Dashboard = () => {
         endPoint: "",
         date: "",
         seats: 1,
-        roundTrip: false,
+        officeRide: false,
         returnPoint: ""
     });
-
+    const [index, setIndex] = useState(0);
     const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Function to get today's date in "YYYY-MM-DD" format
+    // Helper function to get today's date in "YYYY-MM-DD" format
     const getTodayDate = () => {
         const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0'); // Pad day with zero if needed
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Pad month with zero and add 1 (month is zero-based)
-        const year = today.getFullYear();
-        return `${year}-${month}-${day}`;
+        return today.toISOString().split('T')[0];
     };
 
-    // Today's date
     const todayDate = getTodayDate();
 
-    // Fetch routes from Geoapify
-    const fetchRoutes = async (query) => {
+    // Debounced API call
+    const fetchRoutes = useCallback(async (query) => {
+        if (!query) return;
         try {
             setLoading(true);
-            const response = await axios.get(`https://api.geoapify.com/v1/geocode/autocomplete`, {
-                params: {
-                    text: query,
-                    lang: "en",
-                    limit: 20,
-                    type: "amenity",
-                    apiKey: "YOUR_API_KEY" // Replace with your actual API key
-                }
+            setError(null); // Clear any existing errors
+            const response = await axios.get(`http://localhost:1000/mapapi/autocomplete?input=${query}`, {
+                headers: { accept: 'application/json' }
             });
-            setLocations(response.data.features.map(feature => feature.properties.name));
-            setLoading(false);
+            setLocations(response.data);
         } catch (error) {
-            setLoading(false);
             setError("Failed to fetch locations. Please try again later.");
+        } finally {
+            setLoading(false);
         }
-    };
+    }, []);
 
     // Handle pickup location change
     const handlePickUpChange = (e) => {
@@ -60,6 +52,7 @@ const Dashboard = () => {
             ...prevState,
             startPoint: value
         }));
+        setIndex(1);
         fetchRoutes(value);
     };
 
@@ -70,14 +63,15 @@ const Dashboard = () => {
             ...prevState,
             endPoint: value
         }));
+        setIndex(2);
         fetchRoutes(value);
     };
 
     // Handle selection from search results
-    const handleSelect = (key, result) => {
+    const handleSelect = (result, name) => {
         setRideDetails(prevState => ({
             ...prevState,
-            [key]: result
+            [name]: result
         }));
         setLocations([]);
     };
@@ -85,7 +79,11 @@ const Dashboard = () => {
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Submit form logic here
+        // Validate inputs before submission
+        if (!rideDetails.startPoint || !rideDetails.endPoint) {
+            setError("Please provide both a start and end point.");
+            return;
+        }
         console.log("Ride details submitted:", rideDetails);
     };
 
@@ -112,8 +110,8 @@ const Dashboard = () => {
                                     value={rideDetails.startPoint}
                                     onChange={handlePickUpChange}
                                 />
-                                {locations.length > 0 && (
-                                    <SearchList results={locations} onSelect={(result) => handleSelect('startPoint', result)} />
+                                {locations.length > 0 && index === 1 && (
+                                    <SearchList results={locations} onSelect={(result) => handleSelect(result, 'startPoint')} />
                                 )}
                             </InputGroup>
                         </Col>
@@ -122,30 +120,16 @@ const Dashboard = () => {
                                 <InputGroup.Text>
                                     <FontAwesomeIcon icon={faLocationDot} style={{ color: "#ff0000" }} />
                                 </InputGroup.Text>
-                                {rideDetails.roundTrip ? (
-                                    <Form.Control
-                                        className='py-lg-2'
-                                        type="text"
-                                        name="returnPoint"
-                                        placeholder="Enter your office location"
-                                        value={rideDetails.returnPoint}
-                                        onChange={(e) => setRideDetails(prevState => ({
-                                            ...prevState,
-                                            returnPoint: e.target.value
-                                        }))}
-                                    />
-                                ) : (
-                                    <Form.Control
-                                        className='py-lg-2'
-                                        type="text"
-                                        name="endPoint"
-                                        placeholder="Enter your destination"
-                                        value={rideDetails.endPoint}
-                                        onChange={handleDestinationChange}
-                                    />
-                                )}
-                                {locations.length > 0 && !rideDetails.roundTrip && (
-                                    <SearchList results={locations} onSelect={(result) => handleSelect('endPoint', result)} />
+                                <Form.Control
+                                    className='py-lg-2'
+                                    type="text"
+                                    name="endPoint"
+                                    placeholder="Enter your destination"
+                                    value={rideDetails.endPoint}
+                                    onChange={handleDestinationChange}
+                                />
+                                {locations.length > 0 && index === 2 && !rideDetails.officeRide && (
+                                    <SearchList results={locations} onSelect={(result) => handleSelect(result, 'endPoint')} />
                                 )}
                             </InputGroup>
                         </Col>
@@ -158,6 +142,7 @@ const Dashboard = () => {
                                     className='py-lg-2'
                                     type="date"
                                     name="date"
+                                    placeholder={todayDate}
                                     min={todayDate} // Set min date to today
                                     value={rideDetails.date}
                                     onChange={(e) => setRideDetails(prevState => ({
@@ -194,15 +179,16 @@ const Dashboard = () => {
                             type="switch"
                             id="flexSwitchCheckDefault"
                             label="Office Ride"
+                            checked={rideDetails.officeRide}
                             onChange={(e) => setRideDetails(prevState => ({
                                 ...prevState,
-                                roundTrip: e.target.checked
+                                officeRide: e.target.checked
                             }))}
                         />
                     </Row>
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
-                            <Button type="submit" className="gold-gradient-btn w-100">Search</Button>
+                            <Button type="submit" variant='outline-warning' className="btn w-100 btn-dark fw-bold">Search</Button>
                         </Col>
                     </Row>
                 </Form>

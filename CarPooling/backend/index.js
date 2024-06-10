@@ -7,7 +7,7 @@ const gettingStarted = require("./routes/getstarted");
 const routes = require("./routes/routes");
 const cors = require("cors");
 
-
+const mapapi = require("./routes/mapapi")
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +21,7 @@ app.use("/get-started", gettingStarted);
 app.use("/routes", routes);
 
 
-
+app.use("/mapapi",mapapi)
 app.get("/", (req, res) => {
   res.send("<h1>HomePage</h1>");
 });

@@ -29,7 +29,7 @@ const Rides = () => {
                 <Col className="border border-0 rounded-1 shadow-lg w-75 h-75">
 
 
-                    <Card className="border-0 bg-dark-subtle">
+                    <Card className="border-0 bg-slate">
                         <Card.Header>Card 1</Card.Header>
                         <Card.Body>
                             Cards every where
