@@ -5,7 +5,15 @@ import PropTypes from 'prop-types';
 
 export function SearchList({ results, onSelect, inputName }) {
     return (
-        <ul className="list-group position-sticky z-1" style={{ zIndex: 1000, width: '100%' }}>
+        <ul 
+            className="list-group position-sticky z-1" 
+            style={{ 
+                zIndex: 1000, 
+                width: '100%', 
+                maxHeight: '200px',  // height to fit approximately 4 items
+                overflowY: 'auto' 
+            }}
+        >
             {results.map((result, index) => (
                 <li
                     key={`${result}-${index}`} // Ensure unique key for each item

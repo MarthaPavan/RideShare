@@ -1,0 +1,23 @@
+.position-relative {
+  position: relative;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+}
+
+.edit-button {
+  position: absolute;
+  bottom: 0;
+  right: 50px;
+  padding: 0.25rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  border-radius: 50%;
+}
+
+

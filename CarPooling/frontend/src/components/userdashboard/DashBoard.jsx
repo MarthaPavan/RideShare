@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faCalendarDays, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { SearchList } from './SearchList'; // Ensure SearchList is properly implemented
 import axios from 'axios';
+import debounce from 'lodash.debounce';
 import './dashboard.css';
 
 const Dashboard = () => {
@@ -29,7 +30,7 @@ const Dashboard = () => {
     const todayDate = getTodayDate();
 
     // Debounced API call
-    const fetchRoutes = useCallback(async (query) => {
+    const fetchRoutes = useCallback(debounce(async (query) => {
         if (!query) return;
         try {
             setLoading(true);
@@ -43,7 +44,7 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, 500), []);
 
     // Handle pickup location change
     const handlePickUpChange = (e) => {
@@ -87,8 +88,13 @@ const Dashboard = () => {
         console.log("Ride details submitted:", rideDetails);
     };
 
+    // Handle double click to close search list
+    const handleDoubleClick = () => {
+        setLocations([]);
+    };
+
     return (
-        <Container fluid>
+        <Container fluid className='px-5' onDoubleClick={handleDoubleClick}>
             <Row>
                 <Col xs={12} className='d-flex justify-content-center align-items-center mb-4'>
                     <h1 className='text-center'>Book a Ride</h1>
@@ -97,7 +103,7 @@ const Dashboard = () => {
             <Row className='border border-light-subtle rounded bg-light-subtle shadow p-lg-5 ps-lg-0 pe-lg-0'>
                 <Form className='w-100' onSubmit={handleSubmit}>
                     <Row lg={"auto"} className="align-items-center justify-content-between m-0">
-                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0">
+                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0 position-relative">
                             <InputGroup className='h6'>
                                 <InputGroup.Text>
                                     <FontAwesomeIcon icon={faLocationDot} style={{ color: "#00b500" }} />
@@ -107,15 +113,18 @@ const Dashboard = () => {
                                     type="text"
                                     name="startPoint"
                                     placeholder="Enter your location"
+                                    aria-label="Start point"
                                     value={rideDetails.startPoint}
                                     onChange={handlePickUpChange}
                                 />
                                 {locations.length > 0 && index === 1 && (
-                                    <SearchList results={locations} onSelect={(result) => handleSelect(result, 'startPoint')} />
+                                    <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px'  }}>
+                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'startPoint')} inputName="startPoint" />
+                                    </div>
                                 )}
                             </InputGroup>
                         </Col>
-                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0">
+                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0 position-relative">
                             <InputGroup className='h6'>
                                 <InputGroup.Text>
                                     <FontAwesomeIcon icon={faLocationDot} style={{ color: "#ff0000" }} />
@@ -125,11 +134,14 @@ const Dashboard = () => {
                                     type="text"
                                     name="endPoint"
                                     placeholder="Enter your destination"
+                                    aria-label="End point"
                                     value={rideDetails.endPoint}
                                     onChange={handleDestinationChange}
                                 />
                                 {locations.length > 0 && index === 2 && !rideDetails.officeRide && (
-                                    <SearchList results={locations} onSelect={(result) => handleSelect(result, 'endPoint')} />
+                                    <div className="position-absolute w-100" style={{ zIndex: 10 , top: '100%', left: '10px' }}>
+                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'endPoint')} inputName="endPoint" />
+                                    </div>
                                 )}
                             </InputGroup>
                         </Col>
@@ -144,6 +156,7 @@ const Dashboard = () => {
                                     name="date"
                                     placeholder={todayDate}
                                     min={todayDate} // Set min date to today
+                                    aria-label="Date"
                                     value={rideDetails.date}
                                     onChange={(e) => setRideDetails(prevState => ({
                                         ...prevState,
@@ -164,6 +177,7 @@ const Dashboard = () => {
                                     placeholder="Seats"
                                     min={1}
                                     max={4}
+                                    aria-label="Seats"
                                     value={rideDetails.seats}
                                     onChange={(e) => setRideDetails(prevState => ({
                                         ...prevState,
@@ -188,7 +202,7 @@ const Dashboard = () => {
                     </Row>
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
-                            <Button type="submit" variant='outline-warning' className="btn w-100 btn-dark fw-bold">Search</Button>
+                            <Button type="submit" variant='warning' className=" w-100  fw-bold">Search</Button>
                         </Col>
                     </Row>
                 </Form>

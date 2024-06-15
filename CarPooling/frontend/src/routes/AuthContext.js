@@ -6,10 +6,10 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [role, setRole] = useState(localStorage.getItem("role") || "");
-  const [user, setUser] = useState(localStorage.getItem("name") || null);
-
+  const [user, setUser] = useState(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
+  const [name,setName] = useState(localStorage.getItem('name')||"");
   useEffect(() => {
-    axios.interceptors.request.use(
+    const interceptor = axios.interceptors.request.use(
       (config) => {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
@@ -18,6 +18,8 @@ const AuthProvider = ({ children }) => {
       },
       (error) => Promise.reject(error)
     );
+
+    return () => axios.interceptors.request.eject(interceptor);
   }, [token]);
 
   const loginAction = async (data) => {
@@ -27,10 +29,12 @@ const AuthProvider = ({ children }) => {
         const { role, token, user } = response.data;
         setToken(token);
         setRole(role);
-        setUser(user.fullName);
+        setUser(user);
+        setName(user.fullName);
         localStorage.setItem("token", token);
+        localStorage.setItem("name",name);
         localStorage.setItem("role", role);
-        localStorage.setItem("name", user.fullName);
+        localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("status", true);
       }
     } catch (error) {
@@ -44,7 +48,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    localStorage.removeItem("name");
+    localStorage.removeItem("user");
     localStorage.setItem("status", false);
   };
 
