@@ -23,7 +23,6 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "@coreui/coreui/dist/css/coreui.min.css";
 import "@coreui/icons-react";
 import "@coreui/icons";
-import "@coreui/react-chartjs";
 import { Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 const App = () => {
