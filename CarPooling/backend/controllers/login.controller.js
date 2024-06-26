@@ -15,7 +15,7 @@ class LoginController {
       if (!user) {
         return res.status(401).json({ msg: "User not found" });
       }
-      console.log(user)
+      //console.log(user)
       const compare = await bcryptjs.compare(password, user.password);
       if (compare) {
         const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: "24h" });

@@ -1,11 +1,11 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { useReactTable, getCoreRowModel, flexRender, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table';
+import { useTable, useSortBy, usePagination } from 'react-table';
 import { Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 
 const Employees = () => {
-  const [sorting, setSorting] = useState([]);
   const [data, setData] = useState([]);
+  const [sorting, setSorting] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,108 +19,121 @@ const Employees = () => {
 
     fetchData();
   }, []);
-  const handleClick=(id)=>{
-      console.log(id);
-  }
+
+  const handleClick = (id) => {
+    console.log(id);
+  };
+
   const columns = useMemo(() => [
     {
-      header: "Name",
-      accessorKey: "fullName",
-      cell: info => info.getValue()
+      Header: "Name",
+      accessor: "fullName",
     },
     {
-      header: "Email",
-      accessorKey: "emailId",
-      cell: info => info.getValue()
+      Header: "Email",
+      accessor: "emailId",
     },
     {
-      header: "Phone",
-      accessorKey: "phoneNumber",
-      cell: info => info.getValue()
+      Header: "Phone",
+      accessor: "phoneNumber",
     },
     {
-      header: "Registration Number",
-      accessorKey: "registrationNumber",
-      cell: info => info.getValue()
+      Header: "Registration Number",
+      accessor: "registrationNumber",
     },
     {
-      header: "Vehicle Type",
-      accessorKey: "vehicleModel",
-      cell: info => info.getValue()
+      Header: "Vehicle Type",
+      accessor: "vehicleModel",
     },
     {
-      header: "Status",
-      accessorKey: "isVerified",
-      cell: info => (info.getValue() ? 'Verified' : 'Not Verified')
-    }
+      Header: "Status",
+      accessor: "isVerified",
+      Cell: ({ value }) => (value ? 'Verified' : 'Not Verified'),
+    },
   ], []);
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    state: {
-      sorting: sorting,
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page: rows,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 10 },
     },
-    initialState: {
-      pagination: {
-        pageSize: 10,
-        pageIndex: 0,
-      }
-    },
-    onSortingChange: setSorting,
-  });
+    useSortBy,
+    usePagination
+  );
 
-  const { pageCount, pageIndex } = table.getState().pagination;
-  
+  const rowCount = data.length;
+  const startRow = pageIndex * pageSize + 1;
+  const endRow = Math.min(rowCount, startRow + pageSize - 1);
+
   return (
     <div className='container flex-column justify-content-center align-content-center m-2 p-2'>
       <h1><i className="fa-regular fa-address-book"></i> Employees List</h1>
-      <Table responsive bordered hover>
+      <Table responsive bordered hover {...getTableProps()}>
         <thead className='thead-dark'>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(header => (
-                <th key={header.id}
-                    style={{ cursor: "pointer" }}
-                    onClick={header.column.getToggleSortingHandler()}
+                <th
+                  {...header.getHeaderProps(header.getSortByToggleProps())}
+                  style={{ cursor: "pointer" }}
                 >
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                  {header.column.getIsSorted()
-                    ? header.column.getIsSorted() === 'asc'
-                      ? '🔼'
-                      : '🔽'
-                    : null}
+                  {header.render('Header')}
+                  {header.isSorted
+                    ? header.isSortedDesc
+                      ? '🔽'
+                      : '🔼'
+                    : ''}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id} onClick={()=>handleClick(row.original._id)}>
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+        <tbody {...getTableBodyProps()}>
+          {rows.map(row => {
+            prepareRow(row);
+            return (
+              <tr key={row.id} onClick={() => handleClick(row.original._id)}>
+                {row.cells.map(cell => (
+                  <td key={cell.id}>
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
-      <Pagination className='align-items-end'>
-        <Pagination.First onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()} />
-        <Pagination.Prev onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} />
-        {Array.from({ length: pageCount }, (_, i) => (
-          <Pagination.Item key={i} active={i === pageIndex} onClick={() => table.setPageIndex(i)}>
-            {i + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} />
-        <Pagination.Last onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()} />
-      </Pagination>
+      <div className="d-flex justify-content-between align-items-center">
+        <span>
+          Showing {startRow} to {endRow} of {rowCount} entries
+        </span>
+        <Pagination className='align-items-end'>
+          <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
+          <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
+          {pageOptions.map((page, index) => (
+            <Pagination.Item key={index} active={pageIndex === index} onClick={() => gotoPage(index)}>
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
+          <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
+        </Pagination>
+      </div>
     </div>
   );
 };
