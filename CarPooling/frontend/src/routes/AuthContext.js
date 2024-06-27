@@ -31,6 +31,7 @@ const AuthProvider = ({ children }) => {
         setRole(role);
         setUser(user);
         setName(user.fullName);
+        console.log(name);
         localStorage.setItem("token", token);
         localStorage.setItem("name",name);
         localStorage.setItem("role", role);
@@ -46,6 +47,8 @@ const AuthProvider = ({ children }) => {
     setToken("");
     setRole("");
     setUser(null);
+    setName("");
+    localStorage.removeItem("name");
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("user");

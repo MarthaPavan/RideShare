@@ -1,7 +1,7 @@
-export default function Rides() {
-    return (
-        <div>
-            <h1>Previous Rides</h1>
-        </div>
-    )
+const Rides = () => {
+    return (<>
+        <h1 className="display-6">Rides</h1>
+    </>);
 }
+
+export default Rides;

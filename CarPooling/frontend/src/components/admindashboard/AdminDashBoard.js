@@ -11,20 +11,19 @@ import {
   CNavItem,
 } from "@coreui/react";
 import toast from "react-hot-toast";
-import { Toaster } from "react-hot-toast";
 import { useAuth } from "../../routes/AuthContext";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 import Routes from "./Routes";
 import Employees from "./Employees";
-import Profile from "./Profile";
+
 import Dashboard from "./Dashboard";
 const AdminDashBoard = () => {
   const { logOut } = useAuth();
   const navigate = useNavigate();
   const user = localStorage.getItem("name");
   const [index, setIndex] = React.useState(0);
-  const components = [<Profile />, <Dashboard />, <Employees />, <Routes />];
+  const components = [ <Dashboard />, <Employees />, <Routes />];
   const handleClick = (e) => {
     setIndex(e);
   };
@@ -50,18 +49,11 @@ const AdminDashBoard = () => {
               </CSidebarBrand>
             </CSidebarHeader>
             <CSidebarNav variant="pills" layout="fill">
-              <CNavItem
-                href="#/profile"
-                active={index === 0}
-                onClick={() => handleClick(0)}
-              >
-                <CIcon customClassName={"nav-icon"} icon={icon.cilUser} />
-                Profile
-              </CNavItem>
+              
               <CNavItem
                 href="#/dashboard"
-                active={index === 1}
-                onClick={() => handleClick(1)}
+                active={index === 0}
+                onClick={() => handleClick(0)}
               >
                 <CIcon
                   customClassName="nav-icon"
@@ -71,16 +63,16 @@ const AdminDashBoard = () => {
               </CNavItem>
               <CNavItem
                 href="#/employees"
-                active={index === 2}
-                onClick={() => handleClick(2)}
+                active={index === 1}
+                onClick={() => handleClick(1)}
               >
                 <CIcon customClassName="nav-icon" icon={icon.cilPeople} />
                 Employees
               </CNavItem>
               <CNavItem
                 href="#/routes"
-                active={index === 3}
-                onClick={() => handleClick(3)}
+                active={index === 2}
+                onClick={() => handleClick(2)}
               >
                 <CIcon customClassName="nav-icon" icon={icon.cilMap} /> Routes
               </CNavItem>
