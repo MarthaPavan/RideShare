@@ -11,8 +11,8 @@ const Rides = () => {
         console.log(key)
     }
     return (
-        <Container fluid>
-            <Row>
+        <Container fluid >
+            <Row className='px-4 py-2'>
                 <Nav justify variant="tabs" fill >
                     <Nav.Item>
                         <Nav.Link to="#/active" active={key === 0} className={key === 0 ? "bg-dark  text-light" : "text-dark"} onClick={() => changeKey(0)}>Active/Upcoming</Nav.Link>

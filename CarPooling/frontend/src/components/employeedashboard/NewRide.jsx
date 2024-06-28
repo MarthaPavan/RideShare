@@ -1,13 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faCalendarDays, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { SearchList } from '../../components/SearchList'; // Ensure SearchList is properly implemented
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import './dashboard.css';
-import { Loader } from '../Loader';
-const Dashboard = () => {
+import { Container, Row, Col } from "react-bootstrap";
+import { Form, InputGroup, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot, faCalendarDays, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { useState, useCallback } from "react";
+import axios from "axios";
+import { debounce } from "lodash";
+import { SearchList } from '../../components/SearchList';
+export default function NewRide() {
+
+    //States
     const [rideDetails, setRideDetails] = useState({
         startPoint: "",
         endPoint: "",
@@ -15,20 +16,12 @@ const Dashboard = () => {
         seats: 1,
         officeRide: false
     });
-    const [index, setIndex] = useState(0);
-    const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Helper function to get today's date in "YYYY-MM-DD" format
-    const getTodayDate = () => {
-        const today = new Date();
-        return today.toISOString().split('T')[0];
-    };
-
-    const todayDate = getTodayDate();
-
-    // Debounced API call
+    const [index, setIndex] = useState(0);
+    const [locations, setLocations] = useState([]);
+    const todayDate = new Date().toISOString().split('T')[0];
     const fetchRoutes = useCallback(debounce(async (query) => {
         if (!query) return;
         try {
@@ -44,8 +37,13 @@ const Dashboard = () => {
             setLoading(false);
         }
     }, 500), []);
+    const handleDoubleClick = () => {
+        setLocations([]);
+    };
 
-    // Handle pickup location change
+    const handleSubmit = async () => {
+
+    }
     const handlePickUpChange = (e) => {
         const { value } = e.target;
         setRideDetails(prevState => ({
@@ -55,8 +53,6 @@ const Dashboard = () => {
         setIndex(1);
         fetchRoutes(value);
     };
-
-    // Handle destination change
     const handleDestinationChange = (e) => {
         const { value } = e.target;
         setRideDetails(prevState => ({
@@ -66,8 +62,6 @@ const Dashboard = () => {
         setIndex(2);
         fetchRoutes(value);
     };
-
-    // Handle selection from search results
     const handleSelect = (result, name) => {
         setRideDetails(prevState => ({
             ...prevState,
@@ -76,30 +70,11 @@ const Dashboard = () => {
         setLocations([]);
     };
 
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Validate inputs before submission
-        if (!rideDetails.startPoint || !rideDetails.endPoint || !rideDetails.date || !rideDetails.seats) {
-            setError("Please provide all the required details to proceed.");
-            return;
-        }
-        //fetch the available rides
-
-        const response = await axios.post("http://localhost:1000/rides", rideDetails);
-        console.log(response.data);
-    };
-
-    // Handle double click to close search list
-    const handleDoubleClick = () => {
-        setLocations([]);
-    };
-
     return (
         <Container fluid className='px-5' onDoubleClick={handleDoubleClick}>
             <Row>
                 <Col xs={12} className='d-flex justify-content-center align-items-center mb-4'>
-                    <h1 className='text-center'>Book a Ride</h1>
+                    <h1 className='text-center'>Create a Ride</h1>
                 </Col>
             </Row>
             <Row className='border border-light-subtle rounded bg-light-subtle shadow p-lg-5 ps-lg-0 pe-lg-0'>
@@ -204,15 +179,11 @@ const Dashboard = () => {
                     </Row>
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
-                            <Button type="submit" variant='warning' className=" w-100  fw-bold">Search</Button>
+                            <Button type="submit" variant='warning' className=" w-100  fw-bold">Create</Button>
                         </Col>
                     </Row>
                 </Form>
-                {error && <div className="text-danger">*{error}</div>}
             </Row>
-            {loading && <Loader />}
         </Container>
     );
 }
-
-export default Dashboard;

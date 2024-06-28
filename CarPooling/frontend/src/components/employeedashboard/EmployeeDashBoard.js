@@ -1,4 +1,6 @@
-import React from "react";
+
+import {Row,Col} from "react-bootstrap"
+import { useState } from "react";
 import {
   CSidebar,
   CSidebarBrand,
@@ -11,22 +13,21 @@ import * as icon from "@coreui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCarSide } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../routes/AuthContext";
+import NewRide from "./NewRide";
 import Profile from "./Profile";
 import Rides from "./Rides";
-import {Row,Col} from "react-bootstrap"
 const EmployeeDashBoard = () => {
   const { logOut} = useAuth();
-  const name = localStorage.getItem("name");
-  const [index, setIndex] = React.useState(0);
+  const user = localStorage.getItem("name");
+  const [index, setIndex] = useState(0);
+  const components = [<Profile />, <NewRide/>, <Rides />];
   const handleLogout = () => {
     logOut();
   };
 
   const handleClick = (e) => {
     setIndex(e);
-    console.log(e);
   };
-  const components = [<Profile />, <Rides />];
     return(
         <>
       <Row>
@@ -34,12 +35,12 @@ const EmployeeDashBoard = () => {
         <CSidebar className="border-end" style={{ height: "100vh" }}>
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand className="text-decoration-none">
-          Welcome {name ? name : "Guest"}
+          Welcome {user ? user : "Guest"}
         </CSidebarBrand>
       </CSidebarHeader>
       <CSidebarNav variant="pills" layout="fill">
         {/*<CNavTitle>Nav Title</CNavTitle>*/}
-        <CNavItem href="#" active={index === 0} onClick={() => handleClick(0)}>
+        <CNavItem href="#profile" active={index === 0} onClick={() => handleClick(0)}>
           <CIcon
             customClassName="nav-icon"
             className="me-3"
@@ -47,7 +48,11 @@ const EmployeeDashBoard = () => {
           />
           Profile
         </CNavItem>
-        <CNavItem href="#" active={index === 1} onClick={() => handleClick(1)}>
+        <CNavItem href="#new-ride" active={index === 1} onClick={() => handleClick(1)}>
+        <CIcon customClassName="nav-icon" icon={icon.cilScreenDesktop}/>
+          Offer ride
+        </CNavItem>
+        <CNavItem href="#rides" active={index === 2} onClick={() => handleClick(2)}>
           <FontAwesomeIcon
             icon={faCarSide}
             className={"nav-icon fa-thin fa-car-side"}
@@ -61,7 +66,7 @@ const EmployeeDashBoard = () => {
       </CSidebarNav>
     </CSidebar>
         </Col>
-        <Col xs={12} md={10} className="px-4 py-3">
+        <Col xs={10} className="p-0">
           <div style={{ marginLeft: "50px" }}>
             {components[index]}
           </div>

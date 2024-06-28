@@ -20,7 +20,24 @@ const bookingSchema = new mongoose.Schema({
     dropLocation: {
         type: String,
         required: true
-    }
+    },
+    date:{
+        type : Date,
+        required : true
+    },
+    seats:{
+        type : Number,
+        required : true
+    },
+    driverDetails:{
+        type : driverSchema,
+        required : true
+    },
+    status:{
+        type : String,
+        required : true
+    },
+
 })
 
 const bookingModel = mongoose.model("ride",bookingSchema)

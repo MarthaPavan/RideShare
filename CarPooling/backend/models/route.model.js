@@ -2,25 +2,29 @@ const mongoose = require("mongoose");
 const { driverSchema } = require("../models/drivers.model");
 const routeSchema = mongoose.Schema({
   routeId: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-  startPoint: {
+  pickUpLocation: {
     type: String,
     required: true,
   },
-  endPoint: {
+  dropLocation: {
     type: String,
     required: true,
   },
-  distance: {
+  distance:{
     type: Number,
+    required: true,
+  },
+  date:{
+    type: Date,
     required: true,
   },
   drivers: {
     type: [driverSchema],
-    default: [],
-  },
+    required: true,
+  }
 });
 const routeModel = mongoose.model("route", routeSchema);
 module.exports = routeModel;

@@ -74,7 +74,7 @@ const Profile = () => {
     };
     
     return (
-        <div className="px-2">
+        <div className="px-4 py-2">
             <Row>
                 <Row className="gap-2">
                     <Col xs={2} className="position-relative">
