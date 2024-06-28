@@ -42,11 +42,7 @@ const Profile = () => {
         console.log(user);
         const token = localStorage.getItem("token");
         try {
-            const response = await axios.put("http://localhost:1000/get-started/updateProfile", user, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.put("http://localhost:1000/get-started/updateProfile", user);
 
             if (response && response.data && response.data.user) {
                 localStorage.setItem('user', JSON.stringify(response.data.user));

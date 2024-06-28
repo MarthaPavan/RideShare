@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/users.model");
 require("dotenv").config();
-
 const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
 
 const verifyToken = async (req, res, next) => {
@@ -19,19 +18,20 @@ const verifyToken = async (req, res, next) => {
 
   try {
     const verifiedToken = jwt.verify(token, SECRET_KEY);
-    const user = await userModel.findOne({ emailId: verifiedToken.user.emailId });
+    console.log(verifiedToken);
+    const user = await userModel.findOne({ _id: verifiedToken.userId });
 
     if (!user) {
       return res.status(401).json({ msg: "User not found" });
     }
 
-    req.user = user; // Attach the user object to the request
-    console.log("user verified");
+    req.user = user;
+    console.log("User verified:", user.emailId);
     next();
   } catch (err) {
     console.error("Token verification error:", err);
     return res.status(401).json({ msg: "Invalid token" });
   }
-};
+}
 
 module.exports = verifyToken;

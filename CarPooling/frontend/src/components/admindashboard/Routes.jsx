@@ -7,13 +7,14 @@ import RouteDetails from './RouteDetails';
 const Routes = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(false);
-  const [routeId, setRouteId] = useState(1); // Initial routeId set to 1
+  const [routeId, setRouteId] = useState(null); // Initial routeId set to null
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:1000/routes/getRoute");
         setData(response.data);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -24,7 +25,7 @@ const Routes = () => {
   const columns = useMemo(() => [
     {
       Header: "Route ID",
-      accessor: "routeId",
+      accessor: "_id", // Use _id instead of routeId
     },
     {
       Header: "Start Point",
@@ -106,7 +107,7 @@ const Routes = () => {
               {rows.map(row => {
                 prepareRow(row);
                 return (
-                  <tr {...row.getRowProps()} onClick={() => handleClick(row.original.routeId)}>
+                  <tr {...row.getRowProps()} onClick={() => handleClick(row.original._id)}>
                     {row.cells.map(cell => {
                       return (
                         <td {...cell.getCellProps()}>

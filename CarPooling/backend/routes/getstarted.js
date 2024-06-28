@@ -8,6 +8,6 @@ const route = express.Router();
 
 route.post("/login", loginController.userLogin);
 route.post("/signup", loginController.userRegister);
-route.put("/updateProfile", verifyToken, loginController.updateUserProfile); // New update profile route
+route.put("/updateProfile", verifyToken, loginController.updateUserProfile); 
 
 module.exports = route;
