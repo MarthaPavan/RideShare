@@ -16,7 +16,7 @@ class RouteControllers {
       });
       console.log("Inserted successfully");
       res.status(200).json(route);
-    } catch (err) {
+    } catch (err){
       res.status(404).json({ msg: err.message });
     }
   }
