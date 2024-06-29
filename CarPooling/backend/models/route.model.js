@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
-const { driverSchema } = require("../models/drivers.model");
+const {driverSchema} = require("./drivers.model");
 const routeSchema = mongoose.Schema({
-  routeId: {
-    type: mongoose.Schema.Types.ObjectId,
+  routeId:{
+    type: Number,
     required: true,
+    unique : true
   },
   pickUpLocation: {
     type: String,
@@ -13,16 +14,16 @@ const routeSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  distance:{
-    type: Number,
-    required: true,
-  },
   date:{
     type: Date,
     required: true,
   },
-  drivers: {
-    type: [driverSchema],
+  capacity : {
+    type: Number,
+    required: true,
+  },
+  driver: {
+    type: driverSchema,
     required: true,
   }
 });

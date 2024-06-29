@@ -41,7 +41,17 @@ export default function NewRide() {
         setLocations([]);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        setTimeout(() => {
+            if (rideDetails.startPoint === "" || rideDetails.endPoint === "" || rideDetails.date === "") {
+                setError("Please fill all the fields");
+            }
+            else
+                setError(null);
+        }, 5000);
+
 
     }
     const handlePickUpChange = (e) => {
@@ -177,6 +187,7 @@ export default function NewRide() {
                             }))}
                         />
                     </Row>
+                    {error && <p className="text-danger mt-3">*{error}</p>}
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
                             <Button type="submit" variant='warning' className=" w-100  fw-bold">Create</Button>

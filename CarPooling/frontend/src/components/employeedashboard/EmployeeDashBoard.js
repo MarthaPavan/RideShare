@@ -16,11 +16,12 @@ import { useAuth } from "../../routes/AuthContext";
 import NewRide from "./NewRide";
 import Profile from "./Profile";
 import Rides from "./Rides";
+import DashBoard from "./DashBoard";
 const EmployeeDashBoard = () => {
   const { logOut} = useAuth();
   const user = localStorage.getItem("name");
   const [index, setIndex] = useState(0);
-  const components = [<Profile />, <NewRide/>, <Rides />];
+  const components = [<Profile />,<DashBoard/>,<NewRide/>, <Rides />];
   const handleLogout = () => {
     logOut();
   };
@@ -48,11 +49,15 @@ const EmployeeDashBoard = () => {
           />
           Profile
         </CNavItem>
-        <CNavItem href="#new-ride" active={index === 1} onClick={() => handleClick(1)}>
+        <CNavItem href = "#home" active  = {index === 1} onClick={()=>handleClick(1)}>
+          <CIcon  />
+          DashBoard
+        </CNavItem>
+        <CNavItem href="#new-ride" active={index === 2} onClick={() => handleClick(2)}>
         <CIcon customClassName="nav-icon" icon={icon.cilScreenDesktop}/>
           Offer ride
         </CNavItem>
-        <CNavItem href="#rides" active={index === 2} onClick={() => handleClick(2)}>
+        <CNavItem href="#rides" active={index === 3} onClick={() => handleClick(3)}>
           <FontAwesomeIcon
             icon={faCarSide}
             className={"nav-icon fa-thin fa-car-side"}

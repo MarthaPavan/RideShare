@@ -32,4 +32,4 @@ const driverSchema = new mongoose.Schema({
 
 const driverModel = new mongoose.model("driver", driverSchema);
 
-module.exports = driverModel;
+module.exports = {driverModel,driverSchema};
