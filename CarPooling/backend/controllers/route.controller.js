@@ -60,7 +60,7 @@ class RouteControllers {
   async getRouteById(req, res) {
     try {
       const routeId = req.params.id;
-      console.log(routeId);
+      //console.log(routeId);
       const route = await routeModel.findById(routeId); 
 
       if (!route) {

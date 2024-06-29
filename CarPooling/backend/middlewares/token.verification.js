@@ -18,7 +18,7 @@ const verifyToken = async (req, res, next) => {
 
   try {
     const verifiedToken = jwt.verify(token, SECRET_KEY);
-    console.log(verifiedToken);
+    //console.log(verifiedToken);
     const user = await userModel.findOne({ _id: verifiedToken.userId });
 
     if (!user) {

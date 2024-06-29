@@ -18,12 +18,14 @@ import Dashboard from "./DashBoard";
 import { useAuth } from "../../routes/AuthContext";
 import Rides from "./Rides";
 import toast from "react-hot-toast";
+import Feedback from './Feedback';
+import ContactUs from "./Contactus";
 
 const UserDashBoard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
   const user = localStorage.getItem("name");
-  const { logout } = useAuth(); // Destructure logout method properly
+  const { logout } = useAuth(); 
 
   const handleClick = (e) => {
     setIndex(e);
@@ -34,10 +36,10 @@ const UserDashBoard = () => {
   }, []);
 
   const handleLogOut = () => {
-    logout(); // Call the logout method
+    logout(); 
   };
 
-  const components = [<Profile />, <Dashboard />, <Rides />];
+  const components = [<Profile />, <Dashboard />, <Rides />,<Feedback/>,<ContactUs/>];
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevIsSidebarOpen) => !prevIsSidebarOpen);
