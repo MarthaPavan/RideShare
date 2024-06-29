@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Image, Button, Form } from "react-bootstrap";
+import axios from 'axios';
 import "./Profile.css";
 
 const Profile = () => {
     const [image, setImage] = useState("/images/placeholder.jpg");
 
-    // Retrieve and parse the user object from localStorage
     const storedUser = localStorage.getItem('user');
     const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : {
         fullName: 'Guest',
@@ -37,16 +37,40 @@ const Profile = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        localStorage.setItem('user', JSON.stringify(user));
-        console.log("User profile updated:", user);
+        console.log(user);
+        const token = localStorage.getItem("token");
+        try {
+            const response = await axios.put("http://localhost:1000/get-started/updateProfile", user);
+
+            if (response && response.data && response.data.user) {
+                localStorage.setItem('user', JSON.stringify(response.data.user));
+                console.log("User profile updated:", response.data.user);
+            } else {
+                console.error("Unexpected response:", response);
+            }
+        } catch (err) {
+            console.error("Error updating profile:", err.response ? err.response.data.msg : err.message);
+        }
     };
 
     const vehicleOptions = ['sedan', 'hatchback', 'SUV'];
-
+    const editbtn = {
+        position: 'absolute',
+        bottom: 0,
+        right: '50px',
+        borderRadius: '50%',
+        padding: '0.25rem',
+        width: '30px',
+        height: '30px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    };
+    
     return (
-        <div className="px-2">
+        <div className="px-4 py-2">
             <Row>
                 <Row className="gap-2">
                     <Col xs={2} className="position-relative">
@@ -56,23 +80,17 @@ const Profile = () => {
                             height={"100px"}
                             className="profile-image"
                         />
-                        <Button
-                            className="edit-button"
-                            variant="primary"
+                        <Button 
+                            style={editbtn}
+                            variant="primary" 
                             onClick={() => document.getElementById('imageInput').click()}
                         >
                             <i className="fa-solid fa-pen"></i>
                         </Button>
-                        <input
-                            type="file"
-                            id="imageInput"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            style={{ display: "none" }}
-                        />
+                       
                     </Col>
                     <Col>
-                        <h1 className="display-6">{user.fullName}</h1>
+                        <h1 className="display-6 pt-2">{user.fullName}</h1>
                         {user.phoneNumber && <p><i className="fa-solid fa fa-phone"></i> {user.phoneNumber}</p>}
                     </Col>
                 </Row>
@@ -118,6 +136,7 @@ const Profile = () => {
                                         name="emailId"
                                         value={user.emailId}
                                         onChange={handleChange}
+                                        disabled
                                     />
                                 </Col>
                             </Form.Group>
@@ -135,7 +154,7 @@ const Profile = () => {
                                     />
                                 </Col>
                             </Form.Group>
-
+                    
                             <Form.Group as={Row} className="mb-3" controlId="formVehicleModel">
                                 <Form.Label column sm="2">
                                     Vehicle Model

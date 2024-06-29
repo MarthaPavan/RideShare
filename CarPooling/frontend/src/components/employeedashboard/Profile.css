@@ -11,13 +11,14 @@
     position: absolute;
     bottom: 0;
     right: 50px;
+    border-radius: 50%;
     padding: 0.25rem;
     width: 30px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center; 
-    border-radius: 50%;
+    
   }
   
   

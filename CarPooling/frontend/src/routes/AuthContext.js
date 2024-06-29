@@ -7,7 +7,24 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [role, setRole] = useState(localStorage.getItem("role") || "");
   const [user, setUser] = useState(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
-  const [name,setName] = useState(localStorage.getItem('name')||"");
+  const [name, setName] = useState(localStorage.getItem('name') || "");
+
+  useEffect(() => {
+    localStorage.setItem("token", token);
+  }, [token]);
+
+  useEffect(() => {
+    localStorage.setItem("role", role);
+  }, [role]);
+
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem("name", name);
+  }, [name]);
+
   useEffect(() => {
     const interceptor = axios.interceptors.request.use(
       (config) => {
@@ -31,11 +48,7 @@ const AuthProvider = ({ children }) => {
         setRole(role);
         setUser(user);
         setName(user.fullName);
-        console.log(name);
-        localStorage.setItem("token", token);
-        localStorage.setItem("name",name);
-        localStorage.setItem("role", role);
-        localStorage.setItem("user", JSON.stringify(user));
+        console.log(user.fullName);
         localStorage.setItem("status", true);
       }
     } catch (error) {
@@ -48,15 +61,15 @@ const AuthProvider = ({ children }) => {
     setRole("");
     setUser(null);
     setName("");
-    localStorage.removeItem("name");
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("user");
+    localStorage.removeItem("name");
     localStorage.setItem("status", false);
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, role, loginAction, logOut }}>
+    <AuthContext.Provider value={{ token, user, role, name, loginAction, logOut }}>
       {children}
     </AuthContext.Provider>
   );
