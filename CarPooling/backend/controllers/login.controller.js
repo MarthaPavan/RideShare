@@ -22,10 +22,9 @@ class LoginController {
       if (!user) {
         return res.status(401).json({ msg: "User not found" });
       }
-      //console.log(user)
       const compare = await bcryptjs.compare(password, user.password);
       if (compare) {
-        const token = jwt.sign({ user }, SECRET_KEY, { expiresIn: "24h" });
+        const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: "24h" });
         return res.status(200).json({ role: user.role, token: token, user: user });
       } else {
         return res.status(401).json({ msg: "Incorrect emailId or password" });
@@ -39,7 +38,6 @@ class LoginController {
     try {
       const { fullName, emailId, password, phoneNumber, role, registrationNumber, vehicleModel } = req.body;
 
-      // Check if user already exists
       const existingUser = await userModel.findOne({ emailId });
       if (existingUser) {
         return res.status(400).json({ msg: "User already exists" });

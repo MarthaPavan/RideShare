@@ -13,13 +13,13 @@ const Dashboard = () => {
         endPoint: "",
         date: "",
         seats: 1,
-        officeRide: false
     });
+    const [bookDetails, setBookDetails] = useState({});
     const [index, setIndex] = useState(0);
     const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    const [rides, setRides] = useState([]);
     // Helper function to get today's date in "YYYY-MM-DD" format
     const getTodayDate = () => {
         const today = new Date();
@@ -75,7 +75,10 @@ const Dashboard = () => {
         }));
         setLocations([]);
     };
-
+    const handleRequest = async (e) => {
+        e.preventDefault();
+        console.log(rides[e.key])
+    }
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -85,11 +88,9 @@ const Dashboard = () => {
             return;
         }
         //fetch the available rides
-
         const response = await axios.post("http://localhost:1000/rides", rideDetails);
         console.log(response.data);
     };
-
     // Handle double click to close search list
     const handleDoubleClick = () => {
         setLocations([]);
@@ -188,19 +189,6 @@ const Dashboard = () => {
                                 />
                             </InputGroup>
                         </Col>
-                    </Row>
-                    <Row lg={"auto"} className="align-items-center justify-content-between ms-2">
-                        <Form.Check
-                            className="mt-3 mt-lg-0"
-                            type="switch"
-                            id="flexSwitchCheckDefault"
-                            label="Office Ride"
-                            checked={rideDetails.officeRide}
-                            onChange={(e) => setRideDetails(prevState => ({
-                                ...prevState,
-                                officeRide: e.target.checked
-                            }))}
-                        />
                     </Row>
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">

@@ -6,11 +6,15 @@ import axios from 'axios';
 const Employees = () => {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
-
+  const token = localStorage.getItem('token');
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:1000/routes/getDriver");
+        const response = await axios.get("http://localhost:1000/routes/getDriver",{
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);

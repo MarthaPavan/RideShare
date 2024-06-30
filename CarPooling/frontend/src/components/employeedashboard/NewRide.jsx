@@ -1,27 +1,34 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { Form, InputGroup, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faCalendarDays, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useState, useCallback } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
 import { SearchList } from '../../components/SearchList';
-export default function NewRide() {
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-    //States
+const NewRide = ({ setIndex }) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const { fullName, phoneNumber, emailId, registrationNumber, vehicleModel } = user;
+
     const [rideDetails, setRideDetails] = useState({
-        startPoint: "",
-        endPoint: "",
+        pickUpLocation: "",
+        dropLocation: "",
         date: "",
-        seats: 1,
-        officeRide: false
+        capacity: 1,
+        driver: { fullName, phoneNumber, emailId, registrationNumber, vehicleModel }
     });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
-    const [index, setIndex] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [ride, setRide] = useState(false);
+    const [error, setError] = useState(null);
+    const [key, setKey] = useState(0);
     const [locations, setLocations] = useState([]);
+
     const todayDate = new Date().toISOString().split('T')[0];
+    const navigate = useNavigate();
+
     const fetchRoutes = useCallback(debounce(async (query) => {
         if (!query) return;
         try {
@@ -37,31 +44,42 @@ export default function NewRide() {
             setLoading(false);
         }
     }, 500), []);
+
     const handleDoubleClick = () => {
         setLocations([]);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!rideDetails.pickUpLocation || !rideDetails.dropLocation || !rideDetails.date) {
+            setError("Please fill all the fields");
+            return;
+        }
+        setError(null);
+        try {
+            const response = await axios.post("http://localhost:1000/rides/createride", rideDetails);
+            if (response.status === 201) {
+                setRide(true);
+                toast.success("Ride created successfully");
+                setIndex(3); // Switch to Rides view
+            }
+        } catch (error) {
+            setError("Failed to create ride. Please try again later.");
+        }
+    };
 
-    }
-    const handlePickUpChange = (e) => {
-        const { value } = e.target;
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
         setRideDetails(prevState => ({
             ...prevState,
-            startPoint: value
+            [name]: value
         }));
-        setIndex(1);
-        fetchRoutes(value);
+        setKey(name === "pickUpLocation" ? 1 : 2);
+        if (name === "pickUpLocation" || name === "dropLocation") {
+            fetchRoutes(value);
+        }
     };
-    const handleDestinationChange = (e) => {
-        const { value } = e.target;
-        setRideDetails(prevState => ({
-            ...prevState,
-            endPoint: value
-        }));
-        setIndex(2);
-        fetchRoutes(value);
-    };
+
     const handleSelect = (result, name) => {
         setRideDetails(prevState => ({
             ...prevState,
@@ -88,15 +106,15 @@ export default function NewRide() {
                                 <Form.Control
                                     className='py-lg-2'
                                     type="text"
-                                    name="startPoint"
+                                    name="pickUpLocation"
                                     placeholder="Enter your location"
-                                    aria-label="Start point"
-                                    value={rideDetails.startPoint}
-                                    onChange={handlePickUpChange}
+                                    aria-label="Pick up location"
+                                    value={rideDetails.pickUpLocation}
+                                    onChange={handleInputChange}
                                 />
-                                {locations.length > 0 && index === 1 && (
+                                {locations.length > 0 && key === 1 && (
                                     <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
-                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'startPoint')} inputName="startPoint" />
+                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'pickUpLocation')} inputName="pickUpLocation" />
                                     </div>
                                 )}
                             </InputGroup>
@@ -109,15 +127,15 @@ export default function NewRide() {
                                 <Form.Control
                                     className='py-lg-2'
                                     type="text"
-                                    name="endPoint"
+                                    name="dropLocation"
                                     placeholder="Enter your destination"
-                                    aria-label="End point"
-                                    value={rideDetails.endPoint}
-                                    onChange={handleDestinationChange}
+                                    aria-label="Drop location"
+                                    value={rideDetails.dropLocation}
+                                    onChange={handleInputChange}
                                 />
-                                {locations.length > 0 && index === 2 && !rideDetails.officeRide && (
+                                {locations.length > 0 && key === 2 && (
                                     <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
-                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'endPoint')} inputName="endPoint" />
+                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'dropLocation')} inputName="dropLocation" />
                                     </div>
                                 )}
                             </InputGroup>
@@ -131,14 +149,10 @@ export default function NewRide() {
                                     className='py-lg-2'
                                     type="date"
                                     name="date"
-                                    placeholder={todayDate}
                                     min={todayDate} // Set min date to today
                                     aria-label="Date"
                                     value={rideDetails.date}
-                                    onChange={(e) => setRideDetails(prevState => ({
-                                        ...prevState,
-                                        date: e.target.value
-                                    }))}
+                                    onChange={handleInputChange}
                                 />
                             </InputGroup>
                         </Col>
@@ -150,40 +164,27 @@ export default function NewRide() {
                                 <Form.Control
                                     className='py-lg-2'
                                     type="number"
-                                    name="seats"
+                                    name="capacity"
                                     placeholder="Seats"
                                     min={1}
                                     max={4}
                                     aria-label="Seats"
-                                    value={rideDetails.seats}
-                                    onChange={(e) => setRideDetails(prevState => ({
-                                        ...prevState,
-                                        seats: e.target.value
-                                    }))}
+                                    value={rideDetails.capacity}
+                                    onChange={handleInputChange}
                                 />
                             </InputGroup>
                         </Col>
                     </Row>
-                    <Row lg={"auto"} className="align-items-center justify-content-between ms-2">
-                        <Form.Check
-                            className="mt-3 mt-lg-0"
-                            type="switch"
-                            id="flexSwitchCheckDefault"
-                            label="Office Ride"
-                            checked={rideDetails.officeRide}
-                            onChange={(e) => setRideDetails(prevState => ({
-                                ...prevState,
-                                officeRide: e.target.checked
-                            }))}
-                        />
-                    </Row>
+                    {error && <p className="text-danger mt-3">*{error}</p>}
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
-                            <Button type="submit" variant='warning' className=" w-100  fw-bold">Create</Button>
+                            <Button type="submit" variant='warning' className="w-100 fw-bold" disabled={ride}>Create</Button>
                         </Col>
                     </Row>
                 </Form>
             </Row>
         </Container>
     );
-}
+};
+
+export default NewRide;

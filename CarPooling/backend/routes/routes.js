@@ -7,7 +7,7 @@ const verifyToken = require("../middlewares/token.verification");
 // Route controllers
 route.post("/saveRoute", verifyToken, routeController.saveRoute);
 route.get("/getRoute", verifyToken, routeController.getRoute);
-route.get("/getRoute/:routeId", verifyToken, routeController.getRouteById);
+route.get("/getRoute/:id", verifyToken, routeController.getRouteById);
 route.patch("/editRoute/:routeId", verifyToken, routeController.editRoute);
 route.delete("/deleteRoute/:routeId", verifyToken, routeController.deleteRoute);
 
