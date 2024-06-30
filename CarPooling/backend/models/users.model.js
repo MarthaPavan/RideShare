@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
-
+// const multer = require("multer");
 const userSchema = new mongoose.Schema({
+  
+  image: { type: mongoose.Schema.Types.ObjectId, ref: 'Image' } // This will store the MIME type of the image
+  ,
   fullName: {
     type: String,
     required: true,

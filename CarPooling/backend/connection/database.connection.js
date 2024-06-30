@@ -3,7 +3,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 const mongoose = require("mongoose");
 const connection = mongoose.connect(
-  "mongodb+srv://nithineruventi:rideshare%401@cluster0.yde6xe4.mongodb.net/carpooling"
+  "mongodb://127.0.0.1/carpooling"
 );
 connection
     .then(() => {
