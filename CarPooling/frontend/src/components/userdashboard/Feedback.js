@@ -8,6 +8,7 @@ const FeedbackForm = () => {
     cleanliness: "",
     comfort: "",
     driverBehavior: "",
+    overallRide: "",
   });
 
   const handleSatisfactionChange = (e) => {
@@ -36,7 +37,7 @@ const FeedbackForm = () => {
       <h2>Feedback Form</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="feedback">
-          <Form.Label>Feedback:</Form.Label>
+          <Form.Label>Further Suggestions:</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
@@ -106,9 +107,9 @@ const FeedbackForm = () => {
                 <td key={index}>
                   <Form.Check
                     type="radio"
-                    name="driverBehavior"
+                    name="overallRide"
                     value={label}
-                    checked={satisfaction.driverBehavior === label}
+                    checked={satisfaction.overallRide === label}
                     onChange={handleSatisfactionChange}
                   />
                 </td>

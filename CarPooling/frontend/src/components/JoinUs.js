@@ -12,7 +12,9 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 const JoinUs = () => {
+
   const [form, setForm] = useState({
+    image : "images/placeholder.jpg",
     fullName: "",
     emailId: "",
     password: "",

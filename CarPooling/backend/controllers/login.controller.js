@@ -5,7 +5,7 @@ const driverModel = require("../models/drivers.model");
 const Image = require("../models/imageModel");
 const multer = require("multer");
 require("dotenv").config();
-
+const { Readable } = require("stream");
 const SECRET_KEY = process.env.SECRET_KEY || "mysecretkey";
 
 
@@ -16,16 +16,16 @@ const upload = multer({ storage });
 class LoginController {
   async userLogin(req, res) {
     const { emailId, password } = req.body;
-
     try {
       const user = await userModel.findOne({ emailId });
       if (!user) {
         return res.status(401).json({ msg: "User not found" });
       }
+      // console.log(image.imageData)
       const compare = await bcryptjs.compare(password, user.password);
       if (compare) {
         const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: "24h" });
-        return res.status(200).json({ role: user.role, token: token, user: user });
+        return res.status(200).json({ role: user.role, token: token, user: user});
       } else {
         return res.status(401).json({ msg: "Incorrect emailId or password" });
       }
@@ -33,10 +33,9 @@ class LoginController {
       return res.status(500).json({ msg: err.message });
     }
   }
-
   async userRegister(req, res) {
     try {
-      const { fullName, emailId, password, phoneNumber, role, registrationNumber, vehicleModel } = req.body;
+      const {image,fullName, emailId, password, phoneNumber, role, registrationNumber, vehicleModel } = req.body;
 
       const existingUser = await userModel.findOne({ emailId });
       if (existingUser) {
@@ -45,7 +44,6 @@ class LoginController {
       if (!req.file) {
         return res.status(400).json({ msg: "No file uploaded." });
       }
-
       const { buffer, mimetype } = req.file;
 
       // Create new Image document
@@ -54,6 +52,9 @@ class LoginController {
         contentType: mimetype
       });
       const savedImage = await newImage.save();
+
+      const {_id}=savedImage;
+      const profileimg=await Image.findById(_id);
 
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(password, salt);
@@ -81,7 +82,8 @@ class LoginController {
           vehicleModel
         });
         await driver.save();
-        return res.status(200).json({ msg: "success", user });
+        return res.status(200).json({ msg: "success", user ,imageData:image.imageData
+        });
       }
       
       const user = await userModel.create({
@@ -93,9 +95,28 @@ class LoginController {
           role
         });
       await user.save();
-      return res.status(200).json({ msg: "success", user });
+      return res.status(200).json({ msg: "success", user ,imageData:image.imageData});
       
     } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  }
+
+  async fetchProfilePic(req,res){
+    try{
+      // console.log(req.params)
+      const {image} = req.params;
+      // console.log(image)
+      const img = await Image.findById(image);
+      // console.log(img) 
+      res.set("Content-Type", img.contentType);
+      const stream = new Readable();
+      stream.push(img.imageData);
+      stream.push(null);
+      stream.pipe(res);
+      res.status(200);
+    }catch(err){
+      // console.log(err.message)
       return res.status(500).json({ msg: err.message });
     }
   }

@@ -25,7 +25,6 @@ class BookingController{
                 driverDetails: { ...driverDetails },
                 status: status
               });
-          
               if (newBooking) {
                 return res.status(201).json({ message: "Booking created successfully", booking: newBooking });
               } else {
