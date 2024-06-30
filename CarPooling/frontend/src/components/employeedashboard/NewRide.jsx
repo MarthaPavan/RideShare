@@ -1,5 +1,4 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { Form, InputGroup, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faCalendarDays, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useState, useCallback } from "react";
@@ -7,9 +6,12 @@ import axios from "axios";
 import { debounce } from "lodash";
 import { SearchList } from '../../components/SearchList';
 import { useNavigate } from "react-router-dom";
-import Rides from "./Rides";
-export default function NewRide() {
-    const { fullName, phoneNumber, emailId, registrationNumber, vehicleModel, isVerified } = JSON.parse(localStorage.getItem('user'));
+import toast from "react-hot-toast";
+
+const NewRide = ({ setIndex }) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const { fullName, phoneNumber, emailId, registrationNumber, vehicleModel } = user;
+
     const [rideDetails, setRideDetails] = useState({
         pickUpLocation: "",
         dropLocation: "",
@@ -17,11 +19,13 @@ export default function NewRide() {
         capacity: 1,
         driver: { fullName, phoneNumber, emailId, registrationNumber, vehicleModel }
     });
+
     const [loading, setLoading] = useState(false);
     const [ride, setRide] = useState(false);
     const [error, setError] = useState(null);
-    const [index, setIndex] = useState(0);
+    const [key, setKey] = useState(0);
     const [locations, setLocations] = useState([]);
+
     const todayDate = new Date().toISOString().split('T')[0];
     const navigate = useNavigate();
 
@@ -47,42 +51,33 @@ export default function NewRide() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (rideDetails.pickUpLocation === "" || rideDetails.dropLocation === "" || rideDetails.date === "") {
+        if (!rideDetails.pickUpLocation || !rideDetails.dropLocation || !rideDetails.date) {
             setError("Please fill all the fields");
             return;
-        } else {
-            setError(null);
         }
-
+        setError(null);
         try {
             const response = await axios.post("http://localhost:1000/rides/createride", rideDetails);
             if (response.status === 201) {
                 setRide(true);
-                navigate(<Rides/>);
+                toast.success("Ride created successfully");
+                setIndex(3); // Switch to Rides view
             }
         } catch (error) {
             setError("Failed to create ride. Please try again later.");
         }
-    }
-
-    const handlePickUpChange = (e) => {
-        const { value } = e.target;
-        setRideDetails(prevState => ({
-            ...prevState,
-            pickUpLocation: value
-        }));
-        setIndex(1);
-        fetchRoutes(value);
     };
 
-    const handleDestinationChange = (e) => {
-        const { value } = e.target;
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
         setRideDetails(prevState => ({
             ...prevState,
-            dropLocation: value
+            [name]: value
         }));
-        setIndex(2);
-        fetchRoutes(value);
+        setKey(name === "pickUpLocation" ? 1 : 2);
+        if (name === "pickUpLocation" || name === "dropLocation") {
+            fetchRoutes(value);
+        }
     };
 
     const handleSelect = (result, name) => {
@@ -115,9 +110,9 @@ export default function NewRide() {
                                     placeholder="Enter your location"
                                     aria-label="Pick up location"
                                     value={rideDetails.pickUpLocation}
-                                    onChange={handlePickUpChange}
+                                    onChange={handleInputChange}
                                 />
-                                {locations.length > 0 && index === 1 && (
+                                {locations.length > 0 && key === 1 && (
                                     <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
                                         <SearchList results={locations} onSelect={(result) => handleSelect(result, 'pickUpLocation')} inputName="pickUpLocation" />
                                     </div>
@@ -136,9 +131,9 @@ export default function NewRide() {
                                     placeholder="Enter your destination"
                                     aria-label="Drop location"
                                     value={rideDetails.dropLocation}
-                                    onChange={handleDestinationChange}
+                                    onChange={handleInputChange}
                                 />
-                                {locations.length > 0 && index === 2 && (
+                                {locations.length > 0 && key === 2 && (
                                     <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
                                         <SearchList results={locations} onSelect={(result) => handleSelect(result, 'dropLocation')} inputName="dropLocation" />
                                     </div>
@@ -154,14 +149,10 @@ export default function NewRide() {
                                     className='py-lg-2'
                                     type="date"
                                     name="date"
-                                    placeholder={todayDate}
                                     min={todayDate} // Set min date to today
                                     aria-label="Date"
                                     value={rideDetails.date}
-                                    onChange={(e) => setRideDetails(prevState => ({
-                                        ...prevState,
-                                        date: e.target.value
-                                    }))}
+                                    onChange={handleInputChange}
                                 />
                             </InputGroup>
                         </Col>
@@ -179,10 +170,7 @@ export default function NewRide() {
                                     max={4}
                                     aria-label="Seats"
                                     value={rideDetails.capacity}
-                                    onChange={(e) => setRideDetails(prevState => ({
-                                        ...prevState,
-                                        capacity: e.target.value
-                                    }))}
+                                    onChange={handleInputChange}
                                 />
                             </InputGroup>
                         </Col>
@@ -197,4 +185,6 @@ export default function NewRide() {
             </Row>
         </Container>
     );
-}
+};
+
+export default NewRide;

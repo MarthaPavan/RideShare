@@ -101,7 +101,7 @@ class RideController {
     }
   }
     // Method to delete a route
-    async deleteRoute(req, res) {
+    async deleteRide(req, res) {
       try {
         const routeId = parseInt(req.params.routeId);
         if (isNaN(routeId)) {
@@ -120,17 +120,15 @@ class RideController {
         res.status(500).json({ msg: err.message });
       }
     }
-  
+    
     // Method to delete a driver from a route
-    async deleteDriver(req, res) {
+    async deleteDriversRide(req, res) {
       try {
         const routeId = parseInt(req.params.routeId);
-        if (isNaN(routeId)) {
+        if (isNaN(routeId)){
           return res.status(400).json({ msg: "Invalid route ID" });
         }
-  
-        const driverId = req.params.driverId; // Assuming driverId is passed in the URL params
-  
+        const driverId = req.params.driverId; // Assuming driverId is passed in the URL para
         // Find the route by routeId
         const route = await RouteModel.findOne({ routeId: routeId });
   
@@ -144,7 +142,7 @@ class RideController {
         // Save the updated route
         await route.save();
   
-        res.status(200).json({ msg: "Driver deleted successfully", route: route });
+        res.status(200).json({ msg: "You have cancelled your ride offering", route: route });
       } catch (err) {
         res.status(500).json({ msg: err.message });
       }

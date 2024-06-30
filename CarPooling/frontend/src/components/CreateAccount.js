@@ -38,9 +38,9 @@ function CreateAccount() {
   };
 
   return (
-    <Container fluid>
-      <Row>
-        <Col className="m-3 p-3">
+    <Container fluid className="min-vh-100">
+      <Row className="flex-fill align-items-center justify-content-center">
+        <Col className="m-3 p-3 border  border-1 border-dark-subtle shadow">
           <form onSubmit={handleSubmit}>
             <h2>Sign Up</h2>
             <p>It's quick and easy.</p>

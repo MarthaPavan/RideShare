@@ -12,8 +12,9 @@ import {
 
 const Home = () => {
   return (
-    <Container>
-      <Row className="text-center my-5 ">
+    <main className="mt-5">
+    <Container fluid className="flex-column min-vh-100 min-vw-100 mt-lg-5 align-items-center justify-content-center">
+      <Row className="text-center mt-5">
         <Col>
           <h1>Go anywhere within Telangana</h1>
         </Col>
@@ -93,6 +94,7 @@ const Home = () => {
         </Row>
       </Row>
     </Container>
+    </main>
   );
 };
 

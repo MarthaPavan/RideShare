@@ -68,9 +68,9 @@ const JoinUs = () => {
   };
 
   return (
-    <Container>
-      <Row className="text-center my-5">
-        <Col className="m-4 p-3">
+    <Container fluid className="min-vh-100">
+      <Row className="text-center my-5 h-100">
+        <Col className="m-4 p-3 h-100 border border-1 border-dark-subtle shadow bg-bg-warning-subtle">
           <h1 className="mb-2 display-6">Join us</h1>
           <h2 className="mb-2 lead">Create Account</h2>
           <Form onSubmit={handleSignUp}>

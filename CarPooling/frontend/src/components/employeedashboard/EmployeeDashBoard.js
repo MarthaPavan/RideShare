@@ -21,7 +21,7 @@ const EmployeeDashBoard = () => {
   const { logOut} = useAuth();
   const user = localStorage.getItem("name");
   const [index, setIndex] = useState(0);
-  const components = [<Profile />,<DashBoard/>,<NewRide/>, <Rides />];
+  const components = [<Profile />,<DashBoard/>,<NewRide setIndex = {setIndex}/>, <Rides />];
   const handleLogout = () => {
     logOut();
   };

@@ -1,12 +1,28 @@
-Link{
-    text-decoration: none;
-    text-align: center;
+/* Add padding to the top of the body or main container to ensure the content isn't hidden behind the NavBar */
+body,
+.main-content {
+  margin-bottom: 80px;
+  margin-top: 30px;
+  /* Adjust this value to match the height of your NavBar */
 }
+
+/* Ensure the NavBar has a lower z-index if you want other components to overlay it */
+header {
+  z-index: 10;
+  /* Lower value if other components should overlay */
+}
+
+
+Link {
+  text-decoration: none;
+  text-align: center;
+}
+
 .h1-border {
   margin-top: 0;
   padding-bottom: 8px;
   border-bottom: 5px solid #343a40;
-  display: inline-block; 
+  display: inline-block;
   margin-bottom: 20px;
 }
 
@@ -35,7 +51,7 @@ Link{
 
 .nav-link:focus::after,
 .nav-link:active::after {
-  transform: scaleX(1 );
+  transform: scaleX(1);
   transform-origin: bottom left;
 }
 
@@ -54,7 +70,8 @@ Link{
 
 .main-content {
   flex: 1;
-  padding-left: 200px; /* Adjust based on the width of your sidebar */
+  padding-left: 200px;
+  /* Adjust based on the width of your sidebar */
 }
 
 .fixed-sidebar {
@@ -62,15 +79,18 @@ Link{
   top: 0;
   bottom: 0;
   left: 0;
-  width: 200px; /* Adjust width based on your sidebar's width */
-  overflow-y: auto; /* Allow scrolling if content overflows */
+  width: 200px;
+  /* Adjust width based on your sidebar's width */
+  overflow-y: auto;
+  /* Allow scrolling if content overflows */
 }
 
 .footer {
   width: 100%;
   bottom: 0;
   left: 0;
-  padding-left: 200px; /* Adjust based on the width of your sidebar */
+  padding-left: 200px;
+  /* Adjust based on the width of your sidebar */
   background-color: #343a40;
   color: white;
   text-align: center;

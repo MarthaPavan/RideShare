@@ -1,54 +1,50 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { useAuth } from './routes/AuthContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const { token} = useAuth();
+  const { token } = useAuth();
 
   return (
-    <header className="text-bg-dark">
-      <div className="container-fluid mb-container">
-        <div className="d-flex align-items-center justify-content-between">
-          <div className="d-flex align-items-center">
-            <Link to="/">
-              <img src="/images/logo.svg" alt="logo" style={{ height: '65px', width: '65px' }} />
-            </Link>
-            <ul className="nav col-lg-auto justify-content-start">
-              <li>
-                <Link to="/" className="nav-link text-white fs-5 mr-2">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/About" className="nav-link text-white fs-5 mr-2">
-                  About
-                </Link>
-              </li>
-            </ul>
-          </div>
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Container fluid>
+        <Navbar.Brand as={Link} to="/">
+          <img src="/images/logo.svg" alt="logo" style={{ height: '65px', width: '65px' }} />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbar-nav" />
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/" className="fs-5">
+              Home
+            </Nav.Link>
+            <Nav.Link as={Link} to="/About" className="fs-5">
+              About
+            </Nav.Link>
+          </Nav>
           {!token && (
-            <div className="text-end">
-              <button
-                type="button"
-                className="btn btn-outline-light me-2"
+            <div className="d-flex">
+              <Button
+                variant="outline-light"
+                className="me-2"
                 onClick={() => navigate('/Login')}
               >
                 Login
-              </button>
-              <button
-                type="button"
-                className="btn btn-warning"
+              </Button>
+              <Button
+                variant="warning"
                 onClick={() => navigate('/GetStarted')}
               >
                 Sign-up
-              </button>
+              </Button>
             </div>
           )}
-        </div>
-      </div>
-    </header>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
