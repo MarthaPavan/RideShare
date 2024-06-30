@@ -92,8 +92,8 @@ class LoginController {
           password: hashedPassword,
           role
         });
-       await user.save();
-        return res.status(200).json({ msg: "success", user });
+      await user.save();
+      return res.status(200).json({ msg: "success", user });
       
     } catch (err) {
       return res.status(500).json({ msg: err.message });
