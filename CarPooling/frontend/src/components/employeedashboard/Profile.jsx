@@ -68,9 +68,9 @@ const Profile = () => {
         justifyContent: 'center',
         alignItems: 'center'
     };
-    
+
     return (
-        <div className="px-4 py-2">
+        <div className="flex align-items-center justify-content-center px-4 py-2 min-vh-100">
             <Row>
                 <Row className="gap-2">
                     <Col xs={2} className="position-relative">
@@ -80,14 +80,14 @@ const Profile = () => {
                             height={"100px"}
                             className="profile-image"
                         />
-                        <Button 
+                        <Button
                             style={editbtn}
-                            variant="primary" 
+                            variant="primary"
                             onClick={() => document.getElementById('imageInput').click()}
                         >
                             <i className="fa-solid fa-pen"></i>
                         </Button>
-                       
+
                     </Col>
                     <Col>
                         <h1 className="display-6 pt-2">{user.fullName}</h1>
@@ -137,6 +137,7 @@ const Profile = () => {
                                         value={user.emailId}
                                         onChange={handleChange}
                                         disabled
+                                        style={{ "cursor": "not-allowed" }}
                                     />
                                 </Col>
                             </Form.Group>
@@ -154,7 +155,7 @@ const Profile = () => {
                                     />
                                 </Col>
                             </Form.Group>
-                    
+
                             <Form.Group as={Row} className="mb-3" controlId="formVehicleModel">
                                 <Form.Label column sm="2">
                                     Vehicle Model

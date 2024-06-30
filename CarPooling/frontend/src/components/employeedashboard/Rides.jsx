@@ -3,6 +3,8 @@ import { Col, Card, Container, Nav, Row } from 'react-bootstrap';
 import { format } from 'date-fns'; // Assuming you're using date-fns for date formatting
 import axios from 'axios';
 import "./dashboard.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightLong } from '@fortawesome/free-solid-svg-icons';
 
 const Rides = () => {
     const [key, setKey] = useState(0);
@@ -16,11 +18,11 @@ const Rides = () => {
                 const response = await axios.get('http://localhost:1000/rides/fetchrides');
                 const rides = response.data;
                 const now = new Date();
-    
+
                 // Filter rides based on current time
                 const active = rides.filter(ride => new Date(ride.date) >= now);
                 const past = rides.filter(ride => new Date(ride.date) < now);
-                
+
                 setActiveRides(active);
                 setPastRides(past);
                 //console.log(activeRides);
@@ -28,29 +30,29 @@ const Rides = () => {
                 console.error("Failed to fetch rides", error);
             }
         };
-    
+
         fetchRides();
     }, []); // Run once when component mounts, no dependencies
-    
+
     const changeKey = (e) => {
         setKey(e);
     };
 
-   
+
 
     const renderRides = (rides) => {
         return rides.map(ride => {
             // Convert ride.date to a Date object if it's not already
             const rideDate = ride.date instanceof Date ? ride.date : new Date(ride.date);
-    
+
             // Format date as day-month-year
             const formattedDate = format(rideDate, 'dd-MM-yyyy');
-            
+
             // Format time
             const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
+
             return (
-                <Card key={ride._id} className="mb-3">
+                <Card key={ride._id} className="my-3" style={{ "cursor": "pointer" }}>
                     <Card.Body>
                         <Card.Title className="mb-3">
                             <Row>
@@ -58,7 +60,8 @@ const Rides = () => {
                                     <span className="fw-bold text-success">Pickup Location:</span> {ride.pickUpLocation}
                                 </Col>
                                 <Col sm={4} className="text-center">
-                                    <i className="bi bi-arrow-right"></i>
+                                    {key === 0 ? <FontAwesomeIcon icon={faRightLong} beat /> : <FontAwesomeIcon icon={faRightLong} />}
+
                                 </Col>
                                 <Col sm={4}>
                                     <span className="fw-bold text-danger">Drop Location:</span> {ride.dropLocation}
@@ -73,7 +76,7 @@ const Rides = () => {
             );
         });
     }
-    
+
     return (
         <Container fluid>
             <Row className='py-2 px-3'>
@@ -90,7 +93,7 @@ const Rides = () => {
                 </Nav>
             </Row>
             <Row className='flex-row justify-content-center m-3'>
-                <Col className="border border-0 rounded-1 shadow-lg w-75 h-75">
+                <Col className="border border-0 rounded-1 shadow-lg w-75 h-75" style={{ "backgroundColor": "#E8E8E8" }}>
                     {key === 0 && renderRides(activeRides)}
                     {key === 1 && renderRides(pastRides)}
                     {key === 2 && (
