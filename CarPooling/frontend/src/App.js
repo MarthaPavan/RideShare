@@ -27,7 +27,7 @@ import { Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 const App = () => {
 
-  localStorage.setItem("status", false.toString());
+  
 
   return (
     <AuthProvider>
