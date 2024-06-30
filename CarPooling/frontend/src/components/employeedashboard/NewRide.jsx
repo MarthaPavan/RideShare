@@ -1,12 +1,13 @@
-import { Container, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
+import React, { useState, useCallback } from "react";
+import { Container, Row, Col, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faCalendarDays, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { useState, useCallback } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
 import { SearchList } from '../../components/SearchList';
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import './dashboard.css';
 
 const NewRide = ({ setIndex }) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -56,6 +57,7 @@ const NewRide = ({ setIndex }) => {
             return;
         }
         setError(null);
+        setLoading(true);
         try {
             const response = await axios.post("http://localhost:1000/rides/createride", rideDetails);
             if (response.status === 201) {
@@ -65,6 +67,8 @@ const NewRide = ({ setIndex }) => {
             }
         } catch (error) {
             setError("Failed to create ride. Please try again later.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -89,10 +93,10 @@ const NewRide = ({ setIndex }) => {
     };
 
     return (
-        <Container fluid className='px-5' onDoubleClick={handleDoubleClick}>
+        <Container fluid className='px-5 min-vh-100' onDoubleClick={handleDoubleClick}>
             <Row>
-                <Col xs={12} className='d-flex justify-content-center align-items-center mb-4'>
-                    <h1 className='text-center'>Create a Ride</h1>
+                <Col xs={12} className='d-flex justify-content-center align-items-center mb-4 '>
+                    <h1 className='create-ride-heading'>Create a Ride</h1>
                 </Col>
             </Row>
             <Row className='border border-light-subtle rounded bg-light-subtle shadow p-lg-5 ps-lg-0 pe-lg-0'>
@@ -178,7 +182,11 @@ const NewRide = ({ setIndex }) => {
                     {error && <p className="text-danger mt-3">*{error}</p>}
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
-                            <Button type="submit" variant='warning' className="w-100 fw-bold" disabled={ride}>Create</Button>
+                            <Button type="submit" variant='warning' className="w-100 fw-bold" disabled={ride}>
+                                {loading ? <div className="flex align-content-center ju">
+                                        <Spinner animation="border" variant="light" size="sm" />
+                                </div> :"Create"}
+                            </Button>
                         </Col>
                     </Row>
                 </Form>

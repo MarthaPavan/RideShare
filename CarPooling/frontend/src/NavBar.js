@@ -10,7 +10,7 @@ const NavBar = () => {
   const { token } = useAuth();
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar" style={{margin:0,padding:0}}>
       <Container fluid>
         <Navbar.Brand as={Link} to="/">
           <img src="/images/logo.svg" alt="logo" style={{ height: '65px', width: '65px' }} />
@@ -18,10 +18,10 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" className="fs-5">
+            <Nav.Link as={Link} to="/" className="fs-5 custom-nav-link">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/About" className="fs-5">
+            <Nav.Link as={Link} to="/About" className="fs-5 custom-nav-link">
               About
             </Nav.Link>
           </Nav>

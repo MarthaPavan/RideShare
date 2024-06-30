@@ -25,7 +25,7 @@ const UserDashBoard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
   const user = localStorage.getItem("name");
-  const { logout } = useAuth(); 
+  const { logOut } = useAuth(); 
 
   const handleClick = (e) => {
     setIndex(e);
@@ -36,7 +36,7 @@ const UserDashBoard = () => {
   }, []);
 
   const handleLogOut = () => {
-    logout(); 
+    logOut(); 
   };
 
   const components = [<Profile />, <Dashboard />, <Rides />,<Feedback/>,<ContactUs/>];

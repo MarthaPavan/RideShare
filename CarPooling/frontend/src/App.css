@@ -12,6 +12,24 @@ header {
   /* Lower value if other components should overlay */
 }
 
+.custom-navbar {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.custom-nav-link {
+  color: #f8f9fa !important; /* Light color */
+}
+
+.custom-navbar .navbar-brand img {
+  height: 60px; /* Slightly reduce the logo size */
+  width: 60px;
+}
+
+.custom-navbar .navbar-nav .nav-link {
+  font-size: 1.2rem; /* Adjust font size if needed */
+}
+
 
 Link {
   text-decoration: none;

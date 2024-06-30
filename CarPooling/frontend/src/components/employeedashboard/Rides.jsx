@@ -1,84 +1,127 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Card, Container, Nav, Row } from 'react-bootstrap';
+import { Col, Card, Container, Nav, Row, Button, Pagination } from 'react-bootstrap';
 import { format } from 'date-fns'; // Assuming you're using date-fns for date formatting
 import axios from 'axios';
 import "./dashboard.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRightLong } from '@fortawesome/free-solid-svg-icons';
+import { faLongArrowAltRight, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Rides = () => {
     const [key, setKey] = useState(0);
     const [activeRides, setActiveRides] = useState([]);
     const [pastRides, setPastRides] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [visibleFooters, setVisibleFooters] = useState({}); // State to track footer visibility
+    const [currentPage, setCurrentPage] = useState(1); // State for current page
+    const ridesPerPage = 5; // Number of rides per page
 
-    useEffect(() => {
-        const fetchRides = async () => {
-            try {
-                const response = await axios.get('http://localhost:1000/rides/fetchrides');
-                const rides = response.data;
-                const now = new Date();
+    const fetchRides = async () => {
+        try {
+            const response = await axios.get('http://localhost:1000/rides/fetchrides');
+            const rides = response.data;
+            const now = new Date();
 
-                // Filter rides based on current time
-                const active = rides.filter(ride => new Date(ride.date) >= now);
-                const past = rides.filter(ride => new Date(ride.date) < now);
+            // Filter rides based on current time
+            const active = rides.filter(ride => new Date(ride.date) >= now);
+            const past = rides.filter(ride => new Date(ride.date) < now);
 
-                setActiveRides(active);
-                setPastRides(past);
-                //console.log(activeRides);
-            } catch (error) {
-                console.error("Failed to fetch rides", error);
-            }
-        };
-
-        fetchRides();
-    }, []); // Run once when component mounts, no dependencies
-
-    const changeKey = (e) => {
-        setKey(e);
+            setActiveRides(active);
+            setPastRides(past);
+        } catch (error) {
+            console.error("Failed to fetch rides", error);
+        }
     };
 
+    useEffect(() => {
+        fetchRides();
+    }, []);
 
+    const changeKey = (index) => {
+        setKey(index);
+        setCurrentPage(1); // Reset to first page when changing tabs
+    };
+
+    const handleDelete = async (rideId) => {
+        try {
+            await axios.delete(`http://localhost:1000/rides/delete/${rideId}`);
+            fetchRides();
+        } catch (error) {
+            console.error("Failed to delete ride", error);
+        }
+    };
+
+    const toggleFooter = (rideId) => {
+        setVisibleFooters((prevVisibleFooters) => ({
+            ...prevVisibleFooters,
+            [rideId]: !prevVisibleFooters[rideId],
+        }));
+    };
 
     const renderRides = (rides) => {
-        return rides.map(ride => {
-            // Convert ride.date to a Date object if it's not already
-            const rideDate = ride.date instanceof Date ? ride.date : new Date(ride.date);
+        // Calculate pagination
+        const indexOfLastRide = currentPage * ridesPerPage;
+        const indexOfFirstRide = indexOfLastRide - ridesPerPage;
+        const currentRides = rides.slice(indexOfFirstRide, indexOfLastRide);
 
-            // Format date as day-month-year
-            const formattedDate = format(rideDate, 'dd-MM-yyyy');
+        return (
+            <>
+                {currentRides.map(ride => {
+                    const rideDate = ride.date instanceof Date ? ride.date : new Date(ride.date);
+                    const formattedDate = format(rideDate, 'dd-MM-yyyy');
+                    const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            // Format time
-            const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            return (
-                <Card key={ride._id} className="my-3" style={{ "cursor": "pointer" }}>
-                    <Card.Body>
-                        <Card.Title className="mb-3">
-                            <Row>
-                                <Col sm={4}>
-                                    <span className="fw-bold text-success">Pickup Location:</span> {ride.pickUpLocation}
-                                </Col>
-                                <Col sm={4} className="text-center">
-                                    {key === 0 ? <FontAwesomeIcon icon={faRightLong} beat /> : <FontAwesomeIcon icon={faRightLong} />}
-
-                                </Col>
-                                <Col sm={4}>
-                                    <span className="fw-bold text-danger">Drop Location:</span> {ride.dropLocation}
-                                </Col>
-                            </Row>
-                        </Card.Title>
-                        <Card.Text className="mb-0"><span className="fw-bold">Date:</span> {formattedDate}</Card.Text>
-                        <Card.Text><span className="fw-bold">Time:</span> {formattedTime}</Card.Text>
-                        <Card.Text><span className="fw-bold">Seats:</span> {ride.capacity}</Card.Text>
-                    </Card.Body>
-                </Card>
-            );
-        });
-    }
+                    return (
+                        <Card key={ride._id} className="my-3 position-relative" style={{ cursor: "pointer" }}>
+                            <Card.Body onClick={() => toggleFooter(ride._id)}>
+                                <div>
+                                    <Card.Title className="mb-3">
+                                        <Row>
+                                            <Col sm={4}>
+                                                <span className="fw-bold text-success">Pickup Location:</span> {ride.pickUpLocation}
+                                            </Col>
+                                            <Col sm={4} className="text-center">
+                                                {key === 0 ? <FontAwesomeIcon icon={faLongArrowAltRight} beat /> : <FontAwesomeIcon icon={faLongArrowAltRight} />}
+                                            </Col>
+                                            <Col sm={4}>
+                                                <span className="fw-bold text-danger">Drop Location:</span> {ride.dropLocation}
+                                            </Col>
+                                        </Row>
+                                    </Card.Title>
+                                    <Card.Text className="mb-0"><span className="fw-bold">Date:</span> {formattedDate}</Card.Text>
+                                    <Card.Text><span className="fw-bold">Time:</span> {formattedTime}</Card.Text>
+                                    <Card.Text><span className="fw-bold">Seats:</span> {ride.capacity}</Card.Text>
+                                </div>
+                            </Card.Body>
+                            {visibleFooters[ride._id] && (
+                                <Card.Footer className="d-flex justify-content-end">
+                                    <Button
+                                        variant='danger'
+                                        className="m-2"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDelete(ride._id);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </Button>
+                                </Card.Footer>
+                            )}
+                        </Card>
+                    );
+                })}
+                <Pagination className="justify-content-center">
+                    {Array.from({ length: Math.ceil(rides.length / ridesPerPage) }, (_, idx) => (
+                        <Pagination.Item key={idx + 1} active={idx + 1 === currentPage} onClick={() => setCurrentPage(idx + 1)}>
+                            {idx + 1}
+                        </Pagination.Item>
+                    ))}
+                </Pagination>
+            </>
+        );
+    };
 
     return (
-        <Container fluid>
+        <Container fluid className='min-vh-100'>
             <Row className='py-2 px-3'>
                 <Nav justify variant="tabs" fill>
                     <Nav.Item>
@@ -93,11 +136,11 @@ const Rides = () => {
                 </Nav>
             </Row>
             <Row className='flex-row justify-content-center m-3'>
-                <Col className="border border-0 rounded-1 shadow-lg w-75 h-75" style={{ "backgroundColor": "#E8E8E8" }}>
+                <Col className="border rounded shadow-lg w-75 h-75" style={{ backgroundColor: "#E8E8E8" }}>
                     {key === 0 && renderRides(activeRides)}
                     {key === 1 && renderRides(pastRides)}
                     {key === 2 && (
-                        <Card className="border-0 bg-slate">
+                        <Card className="border-1 my-3">
                             <Card.Header>Transactions</Card.Header>
                             <Card.Body>
                                 {/* Assuming transactions would have a similar structure */}
@@ -109,6 +152,6 @@ const Rides = () => {
             </Row>
         </Container>
     );
-}
+};
 
 export default Rides;
