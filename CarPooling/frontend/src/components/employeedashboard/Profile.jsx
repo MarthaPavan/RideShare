@@ -5,7 +5,7 @@ import "./Profile.css";
 
 const Profile = () => {
     const [image, setImage] = useState("/images/placeholder.jpg");
-
+    const [imageLoad, setImageLoad] = useState(true);
     const storedUser = localStorage.getItem('user');
     const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : {
         fullName: 'Guest',
@@ -20,6 +20,21 @@ const Profile = () => {
             setUser(JSON.parse(storedUser));
         }
     }, [storedUser]);
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get(`http://localhost:1000/get-started/fetch-profile-pic/${user.image}`, {
+                    responseType: 'blob',
+                });
+                const imageUrl = URL.createObjectURL(response.data);
+                setImage(imageUrl);
+                setImageLoad(false);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchProfile();
+    }, [user.image]);
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -71,6 +86,7 @@ const Profile = () => {
 
     return (
         <div className="flex align-items-center justify-content-center px-4 py-2 min-vh-100">
+            {imageLoad && <div className="loader"></div>}
             <Row>
                 <Row className="gap-2">
                     <Col xs={2} className="position-relative">

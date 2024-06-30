@@ -2,34 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { Col, Card, Container, Nav, Row } from 'react-bootstrap';
 import axios from 'axios';
 import "./dashboard.css";
+import Loader from '../Loader';
 
 const Rides = () => {
     const [key, setKey] = useState(0);
     const [activeRides, setActiveRides] = useState([]);
     const [pastRides, setPastRides] = useState([]);
     const [transactions, setTransactions] = useState([]);
-
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchRides = async () => {
             try {
                 const response = await axios.get('http://localhost:1000/rides/fetchrides');
                 const rides = response.data;
                 const now = new Date();
-    
+
                 // Filter rides based on current time
                 const active = rides.filter(ride => new Date(ride.date) >= now);
                 const past = rides.filter(ride => new Date(ride.date) < now);
-    
+
                 setActiveRides(active);
                 setPastRides(past);
+                setLoading(false);
             } catch (error) {
                 console.error("Failed to fetch rides", error);
             }
         };
-    
+
         fetchRides();
     }, []); // Run once when component mounts, no dependencies
-    
+
     const changeKey = (e) => {
         setKey(e);
     };
@@ -61,6 +63,7 @@ const Rides = () => {
                     </Nav.Item>
                 </Nav>
             </Row>
+            {loading && <Loader />}
             <Row className='flex-row justify-content-center m-3'>
                 <Col className="border border-0 rounded-1 shadow-lg w-75 h-75">
                     {key === 0 && renderRides(activeRides)}
@@ -76,7 +79,7 @@ const Rides = () => {
                     )}
                 </Col>
             </Row>
-        
+
         </Container>
     );
 }

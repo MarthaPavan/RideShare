@@ -26,28 +26,42 @@ const Login = () => {
     setError("");
 
     try {
+      // Attempt to login
       await auth.loginAction({ emailId, password });
-      const role = localStorage.getItem("role");
-      localStorage.setItem("status", true.toString());
 
-      console.log(role);
-     
-      switch (role) {
-        case "admin":
-          navigate("/AdminDashBoard");
-          break;
-        case "driver":
-          navigate("/EmployeeDashBoard");
-          break;
-        case "user":
-          navigate("/UserDashBoard");
-          break;
-        default:
-          setError("Account doesn't exist.Register");
-          setLoading(false);
-          navigate("/Login");
+      // Retrieve role from local storage
+      const role = localStorage.getItem("role");
+      console.log("Logged in role:", role);
+
+      // Store logged-in status
+      localStorage.setItem("status", "true");
+
+      // Check and navigate based on role
+      if (role) {
+        switch (role) {
+          case "admin":
+            navigate("/AdminDashBoard");
+            break;
+          case "driver":
+            navigate("/EmployeeDashBoard");
+            break;
+          case "user":
+            navigate("/UserDashBoard");
+            break;
+          default:
+            setError("Account doesn't exist. Register.");
+            setLoading(false);
+            navigate("/Login");
+        }
+      } else {
+        // If role is not found, show error
+        setError("Account doesn't exist. Register.");
+        setLoading(false);
+        navigate("/Login");
       }
     } catch (err) {
+      // Handle login error
+      console.error("Login error:", err);
       setError("Invalid username or password");
       setLoading(false);
     }

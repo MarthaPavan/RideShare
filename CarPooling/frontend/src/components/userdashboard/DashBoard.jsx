@@ -6,7 +6,7 @@ import { SearchList } from '../../components/SearchList'; // Ensure SearchList i
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import './dashboard.css';
-import { Loader } from '../Loader';
+
 const Dashboard = () => {
     const [rideDetails, setRideDetails] = useState({
         startPoint: "",
@@ -39,7 +39,7 @@ const Dashboard = () => {
             });
             setLocations(response.data);
         } catch (error) {
-            setError("Failed to fetch locations. Please try again later.");
+            setError("An error occurred at backend. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -88,7 +88,7 @@ const Dashboard = () => {
             return;
         }
         //fetch the available rides
-        const response = await axios.post("http://localhost:1000/rides", rideDetails);
+        const response = await axios.get("http://localhost:1000/rides/fetchrides", rideDetails);
         console.log(response.data);
     };
     // Handle double click to close search list
@@ -198,7 +198,6 @@ const Dashboard = () => {
                 </Form>
                 {error && <div className="text-danger">*{error}</div>}
             </Row>
-            {loading && <Loader />}
         </Container>
     );
 }

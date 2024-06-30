@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const driverSchema = new mongoose.Schema({
+  image: { type: mongoose.Schema.Types.ObjectId, ref: 'Image' } ,
   fullName: {
     type: String,
     required: true,

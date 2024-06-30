@@ -23,12 +23,13 @@ import ContactUs from "./Contactus";
 
 const UserDashBoard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState(localStorage.getItem("index") || 0);
   const user = localStorage.getItem("name");
   const { logOut } = useAuth(); 
 
   const handleClick = (e) => {
     setIndex(e);
+    localStorage.setItem("index", e);
   };
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const UserDashBoard = () => {
     logOut(); 
   };
 
-  const components = [<Profile />, <Dashboard />, <Rides />,<Feedback/>,<ContactUs/>];
+  const components = [<Profile />, <Dashboard />, <Rides />, <Feedback />, <ContactUs />];
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevIsSidebarOpen) => !prevIsSidebarOpen);
@@ -48,7 +49,6 @@ const UserDashBoard = () => {
   return (
     <Container fluid className="p-0">
       <Row>
-        {/* Toggle Button for Sidebar on Small Screens */}
         <Col
           xs={12}
           className="d-md-none d-flex justify-content-between align-items-center mb-3"
@@ -58,8 +58,6 @@ const UserDashBoard = () => {
           </Button>
           <span>Welcome {user ? user : "User"}</span>
         </Col>
-
-        {/* Sidebar */}
         <Col
           xs={12}
           md={2}
@@ -116,8 +114,6 @@ const UserDashBoard = () => {
             </CSidebarNav>
           </CSidebar>
         </Col>
-
-        {/* Main Content */}
         <Col xs={12} md={10} className="px-4 py-3">
           <div style={{ marginLeft: "50px" }}>
             {components[index]}

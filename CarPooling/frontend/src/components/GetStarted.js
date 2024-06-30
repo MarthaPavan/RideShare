@@ -22,9 +22,9 @@ export default function GetStarted() {
     };
 
     return (
-        <Container>
+        <Container fluid >
             <Row className="align-items-start">
-                <Col className="m-5 p-5">
+                <Col className="m-5 p-5 min-vh-100">
                     <h1>How do you want to use RideShare?</h1>
                     <p>We will personalize your account setup according to that</p>
                     <ListGroup as="ul" className="mb-5">
@@ -58,7 +58,13 @@ export default function GetStarted() {
                         </Button>
                     </div>
                 </Col>
-                <Col></Col>
+                <Col className="min-vh-100">
+                    <img
+                        src="https://images.unsplash.com/photo-1606783423908-4e1f7d4b4c1e"
+                        alt="Get Started"
+                        className="img-fluid"
+                    />
+                </Col>
             </Row>
         </Container>
     );

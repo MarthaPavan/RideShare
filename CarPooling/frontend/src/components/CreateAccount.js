@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col, Container, Image } from "react-bootstrap";
+import { Row, Col, Container, Image, Form, Button } from "react-bootstrap";
 import axios from "axios";
 
 function CreateAccount() {
   const [form, setForm] = useState({
+    image: null, // Default image path
     fullName: "",
     emailId: "",
     password: "",
@@ -13,26 +14,55 @@ function CreateAccount() {
     role: "user",
   });
 
+  const [selectedFile, setSelectedFile] = useState(null); // State to store selected image file
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((previousState) => ({ ...previousState, [name]: value }));
+    setForm((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+
+    // Read the file and set as data URL
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setForm((prevState) => ({ ...prevState, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+
+    // Append form fields to formData
+    formData.append("fullName", form.fullName);
+    formData.append("emailId", form.emailId);
+    formData.append("password", form.password);
+    formData.append("phoneNumber", form.phoneNumber);
+    formData.append("role", form.role);
+
+    // Append selected file to formData
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
 
     try {
-      const res = await axios.post("http://localhost:1000/get-started/signup", form);
-      console.log(res);
+      const res = await axios.post("http://localhost:1000/get-started/signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       if (res.status === 200 && res.data.msg === "success") {
         navigate("/SignUpSuccess");
       } else {
         alert("Registration failed. Please try again.");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       alert("An error occurred during registration. Please try again later.");
     }
   };
@@ -40,9 +70,14 @@ function CreateAccount() {
   return (
     <Container fluid className="min-vh-100">
       <Row className="flex-fill align-items-center justify-content-center">
-        <Col className="m-3 p-3 border  border-1 border-dark-subtle shadow">
-          <form onSubmit={handleSubmit}>
+        <Col className="m-3 p-3 border border-1 border-dark-subtle shadow">
+          <div className="d-flex justify-content-between align-items-center mb-4">
             <h2>Sign Up</h2>
+            {form.image && (
+              <Image src={form.image} className="rounded-circle" style={{ width: "50px", height: "50px" }} />
+            )}
+          </div>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <p>It's quick and easy.</p>
             <div className="mb-3">
               <input
@@ -52,6 +87,7 @@ function CreateAccount() {
                 className="form-control"
                 value={form.fullName}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="mb-3">
@@ -87,12 +123,25 @@ function CreateAccount() {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-success">
+            <div className="mb-3">
+              <input
+                type="file"
+                name="image"
+                className="form-control"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+            </div>
+            {form.image && (
+              <div className="mb-3">
+                <Image src={form.image} thumbnail fluid alt="Profile Preview" />
+              </div>
+            )}
+            <Button variant="success" type="submit" className="w-100 mt-3">
               Sign Up
-            </button>
+            </Button>
           </form>
-          <br />
-          <p>
+          <p className="mt-3">
             Already an existing user? <Link to="/Login">Login Here</Link>
           </p>
         </Col>
