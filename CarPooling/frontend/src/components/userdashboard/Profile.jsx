@@ -44,6 +44,7 @@ const Profile = () => {
       catch (err) {
         // console.error(err);
         setImage('/images/placeholder.jpg')
+        setImageLoad(false);
       }
     }
     fetchProfile();
