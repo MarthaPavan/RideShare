@@ -97,7 +97,7 @@ const Dashboard = () => {
     };
 
     return (
-        <Container fluid className='px-5' onDoubleClick={handleDoubleClick}>
+        <Container fluid className='px-5 min-vh-100' onDoubleClick={handleDoubleClick}>
             <Row>
                 <Col xs={12} className='d-flex justify-content-center align-items-center mb-4'>
                     <h1 className='text-center'>Book a Ride</h1>

@@ -30,7 +30,7 @@ const ContactUs = () => {
   };
 
   return (
-    <Container className="mt-4">
+    <Container className="mt-4 mx-2 min-vh-100">
       <h2>Contact Us</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formName">
