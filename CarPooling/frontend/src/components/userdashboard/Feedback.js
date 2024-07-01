@@ -26,8 +26,11 @@ const FeedbackForm = () => {
       cleanliness: "",
       comfort: "",
       driverBehavior: "",
+      overallRide: "",
     });
   };
+
+  const maxLength = 200; // Maximum number of characters for the text area
 
   return (
     <div className="container mt-4 min-vh-100">
@@ -39,9 +42,13 @@ const FeedbackForm = () => {
             as="textarea"
             rows={3}
             value={feedback}
+            maxLength={maxLength}
             onChange={(e) => setFeedback(e.target.value)}
             required
           />
+          <Form.Text className="text-muted">
+            {feedback.length}/{maxLength} characters
+          </Form.Text>
         </Form.Group>
         
         <Table striped bordered hover className="mt-4">
