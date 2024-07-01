@@ -35,33 +35,31 @@ class LoginController {
   }
   async userRegister(req, res) {
     try {
-      const {image,fullName, emailId, password, phoneNumber, role, registrationNumber, vehicleModel } = req.body;
-
+      const { fullName, emailId, password, phoneNumber, role, registrationNumber, vehicleModel } = req.body;
+  
       const existingUser = await userModel.findOne({ emailId });
       if (existingUser) {
         return res.status(400).json({ msg: "User already exists" });
       }
-      if (!req.file) {
-        return res.status(400).json({ msg: "No file uploaded." });
+  
+      let savedImage = null;
+      if (req.file) {
+        const { buffer, mimetype } = req.file;
+  
+        // Create new Image document
+        const newImage = new Image({
+          imageData: buffer,
+          contentType: mimetype
+        });
+        savedImage = await newImage.save();
       }
-      const { buffer, mimetype } = req.file;
-
-      // Create new Image document
-      const newImage = new Image({
-        imageData: buffer,
-        contentType: mimetype
-      });
-      const savedImage = await newImage.save();
-
-      const {_id}=savedImage;
-      const profileimg=await Image.findById(_id);
-
+  
       const salt = await bcryptjs.genSalt(10);
       const hashedPassword = await bcryptjs.hash(password, salt);
+  
       if (role == "driver") {
-      
         const user = await userModel.create({
-          image: savedImage._id ,// Reference to saved image
+          image: savedImage ? savedImage._id : undefined, // Reference to saved image if exists
           fullName,
           emailId,
           phoneNumber,
@@ -71,9 +69,9 @@ class LoginController {
           vehicleModel
         });
         await user.save();
-
+  
         const driver = await driverModel.create({
-          image: savedImage._id ,// Reference to saved image
+          image: savedImage ? savedImage._id : undefined, // Reference to saved image if exists
           fullName,
           emailId,
           phoneNumber,
@@ -82,25 +80,27 @@ class LoginController {
           vehicleModel
         });
         await driver.save();
-        return res.status(200).json({ msg: "success", user ,imageData:image.imageData
-        });
+        
+        return res.status(200).json({ msg: "success", user, imageData: savedImage ? savedImage.imageData : null });
       }
-      
+  
       const user = await userModel.create({
-          image: savedImage._id, // Reference to saved image,
-          fullName,
-          emailId,
-          phoneNumber,
-          password: hashedPassword,
-          role
-        });
+        image: savedImage ? savedImage._id : undefined, // Reference to saved image if exists
+        fullName,
+        emailId,
+        phoneNumber,
+        password: hashedPassword,
+        role
+      });
       await user.save();
-      return res.status(200).json({ msg: "success", user ,imageData:image.imageData});
-      
+  
+      return res.status(200).json({ msg: "success", user, imageData: savedImage ? savedImage.imageData : null });
+  
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
   }
+  
 
   async fetchProfilePic(req,res){
     try{

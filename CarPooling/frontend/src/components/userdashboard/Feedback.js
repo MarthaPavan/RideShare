@@ -21,9 +21,6 @@ const FeedbackForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Handle form submission logic here
-    console.log(feedback, satisfaction);
-    // Reset the form
     setFeedback("");
     setSatisfaction({
       cleanliness: "",
@@ -33,7 +30,7 @@ const FeedbackForm = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 min-vh-100">
       <h2>Feedback Form</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="feedback">
