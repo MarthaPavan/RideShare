@@ -157,7 +157,7 @@ const Profile = () => {
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} className="mb-3" controlId="formEmailId">
+            <Form.Group as={Row} className="mb-3" controlId="formEmailId" >
               <Form.Label column sm="2">
                 Email
               </Form.Label>
@@ -167,6 +167,7 @@ const Profile = () => {
                   name="emailId"
                   value={user.emailId}
                   onChange={handleChange}
+                  style={{cursor:"not-allowed"}}
                   disabled
                 />
               </Col>
