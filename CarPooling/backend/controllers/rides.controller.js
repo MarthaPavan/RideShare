@@ -101,13 +101,14 @@ class RideController {
     }
   }
     // Method to delete a route
-    async deleteRide(req, res) {
+    async deleteRide(req, res){
+      console.log(req.params.routeId)
       try {
         const routeId = parseInt(req.params.routeId);
         if (isNaN(routeId)) {
           return res.status(400).json({ msg: "Invalid route ID" });
         }
-  
+        
         // Find the route by routeId and delete it
         const deletedRoute = await RouteModel.findOneAndDelete({ routeId: routeId });
   
