@@ -28,7 +28,7 @@ const NavBar = () => {
           </Nav>
           {token && (
             <div className='d-flex'>
-            <button className='button-42' onClick={()=>{
+            <button className='button-42 mb-1' onClick={()=>{
               if(localStorage.getItem('role')==='driver'){
                 navigate('/EmployeeDashboard')
               }
