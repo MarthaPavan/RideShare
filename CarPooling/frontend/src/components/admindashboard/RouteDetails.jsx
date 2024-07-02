@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, ButtonGroup, Card, ListGroup, ListGroupItem, Modal } from 'react-bootstrap';
+import { Button, ButtonGroup, Card, ListGroup, ListGroupItem, Modal, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const RouteDetails = (props) => {
-  const id = props.id;
+const RouteDetails = ({ id }) => {
   const [route, setRoute] = useState(null);
   const [selectedDriver, setSelectedDriver] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false); // State for delete confirmation modal
@@ -23,7 +22,13 @@ const RouteDetails = (props) => {
   }, [id]);
 
   if (!route) {
-    return <div>Loading...</div>;
+    return (
+      <div className='d-flex justify-content-center align-items-center min-vh-100'>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
   }
 
   const handleDriverClick = (driverId) => {
@@ -35,7 +40,6 @@ const RouteDetails = (props) => {
   };
 
   const handleEditDriver = () => {
-    console.log(selectedDriver);
     if (selectedDriver) {
       console.log("Edit driver:", selectedDriver);
       // Implement edit logic here
@@ -65,13 +69,14 @@ const RouteDetails = (props) => {
       <Card.Body>
         <Card.Title>Route Details</Card.Title>
         <Card.Text><strong>Route ID:</strong> {route.routeId}</Card.Text>
-        <Card.Text><strong>Start Point:</strong> {route.startPoint}</Card.Text>
-        <Card.Text><strong>End Point:</strong> {route.endPoint}</Card.Text>
-        <Card.Text><strong>Distance:</strong> {route.distance} km</Card.Text>
-        <Card.Text><strong>Number of Drivers:</strong> {route.drivers.length}</Card.Text>
+        <Card.Text><strong>Pick Up Location:</strong> {route.pickUpLocation}</Card.Text>
+        <Card.Text><strong>Drop Location:</strong> {route.dropLocation}</Card.Text>
+        <Card.Text><strong>Date:</strong> {new Date(route.date).toLocaleDateString()}</Card.Text>
+        <Card.Text><strong>Capacity:</strong> {route.capacity}</Card.Text>
+        <Card.Text><strong>Number of Drivers:</strong> {route.driver.length}</Card.Text>
 
         <ListGroup>
-          {route.drivers.map(d => (
+          {route.driver.map(d => (
             <ListGroupItem
               key={d._id}
               onClick={() => handleDriverClick(d._id)}

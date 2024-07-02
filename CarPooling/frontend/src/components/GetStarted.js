@@ -59,11 +59,7 @@ export default function GetStarted() {
                     </div>
                 </Col>
                 <Col className="min-vh-100">
-                    <img
-                        src="https://images.unsplash.com/photo-1606783423908-4e1f7d4b4c1e"
-                        alt="Get Started"
-                        className="img-fluid"
-                    />
+                    
                 </Col>
             </Row>
         </Container>

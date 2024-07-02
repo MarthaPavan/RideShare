@@ -3,6 +3,7 @@ import { useTable, useSortBy, usePagination } from 'react-table';
 import { Table, Pagination, Button } from 'react-bootstrap';
 import axios from 'axios';
 import RouteDetails from './RouteDetails';
+import './styles.css';
 
 const Routes = () => {
   const [data, setData] = useState([]);
@@ -25,24 +26,28 @@ const Routes = () => {
   const columns = useMemo(() => [
     {
       Header: "Route ID",
-      accessor: "_id", // Use _id instead of routeId
+      accessor: "routeId", // Use routeId instead of _id
     },
     {
-      Header: "Start Point",
-      accessor: "startPoint",
+      Header: "Pick Up Location",
+      accessor: "pickUpLocation",
     },
     {
-      Header: "End Point",
-      accessor: "endPoint",
+      Header: "Drop Location",
+      accessor: "dropLocation",
     },
     {
-      Header: "Distance (km)",
-      accessor: "distance",
-      Cell: ({ value }) => `${value} km`,
+      Header: "Date",
+      accessor: "date",
+      Cell: ({ value }) => new Date(value).toLocaleDateString(),
+    },
+    {
+      Header: "Capacity",
+      accessor: "capacity",
     },
     {
       Header: "Number of Drivers",
-      accessor: "drivers",
+      accessor: "driver",
       Cell: ({ value }) => value.length,
     },
   ], []);
@@ -86,12 +91,12 @@ const Routes = () => {
   const endRow = Math.min(rowCount, startRow + pageSize - 1);
 
   return (
-    <div className='container flex-column justify-content-center align-content-center m-2 p-2'>
-      <h3 className='display-6'><i className="fa-solid fa-map"></i> Routes</h3>
+    <div className='table-container'>
+      <h3 className='display-6 text-center'><i className="fa-solid fa-map"></i> Routes</h3>
       {!page && (
         <>
-          <Table responsive bordered hover {...getTableProps()}>
-            <thead className='thead bg-dark text-white'>
+          <Table responsive bordered hover {...getTableProps()} className='text-center'>
+            <thead className='table-header'>
               {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map(column => (
@@ -107,7 +112,7 @@ const Routes = () => {
               {rows.map(row => {
                 prepareRow(row);
                 return (
-                  <tr {...row.getRowProps()} onClick={() => handleClick(row.original._id)}>
+                  <tr {...row.getRowProps()} onClick={() => handleClick(row.original.routeId)} className='table-row'>
                     {row.cells.map(cell => {
                       return (
                         <td {...cell.getCellProps()}>
@@ -120,11 +125,11 @@ const Routes = () => {
               })}
             </tbody>
           </Table>
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="pagination-container">
             <span>
               Showing {startRow} to {endRow} of {rowCount} entries
             </span>
-            <Pagination className='align-items-end'>
+            <Pagination className='pagination'>
               <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
               <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
               {pageOptions.map((page, index) => (

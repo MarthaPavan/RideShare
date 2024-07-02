@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const driverSchema = new mongoose.Schema({
-  image: { type: mongoose.Schema.Types.ObjectId, ref: 'Image' } ,
+  image: { type: mongoose.Schema.Types.ObjectId, ref: 'Image' },
   fullName: {
     type: String,
     required: true,
@@ -9,17 +9,17 @@ const driverSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     required: true,
-    unique: [true, "phone number already exists"],
+    unique: true,
   },
   emailId: {
     type: String,
     required: true,
-    unique: [true, "emailId already exists"],
+    unique: true,
   },
   registrationNumber: {
     type: String,
     required: true,
-    unique: [true, "registration number already exists"],
+    unique: true,
   },
   vehicleModel: {
     type: String,
@@ -31,6 +31,9 @@ const driverSchema = new mongoose.Schema({
   },
 });
 
-const driverModel = new mongoose.model("driver", driverSchema);
+const driverModel = mongoose.model("driver", driverSchema);
 
-module.exports = {driverModel,driverSchema};
+module.exports = {
+  driverModel: driverModel,
+  driverSchema: driverSchema
+};

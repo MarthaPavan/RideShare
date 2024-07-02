@@ -36,12 +36,14 @@ const UserDashBoard = () => {
   }, [user]);
 
   const handleLogout = () => {
-    
+    console.log("Toast shown:", showToast);
     setToastMessage("Logged out successfully");
     setShowToast(true);
     sessionStorage.setItem("welcomeToastShown", "false");
     logOut();
+     // Check if this logs true
   };
+  
 
   const handleClick = (e) => {
     setIndex(e);

@@ -2,19 +2,21 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
+import './styles.css'; // Import your custom CSS for additional styling
 
 const Employees = () => {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const token = localStorage.getItem('token');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:1000/routes/getDriver",{
+        const response = await axios.get("http://localhost:1000/routes/getDriver", {
           headers: {
-              Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
-      });
+        });
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -22,7 +24,7 @@ const Employees = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   const handleClick = (id) => {
     console.log(id);
@@ -85,7 +87,7 @@ const Employees = () => {
   const endRow = Math.min(rowCount, startRow + pageSize - 1);
 
   return (
-    <div className='container flex-column justify-content-center align-content-center m-2 p-2'>
+    <div className='container flex-column justify-content-center align-content-center m-2 p-2 table-container'>
       <h1><i className="fa-regular fa-address-book"></i> Employees List</h1>
       <Table responsive bordered hover {...getTableProps()}>
         <thead className='thead-dark'>
@@ -111,7 +113,7 @@ const Employees = () => {
           {rows.map(row => {
             prepareRow(row);
             return (
-              <tr key={row.id} onClick={() => handleClick(row.original._id)}>
+              <tr key={row.id} onClick={() => handleClick(row.original._id)} className='table-row'>
                 {row.cells.map(cell => (
                   <td key={cell.id}>
                     {cell.render('Cell')}

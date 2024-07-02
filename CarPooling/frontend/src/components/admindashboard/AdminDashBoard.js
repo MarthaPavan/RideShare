@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
-import { Col, Row } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Col, Row, Button, Toast, ToastContainer } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
-
 import {
   CSidebar,
   CSidebarBrand,
@@ -10,36 +9,54 @@ import {
   CSidebarNav,
   CNavItem,
 } from "@coreui/react";
-import toast from "react-hot-toast";
-import { useAuth } from "../../routes/AuthContext";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 import Routes from "./Routes";
 import Employees from "./Employees";
-
 import Dashboard from "./Dashboard";
+import { useAuth } from "../../routes/AuthContext";
+
 const AdminDashBoard = () => {
   const { logOut } = useAuth();
   const navigate = useNavigate();
   const user = localStorage.getItem("name");
-  const [index, setIndex] = React.useState(0);
-  const components = [ <Dashboard />, <Employees />, <Routes />];
+  const [index, setIndex] = useState(localStorage.getItem("index") || 0);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  const components = [<Dashboard />, <Employees />, <Routes />];
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setToastMessage(`Welcome back, ${user ? user : "User"}`);
+      setShowToast(true);
+    }
+  }, [user]);
+
+  const handleLogout = () => {
+    setToastMessage("Logged out successfully");
+    setShowToast(true);
+    logOut();
+    navigate("/login");
+  };
+
   const handleClick = (e) => {
     setIndex(e);
+    localStorage.setItem("index", e);
   };
-  const handleLogout = (event) => {
-    event.preventDefault();
-    logOut();
-    navigate('/');
-  };
-  useEffect(() => {
-    toast("Welcome back", {
-      icon: "👋",
-      position: "top-right",
-    });
-  }, []);
+
   return (
     <>
+      <ToastContainer position="top-end" className="p-3">
+        <Toast onClose={() => setShowToast(false)} show={showToast} delay={20000} autohide>
+          <Toast.Header>
+            <strong className="me-auto">Dashboard</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <Row className="gx-4">
         <Col xs={2} className="px-0">
           <CSidebar className="border-end" style={{ height: "100vh" }}>
@@ -49,25 +66,19 @@ const AdminDashBoard = () => {
               </CSidebarBrand>
             </CSidebarHeader>
             <CSidebarNav variant="pills" layout="fill">
-              
               <CNavItem
                 href="#/dashboard"
                 active={index === 0}
                 onClick={() => handleClick(0)}
               >
-                <CIcon
-                  customClassName="nav-icon"
-                  icon={icon.cilScreenDesktop}
-                />{" "}
-                Dashboard
+                <CIcon customClassName="nav-icon" icon={icon.cilScreenDesktop} /> Dashboard
               </CNavItem>
               <CNavItem
                 href="#/employees"
                 active={index === 1}
                 onClick={() => handleClick(1)}
               >
-                <CIcon customClassName="nav-icon" icon={icon.cilPeople} />
-                Employees
+                <CIcon customClassName="nav-icon" icon={icon.cilPeople} /> Employees
               </CNavItem>
               <CNavItem
                 href="#/routes"
@@ -76,15 +87,9 @@ const AdminDashBoard = () => {
               >
                 <CIcon customClassName="nav-icon" icon={icon.cilMap} /> Routes
               </CNavItem>
-              <CNavItem href="/" onClick={handleLogout}>
-              <CIcon
-                customClassName="nav-icon"
-                icon={icon.cilAccountLogout}
-              />
-              Log out
-            </CNavItem>
-
-              {/*<CNavItem href="https://coreui.io/pro/"><CIcon customClassName="nav-icon" icon={icon.cilLayers} /> Try CoreUI PRO</CNavItem>*/}
+              <CNavItem onClick={handleLogout} href="/login">
+                <CIcon customClassName="nav-icon" icon={icon.cilAccountLogout} /> Logout
+              </CNavItem>
             </CSidebarNav>
           </CSidebar>
         </Col>
@@ -92,7 +97,6 @@ const AdminDashBoard = () => {
           {components[index]}
         </Col>
       </Row>
-      
     </>
   );
 };

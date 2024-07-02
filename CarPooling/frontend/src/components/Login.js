@@ -72,7 +72,7 @@ const Login = () => {
       fluid
       className="d-flex align-items-center justify-content-center vh-100"
     >
-      <Row>
+      <Row> 
         <Col className="m-5 p-5">
           <Image
             src={"/images/login_page_image.jpg"}
