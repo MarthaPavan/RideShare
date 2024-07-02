@@ -1,7 +1,7 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/users.model");
-const driverModel = require("../models/drivers.model");
+const {driverModel} = require("../models/drivers.model");
 const Image = require("../models/imageModel");
 const multer = require("multer");
 require("dotenv").config();

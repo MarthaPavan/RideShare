@@ -87,9 +87,7 @@ const UserDashBoard = () => {
         {isMobile ? (
           <Offcanvas show={isSidebarOpen} onHide={toggleSidebar} responsive="md">
             <Offcanvas.Header closeButton>
-              <Offcanvas.Title>
-                <img src="/images/logo.svg" alt="logo" style={{ height: '65px', width: '65px' }} />
-              </Offcanvas.Title>
+            <Offcanvas.Title><img src="/images/logo_white.svg" alt="logo" style={{ height: '65px', width: '65px' }} /></Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Offcanvas.Title>Welcome {user ? user : "User"}</Offcanvas.Title>

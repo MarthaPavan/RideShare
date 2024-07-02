@@ -1,14 +1,9 @@
 
 const mongoose = require('mongoose');
 const userSchema = require("../models/users.model")
-const {Schema} = require("mongoose");
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const bookingSchema = new mongoose.Schema({
 
-    bookingId : {
-        type : Schema.ObjectId,
-        required : true,
-        unique : true
-    },
     userDetails :{
         type : userSchema,
         required : true,
@@ -40,5 +35,6 @@ const bookingSchema = new mongoose.Schema({
 
 })
 
+bookingSchema.plugin(AutoIncrement, { inc_field: 'bookingId' });
 const bookingModel = mongoose.model("ride",bookingSchema)
 module.exports = bookingModel

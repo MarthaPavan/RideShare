@@ -5,7 +5,7 @@ import axios from 'axios';
 import "./dashboard.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltRight, faTrash } from '@fortawesome/free-solid-svg-icons';
-
+import toast from 'react-hot-toast';
 const Rides = () => {
     const [key, setKey] = useState(0);
     const [activeRides, setActiveRides] = useState([]);
@@ -41,9 +41,9 @@ const Rides = () => {
         setCurrentPage(1); // Reset to first page when changing tabs
     };
 
-    const handleDelete = async (rideId) => {
+    const handleDelete = async (routeId) => {
         try {
-            await axios.delete(`http://localhost:1000/rides/delete/${rideId}`);
+            await axios.delete(`http://localhost:1000/rides/deleteride/${routeId}`);
             fetchRides();
         } catch (error) {
             console.error("Failed to delete ride", error);
@@ -71,8 +71,8 @@ const Rides = () => {
                     const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                     return (
-                        <Card key={ride._id} className="my-3 position-relative" style={{ cursor: "pointer" }}>
-                            <Card.Body onClick={() => toggleFooter(ride._id)}>
+                        <Card key={ride.routeId} className="my-3 position-relative" style={{ cursor: "pointer" }}>
+                            <Card.Body onClick={() => toggleFooter(ride.routeId)}>
                                 <div>
                                     <Card.Title className="mb-3">
                                         <Row>
@@ -92,14 +92,25 @@ const Rides = () => {
                                     <Card.Text><span className="fw-bold">Seats:</span> {ride.capacity}</Card.Text>
                                 </div>
                             </Card.Body>
-                            {visibleFooters[ride._id] && (
+                            {visibleFooters[ride.routeId] && (
                                 <Card.Footer className="d-flex justify-content-end">
                                     <Button
                                         variant='danger'
                                         className="m-2"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleDelete(ride._id);
+                                            toast.promise(
+                                                handleDelete(ride.routeId),
+                                                {
+                                                    loading: 'Deleting...',
+                                                    success: <b>Deleted successfully</b>,
+                                                    error: <b>Could not delete</b>,
+                                                }, {
+                                                style: {
+                                                    position: "top-left"
+                                                }
+                                            }
+                                            );
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faTrash} />

@@ -44,7 +44,7 @@ const routeSchema = new mongoose.Schema({
     required: true
   },
   driver: {
-    type: [driverSchema],
+    type: driverSchema,
     required: true
   }
 });

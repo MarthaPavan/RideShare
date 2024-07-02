@@ -15,7 +15,7 @@ class RideController {
         dropLocation: dropLocation,
         date: parsedDate,
         capacity: capacity,
-        driver: [driver] // Assuming driver is an object containing driver details
+        driver: driver // Assuming driver is an object containing driver details
       });
 
       if (newRide) {
@@ -53,7 +53,7 @@ class RideController {
       if (rides.length === 0) {
         return res.status(404).json({ message: "No rides found" });
       }
-
+      
       return res.status(200).json(rides);
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -101,13 +101,14 @@ class RideController {
     }
   }
     // Method to delete a route
-    async deleteRide(req, res) {
+    async deleteRide(req, res){
+      console.log(req.params.routeId)
       try {
         const routeId = parseInt(req.params.routeId);
         if (isNaN(routeId)) {
           return res.status(400).json({ msg: "Invalid route ID" });
         }
-  
+        
         // Find the route by routeId and delete it
         const deletedRoute = await RouteModel.findOneAndDelete({ routeId: routeId });
   

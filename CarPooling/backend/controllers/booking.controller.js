@@ -10,13 +10,9 @@ class BookingController{
               if (isNaN(parsedDate)) {
                 return res.status(400).json({ message: "Invalid date format" });
               }
-          
-              // Generate a unique booking ID using the count (for demonstration purposes)
-              const count = await bookingModel.countDocuments();
-          
+
               // Create a new booking document
               const newBooking = await bookingModel.create({
-                bookingId: count + 1,
                 userDetails: { ...userDetails },
                 pickupLocation: pickupLocation,
                 dropLocation: dropLocation,
@@ -26,7 +22,7 @@ class BookingController{
                 status: status
               });
               if (newBooking) {
-                return res.status(201).json({ message: "Booking created successfully", booking: newBooking });
+                return res.status(201).json({ message: "Request  created successfully", booking: newBooking });
               } else {
                 return res.status(400).json({ message: "Failed to create booking" });
               }
@@ -34,5 +30,25 @@ class BookingController{
               return res.status(500).json({ message: error.message });
             }
           }
-    }
+    // async fetchBooking(req,res){
+    //     try {
+    //         const { date, status } = req.query;
+    //         let query = {};
+    //         if (date) {
+    //           const parsedDate = new Date(date);
+    //           query.date = parsedDate;
+    //         }
+    //         if (status) {
+    //           query.status = status;
+    //         }
+    //         const bookings = await bookingModel.find(query);
+    //         if (bookings.length === 0) {
+    //           return res.status(404).json({ message: "No bookings found" });
+    //         }
+    //         return res.status(200).json(bookings);
+    //       } catch (error) {
+    //         return res.status(500).json({ message: error.message });
+    //       }
+    // }
+}
 module.exports = new BookingController();

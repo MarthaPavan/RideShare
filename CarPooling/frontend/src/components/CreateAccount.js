@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col, Container, Image, Form, Button } from "react-bootstrap";
+import { Row, Col, Container, Image, Button } from "react-bootstrap";
 import axios from "axios";
 
 function CreateAccount() {

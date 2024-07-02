@@ -27,27 +27,44 @@ const NavBar = () => {
             </Nav.Link>
           </Nav>
           {token && (
-            <div className='d-flex justify-content-center mt-4'>
-            <Button
-              variant='warning'
-              className='custom-button mb-2'
-              onClick={() => {
-                const role = localStorage.getItem('role');
-                if (role === 'driver') {
-                  navigate('/EmployeeDashboard');
-                } else if (role === 'user') {
-                  navigate('/UserDashboard');
-                } else if (role === 'admin') {
-                  navigate('/AdminDashboard');
-                } else {
-                  toast.error("Please login to continue");
-                  navigate('/Login');
-                }
-              }}
-            >
-              Go to Dashboard
-            </Button>
-          </div>
+            <div className='d-flex'>
+            <button className='button-42 mb-1' onClick={()=>{
+              if(localStorage.getItem('role')==='driver'){
+                navigate('/EmployeeDashboard')
+              }
+              else if(localStorage.getItem('role')==='user'){
+                navigate('/UserDashboard')
+              }
+              else if(localStorage.getItem('role')==='admin'){
+                navigate('/AdminDashboard')
+              }
+              else{
+                toast.error("Please login to continue");
+                navigate('/Login')
+              }
+            }}>Go to dashboard</button>
+            </div>
+          //   <div className='d-flex justify-content-center mt-4'>
+          //   <Button
+          //     variant='warning'
+          //     className='custom-button mb-2'
+          //     onClick={() => {
+          //       const role = localStorage.getItem('role');
+          //       if (role === 'driver') {
+          //         navigate('/EmployeeDashboard');
+          //       } else if (role === 'user') {
+          //         navigate('/UserDashboard');
+          //       } else if (role === 'admin') {
+          //         navigate('/AdminDashboard');
+          //       } else {
+          //         toast.error("Please login to continue");
+          //         navigate('/Login');
+          //       }
+          //     }}
+          //   >
+          //     Go to Dashboard
+          //   </Button>
+          // </div>
           )}
           {!token && (
             <div className="d-flex">
