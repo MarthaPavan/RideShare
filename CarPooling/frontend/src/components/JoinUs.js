@@ -11,10 +11,11 @@ import {
   Image,
 } from "react-bootstrap";
 import axios from "axios";
+
 const JoinUs = () => {
 
   const [form, setForm] = useState({
-    image : "images/placeholder.jpg",
+    image : null,
     fullName: "",
     emailId: "",
     password: "",
@@ -25,7 +26,7 @@ const JoinUs = () => {
   });
 
   const navigate = useNavigate();
-
+  const [selectedFile, setSelectedFile] = useState(null);
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -39,18 +40,32 @@ const JoinUs = () => {
       alert("Please fill all required fields.");
       return;
     }
-
     form.phoneNumber = parseInt(form.phoneNumber);
-
+    const formData = new FormData();
+    formData.append("fullName", form.fullName);
+    formData.append("emailId", form.emailId);
+    formData.append("password", form.password);
+    formData.append("phoneNumber", form.phoneNumber);
+    formData.append("role", form.role);
+    formData.append("vehicleModel", form.vehicleModel);
+    formData.append("registrationNumber", form.registrationNumber);
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
+    
     try {
       console.log(form);
       const response = await axios.post(
         "http://localhost:1000/get-started/signup",
-        form
+        formData,{
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log(response);
       console.log("Response:", response);
-      if (response.status === 200 && response.data.msg === "success") {
+      if (response.status === 200 && response.data.msg === "success"){
         navigate("/SignUpSuccess");
       }
     } catch (err) {
@@ -64,7 +79,18 @@ const JoinUs = () => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
   };
+  //Profile picture selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
 
+    // Read the file and set as data URL
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setForm((prevState) => ({ ...prevState, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
+  };
   const handleClick = () => {
     navigate("/Login");
   };
@@ -75,6 +101,7 @@ const JoinUs = () => {
         <Col className="m-4 p-3 h-100 border border-1 border-dark-subtle shadow bg-bg-warning-subtle">
           <h1 className="mb-2 display-6">Join us</h1>
           <h2 className="mb-2 lead">Create Account</h2>
+          
           <Form onSubmit={handleSignUp}>
             <Form.Group>
               <Form.Control
@@ -135,6 +162,15 @@ const JoinUs = () => {
               />
             </Form.Group>
             <br />
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Upload Profile Picture</Form.Label>
+              <Form.Control
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+                accept="image/*"
+              />
+            </Form.Group>
             <div className="text-start">
               Already an existing user{" "}
               <Link to="/Login" onClick={handleClick}>
