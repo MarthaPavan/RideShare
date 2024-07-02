@@ -11,7 +11,7 @@ const NavBar = () => {
   const { token } = useAuth();
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" className="border border-bottom custom-navbar shadow-lg" style={{margin:0,padding:1}}>
+    <Navbar bg="dark" variant="dark" expand="lg" className=" custom-navbar" style={{margin:0,padding:1}}>
       <Container fluid>
         <Navbar.Brand as={Link} to="/">
           <img src="/images/logo.svg" alt="logo" style={{ height: '65px', width: '65px' }} />
@@ -44,6 +44,27 @@ const NavBar = () => {
               }
             }}>Go to dashboard</button>
             </div>
+          //   <div className='d-flex justify-content-center mt-4'>
+          //   <Button
+          //     variant='warning'
+          //     className='custom-button mb-2'
+          //     onClick={() => {
+          //       const role = localStorage.getItem('role');
+          //       if (role === 'driver') {
+          //         navigate('/EmployeeDashboard');
+          //       } else if (role === 'user') {
+          //         navigate('/UserDashboard');
+          //       } else if (role === 'admin') {
+          //         navigate('/AdminDashboard');
+          //       } else {
+          //         toast.error("Please login to continue");
+          //         navigate('/Login');
+          //       }
+          //     }}
+          //   >
+          //     Go to Dashboard
+          //   </Button>
+          // </div>
           )}
           {!token && (
             <div className="d-flex">

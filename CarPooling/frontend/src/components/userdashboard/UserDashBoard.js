@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Button, Offcanvas } from "react-bootstrap";
-import { CSidebarNav, CNavItem, CNavbarBrand } from "@coreui/react";
+import { Row, Col, Button, Offcanvas, Toast, ToastContainer } from "react-bootstrap";
+import { CSidebarNav, CNavItem } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +11,6 @@ import Dashboard from "./DashBoard";
 import Rides from "./Rides";
 import Feedback from './Feedback';
 import ContactUs from "./Contactus";
-import toast, { Toaster } from "react-hot-toast";
 import { useMediaQuery } from 'react-responsive';
 
 const UserDashBoard = () => {
@@ -20,24 +19,27 @@ const UserDashBoard = () => {
   const [index, setIndex] = useState(localStorage.getItem("index") || 0);
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const components = [<Profile />, <Dashboard />, <Rides />, <Feedback />, <ContactUs />];
 
   useEffect(() => {
-    toast.success("Welcome to your dashboard", {
-      position: 'top-right',
-      style: {
-        background: '#333',
-        color: '#fff',
-      },
-      iconTheme: {
-        primary: '#4CAF50',
-        secondary: '#FFFAEE',
-      },
-    });
-  }, []);
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      sessionStorage.setItem("welcomeToastShown", "true");
+      setToastMessage(`Welcome back, ${user ? user : "User"}`);
+      setShowToast(true);
+      
+    }
+  }, [user]);
 
   const handleLogout = () => {
+    
+    setToastMessage("Logged out successfully");
+    setShowToast(true);
+    sessionStorage.setItem("welcomeToastShown", "false");
     logOut();
   };
 
@@ -55,9 +57,16 @@ const UserDashBoard = () => {
 
   return (
     <>
-      
+      <ToastContainer position="top-end" className="p-3">
+        <Toast onClose={() => setShowToast(false)} show={showToast} delay={2000} autohide>
+          <Toast.Header>
+            <strong className="me-auto">Dashboard</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <Row className="g-0">
-        <Toaster />
         <Col xs={12} className="d-md-none d-flex justify-content-between align-items-center mb-3">
           <Button
             variant="link"
@@ -72,7 +81,6 @@ const UserDashBoard = () => {
           >
             <FontAwesomeIcon icon={faBars} />
           </Button>
-
         </Col>
         {isMobile ? (
           <Offcanvas show={isSidebarOpen} onHide={toggleSidebar} responsive="md">
@@ -113,8 +121,8 @@ const UserDashBoard = () => {
           <Col xs={12} md={2} className={`d-none d-md-flex flex-column`}>
             <div className="border-end flex-grow-1" style={{ height: "100vh" }}>
               <div className="border-bottom p-3">
-                  Welcome {user ? user : "User"}
-                </div>
+                Welcome {user ? user : "User"}
+              </div>
               <CSidebarNav variant="pills" layout="fill">
                 <CNavItem href="#profile" active={index === 0} onClick={() => handleClick(0)}>
                   <CIcon customClassName="nav-icon me-3" icon={icon.cilUser} />

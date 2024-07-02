@@ -91,7 +91,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="px-5 mt-2 min-vh-100">
+    <div className="px-2 mt-3 min-vh-100">
       {imageLoad ? (
         <Loader /> // Display loader while image is loading
       ) : (
