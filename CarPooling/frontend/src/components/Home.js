@@ -77,6 +77,7 @@ const Home = () => {
             <p className="mt-5 pt-5">
               We are one of the biggest carpool network in hyderabad and in
               Telangana.
+              
             </p>
           </Col>
         </Row>

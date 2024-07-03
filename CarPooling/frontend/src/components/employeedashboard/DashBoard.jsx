@@ -12,7 +12,7 @@ export default function DashBoard() {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August'],
         datasets: [
             {
-                label: 'Dataset 1',
+                label: 'No. of rides',
                 data: [0, 0, 0, 0, 0, 0, 7],
                 fill: true,
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',

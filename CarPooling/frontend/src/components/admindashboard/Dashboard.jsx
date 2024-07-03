@@ -36,7 +36,7 @@ const Dashboard = () => {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Rides',
         backgroundColor: 'rgba(75,192,192,0.4)',
         borderColor: 'rgba(75,192,192,1)',
         borderWidth: 1,
@@ -48,25 +48,19 @@ const Dashboard = () => {
   };
 
   const pieData = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: ['Rides Intiated', 'Rides completed'],
     datasets: [
       {
-        data: [300, 50, 100, 40, 120, 90],
+        data: [300, 200],
         backgroundColor: [
           '#FF6384',
           '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-          '#FF9F40',
+          
         ],
         hoverBackgroundColor: [
           '#FF6384',
           '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-          '#FF9F40',
+          
         ],
       },
     ],

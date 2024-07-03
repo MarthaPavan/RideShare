@@ -20,6 +20,7 @@ const Profile = () => {
             setUser(JSON.parse(storedUser));
         }
     }, [storedUser]);
+
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -96,14 +97,16 @@ const Profile = () => {
                             height={"100px"}
                             className="profile-image"
                         />
+                        <Form.Group controlId="formFile" className="d-none">
+                            <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+                        </Form.Group>
                         <Button
                             style={editbtn}
                             variant="primary"
-                            onClick={() => document.getElementById('imageInput').click()}
+                            onClick={() => document.getElementById('formFile').click()}
                         >
                             <i className="fa-solid fa-pen"></i>
                         </Button>
-
                     </Col>
                     <Col>
                         <h1 className="display-6 pt-2">{user.fullName}</h1>

@@ -59,9 +59,9 @@ class RouteControllers {
 
   async getRouteById(req, res) {
     try {
-      const routeId = req.params.id;
-      //console.log(routeId);
-      const route = await routeModel.findById(routeId); 
+      const routeId = parseInt(req.params.routeId); // Ensure the routeId is parsed as an integer
+      console.log(routeId);
+      const route = await routeModel.findOne({ routeId: routeId }); // Use findOne with routeId field
 
       if (!route) {
         return res.status(404).json({ msg: "Route not found" });

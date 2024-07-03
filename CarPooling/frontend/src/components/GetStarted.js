@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Container, Row, Col, ListGroup, Button } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Button,Image } from "react-bootstrap";
 //import './GetStarted.css';
 
 const selected = {
@@ -59,7 +59,7 @@ export default function GetStarted() {
                     </div>
                 </Col>
                 <Col className="min-vh-100">
-                    
+                    <Image src = {"/images/get_started.jpg"} alt = 'getstarted' fluid/>
                 </Col>
             </Row>
         </Container>

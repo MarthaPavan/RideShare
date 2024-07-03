@@ -8,25 +8,25 @@ import './styles.css';
 const Routes = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(false);
-  const [routeId, setRouteId] = useState(null); // Initial routeId set to null
+  const [routeId, setRouteId] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:1000/routes/getRoute");
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:1000/routes/getRoute");
-        setData(response.data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
     fetchData();
   }, []);
 
   const columns = useMemo(() => [
     {
       Header: "Route ID",
-      accessor: "routeId", // Use routeId instead of _id
+      accessor: "routeId",
     },
     {
       Header: "Pick Up Location",
@@ -44,11 +44,6 @@ const Routes = () => {
     {
       Header: "Capacity",
       accessor: "capacity",
-    },
-    {
-      Header: "Number of Drivers",
-      accessor: "driver",
-      Cell: ({ value }) => value.length,
     },
   ], []);
 
@@ -83,7 +78,8 @@ const Routes = () => {
   };
 
   const handleBackClick = () => {
-    setPage(false); // Set page to false to display the list again
+    setPage(false);
+    fetchData(); // Refresh the data after returning to the list view
   };
 
   const rowCount = data.length;
@@ -113,13 +109,11 @@ const Routes = () => {
                 prepareRow(row);
                 return (
                   <tr {...row.getRowProps()} onClick={() => handleClick(row.original.routeId)} className='table-row'>
-                    {row.cells.map(cell => {
-                      return (
-                        <td {...cell.getCellProps()}>
-                          {cell.render('Cell')}
-                        </td>
-                      );
-                    })}
+                    {row.cells.map(cell => (
+                      <td {...cell.getCellProps()}>
+                        {cell.render('Cell')}
+                      </td>
+                    ))}
                   </tr>
                 );
               })}
@@ -143,7 +137,7 @@ const Routes = () => {
           </div>
         </>
       )}
-      {page && <RouteDetails id={routeId} />}
+      {page && <RouteDetails id={routeId} onDelete={handleBackClick} />}
       {page && 
         <Button variant="primary" onClick={handleBackClick}>Back</Button>
       }

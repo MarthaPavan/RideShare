@@ -6,6 +6,7 @@ import "./dashboard.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltRight, faTrash } from '@fortawesome/free-solid-svg-icons';
 import toast from 'react-hot-toast';
+
 const Rides = () => {
     const [key, setKey] = useState(0);
     const [activeRides, setActiveRides] = useState([]);
@@ -58,6 +59,16 @@ const Rides = () => {
     };
 
     const renderRides = (rides) => {
+        if (rides.length === 0) {
+            return (
+                <Card className="my-3">
+                    <Card.Body>
+                        <Card.Text>No rides available.</Card.Text>
+                    </Card.Body>
+                </Card>
+            );
+        }
+
         // Calculate pagination
         const indexOfLastRide = currentPage * ridesPerPage;
         const indexOfFirstRide = indexOfLastRide - ridesPerPage;

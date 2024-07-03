@@ -28,7 +28,7 @@ const NavBar = () => {
           </Nav>
           {token && (
             <div className='d-flex'>
-            <button className='button-42 mb-1' onClick={()=>{
+            <button className='button-42 mb-1' style={{color: '#000000'}} onClick={()=>{
               if(localStorage.getItem('role')==='driver'){
                 navigate('/EmployeeDashboard')
               }
@@ -43,6 +43,7 @@ const NavBar = () => {
                 navigate('/Login')
               }
             }}>Go to dashboard</button>
+
             </div>
           //   <div className='d-flex justify-content-center mt-4'>
           //   <Button

@@ -8,7 +8,7 @@ const SignUpSuccess = () => {
   };
 
   return (
-    <div className="text-center">
+    <div className="text-center min-vh-100">
       <h1>Account created successfully</h1>
       <p>Click below to login</p>
       <button className="btn btn-primary" onClick={handleClick}>

@@ -24,7 +24,11 @@ const AdminDashBoard = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const components = [<Dashboard />, <Employees />, <Routes />];
+  const components = [
+    <Dashboard />,
+    <Employees />,
+    <Routes onDelete={() => setIndex(2)} />
+  ];
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -59,7 +63,7 @@ const AdminDashBoard = () => {
 
       <Row className="gx-4">
         <Col xs={2} className="px-0">
-          <CSidebar className="border-end" style={{ height: "100vh" }}>
+          <CSidebar className="border-end flex-grow-1-end" style={{ height: "100vh" }}>
             <CSidebarHeader className="border-bottom">
               <CSidebarBrand className="text-decoration-none">
                 Welcome {user ? user : "Guest"}
