@@ -87,7 +87,8 @@ const Employees = () => {
   const endRow = Math.min(rowCount, startRow + pageSize - 1);
 
   return (
-    <div className='container flex-column justify-content-center align-content-center m-2 p-2 table-container'>
+    <div className='min-vh-100 mt-5'>
+    <div className='container flex-column justify-content-center align-content-center m-2 table-container'>
       <h1><i className="fa-regular fa-address-book"></i> Employees List</h1>
       <Table responsive bordered hover {...getTableProps()}>
         <thead className='thead-dark'>
@@ -140,6 +141,7 @@ const Employees = () => {
           <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
         </Pagination>
       </div>
+    </div>
     </div>
   );
 };

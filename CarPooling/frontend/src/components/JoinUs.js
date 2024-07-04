@@ -98,8 +98,8 @@ const JoinUs = () => {
   return (
     <Container fluid className="min-vh-100">
       <Row className="text-center my-5 h-100">
-        <Col className="m-4 p-3 h-100 border border-1 border-dark-subtle shadow bg-bg-warning-subtle">
-          <h1 className="mb-2 display-6">Join us</h1>
+        <Col className="m-4 p-3 h-100 border md-w-100 border-1 border-dark-subtle shadow bg-bg-warning-subtle">
+          <h1 className="mb-2 display-6 fw-bold text-text-dark-emphasis" >Join <span className="text-warning fw-bold">Us</span></h1>
           <h2 className="mb-2 lead">Create Account</h2>
           
           <Form onSubmit={handleSignUp}>
@@ -183,11 +183,10 @@ const JoinUs = () => {
             </Button>
           </Form>
         </Col>
-        <Col className="m-4 p-3">
-          <br />
-          <br />
+        <Col className="m-4 p-3 d-none d-md-block">
+          
           <Image
-            className="m-5 =-5"
+            className="mt-5"
             src="/images/driver_signup_page.jpg"
             fluid
           />

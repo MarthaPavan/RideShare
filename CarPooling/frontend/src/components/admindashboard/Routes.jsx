@@ -87,7 +87,8 @@ const Routes = () => {
   const endRow = Math.min(rowCount, startRow + pageSize - 1);
 
   return (
-    <div className='table-container'>
+    <div className='min-vh-100 mt-5'>
+      <div className='table-container'>
       <h3 className='display-6 text-center'><i className="fa-solid fa-map"></i> Routes</h3>
       {!page && (
         <>
@@ -141,6 +142,7 @@ const Routes = () => {
       {page && 
         <Button variant="primary" onClick={handleBackClick}>Back</Button>
       }
+    </div>
     </div>
   );
 };

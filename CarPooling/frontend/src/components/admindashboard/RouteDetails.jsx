@@ -72,6 +72,7 @@ const RouteDetails = ({ id, onDelete }) => {
             onClick={() => handleDriverClick(route.driver._id)}
             style={selectedDriver === route.driver._id ? { backgroundColor: '#f8f9fa', borderLeft: '5px solid #007bff' } : {}}
           >
+            <h1 className='display-6'>Driver</h1>
             <p><strong>Name:</strong> {route.driver.fullName}</p>
             <p><strong>Phone:</strong> {route.driver.phoneNumber}</p>
             <p><strong>Email:</strong> {route.driver.emailId}</p>
@@ -81,7 +82,7 @@ const RouteDetails = ({ id, onDelete }) => {
       </Card.Body>
       <div className="d-flex justify-content-end p-2">
         <ButtonGroup>
-          <Button variant='danger' onClick={handleDeleteRoute}>
+          <Button variant='outline-danger' onClick={handleDeleteRoute}>
             <i className="fa-solid fa-trash"></i> Delete
           </Button>
         </ButtonGroup>

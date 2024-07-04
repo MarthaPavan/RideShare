@@ -8,7 +8,7 @@ const routes = require("./routes/routes");
 const cors = require("cors");
 const  rides = require("./routes/rides")
 const mapapi = require("./routes/mapapi")
-
+const book = require("./routes/book.js");
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -19,7 +19,7 @@ app.use("/get-started", gettingStarted);
 app.use("/rides",rides);
 //other endpoints
 app.use("/routes", routes);
-
+app.use("/book",book);
 
 app.use("/mapapi",mapapi)
 app.get("/", (req, res) => {

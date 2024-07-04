@@ -73,6 +73,17 @@ class RouteControllers {
       res.status(500).json({ msg: "Internal server error" });
     }
   }
+  async getDriverRoute(req, res) {
+    try {
+        const driverEmail = req.params.email;
+        const route = await routeModel.find({"driver.emailId": driverEmail});
+        res.json(route); // Make sure to send the response
+    } catch (err) {
+        console.error("Error fetching route by email:", err);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+  }
+
 }
 
 module.exports = new RouteControllers();

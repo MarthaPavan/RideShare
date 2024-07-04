@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Card, Container, Nav, Row, Button, Pagination } from 'react-bootstrap';
-import { format } from 'date-fns'; // Assuming you're using date-fns for date formatting
+import { format } from 'date-fns';
 import axios from 'axios';
 import "./dashboard.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,17 +12,17 @@ const Rides = () => {
     const [activeRides, setActiveRides] = useState([]);
     const [pastRides, setPastRides] = useState([]);
     const [transactions, setTransactions] = useState([]);
-    const [visibleFooters, setVisibleFooters] = useState({}); // State to track footer visibility
-    const [currentPage, setCurrentPage] = useState(1); // State for current page
-    const ridesPerPage = 5; // Number of rides per page
+    const [visibleFooters, setVisibleFooters] = useState({});
+    const [currentPage, setCurrentPage] = useState(1);
+    const ridesPerPage = 5;
+    const email = JSON.parse(localStorage.getItem('user')).emailId; // Replace with actual email or pass as a prop
 
     const fetchRides = async () => {
         try {
-            const response = await axios.get('http://localhost:1000/rides/fetchrides');
+            const response = await axios.get(`http://localhost:1000/routes/driver-route/${email}`);
             const rides = response.data;
             const now = new Date();
 
-            // Filter rides based on current time
             const active = rides.filter(ride => new Date(ride.date) >= now);
             const past = rides.filter(ride => new Date(ride.date) < now);
 
@@ -39,7 +39,7 @@ const Rides = () => {
 
     const changeKey = (index) => {
         setKey(index);
-        setCurrentPage(1); // Reset to first page when changing tabs
+        setCurrentPage(1);
     };
 
     const handleDelete = async (routeId) => {
@@ -69,7 +69,6 @@ const Rides = () => {
             );
         }
 
-        // Calculate pagination
         const indexOfLastRide = currentPage * ridesPerPage;
         const indexOfFirstRide = indexOfLastRide - ridesPerPage;
         const currentRides = rides.slice(indexOfFirstRide, indexOfLastRide);
@@ -77,7 +76,7 @@ const Rides = () => {
         return (
             <>
                 {currentRides.map(ride => {
-                    const rideDate = ride.date instanceof Date ? ride.date : new Date(ride.date);
+                    const rideDate = new Date(ride.date);
                     const formattedDate = format(rideDate, 'dd-MM-yyyy');
                     const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -116,11 +115,12 @@ const Rides = () => {
                                                     loading: 'Deleting...',
                                                     success: <b>Deleted successfully</b>,
                                                     error: <b>Could not delete</b>,
-                                                }, {
-                                                style: {
-                                                    position: "top-left"
+                                                },
+                                                {
+                                                    style: {
+                                                        position: "top-left"
+                                                    }
                                                 }
-                                            }
                                             );
                                         }}
                                     >

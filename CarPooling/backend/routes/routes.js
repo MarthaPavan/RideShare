@@ -12,5 +12,5 @@ route.patch("/editRoute/:routeId", verifyToken, routeController.editRoute);
 route.delete("/deleteRoute/:routeId", verifyToken, routeController.deleteRoute);
 // Drivers
 route.get("/getDriver", verifyToken, getDriver);
-
+route.get('/driver-route/:email', routeController.getDriverRoute);
 module.exports = route;
