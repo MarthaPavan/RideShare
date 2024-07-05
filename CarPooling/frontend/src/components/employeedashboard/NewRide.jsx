@@ -5,7 +5,6 @@ import { faLocationDot, faCalendarDays, faUsers } from "@fortawesome/free-solid-
 import axios from "axios";
 import { debounce } from "lodash";
 import { SearchList } from '../../components/SearchList';
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import './dashboard.css';
 
@@ -28,7 +27,6 @@ const NewRide = ({ setIndex }) => {
     const [locations, setLocations] = useState([]);
 
     const todayDate = new Date().toISOString().split('T')[0];
-    const navigate = useNavigate();
 
     const fetchRoutes = useCallback(debounce(async (query) => {
         if (!query) return;
@@ -93,7 +91,7 @@ const NewRide = ({ setIndex }) => {
     };
 
     return (
-        <Container fluid className='px-5 min-vh-100' onDoubleClick={handleDoubleClick}>
+        <Container fluid className='px-5 min-vh-100 ' onDoubleClick={handleDoubleClick}>
             <Row>
                 <Col xs={12} className='d-flex justify-content-center align-items-center mb-4 '>
                     <h1 className='create-ride-heading'>Create a Ride</h1>
@@ -102,7 +100,7 @@ const NewRide = ({ setIndex }) => {
             <Row className='border border-light-subtle rounded bg-light-subtle shadow p-lg-5 ps-lg-0 pe-lg-0'>
                 <Form className='w-100' onSubmit={handleSubmit}>
                     <Row lg={"auto"} className="align-items-center justify-content-between m-0">
-                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0 position-relative">
+                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0 position-relative mt-sm-2">
                             <InputGroup className='h6'>
                                 <InputGroup.Text>
                                     <FontAwesomeIcon icon={faLocationDot} style={{ color: "#00b500" }} />
@@ -180,7 +178,7 @@ const NewRide = ({ setIndex }) => {
                         </Col>
                     </Row>
                     {error && <p className="text-danger mt-3">*{error}</p>}
-                    <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
+                    <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center mb-sm-2'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
                             <Button type="submit" variant='warning' className="w-100 fw-bold" disabled={ride}>
                                 {loading ? <div className="flex align-content-center ju">

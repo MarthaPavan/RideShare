@@ -100,7 +100,7 @@ const EmployeeDashBoard = () => {
                   DashBoard
                 </CNavItem>
                 <CNavItem href="#new-ride" active={index === 2} onClick={() => handleClick(2)}>
-                  <CIcon customClassName="nav-icon" icon={faCarAlt} />
+                  <CIcon customClassName="nav-icon" icon={icon.cilCarAlt} />
                   Offer Ride
                 </CNavItem>
                 <CNavItem href="#rides" active={index === 3} onClick={() => handleClick(3)}>

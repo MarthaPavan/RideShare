@@ -83,7 +83,34 @@ class RouteControllers {
         res.status(500).json({ msg: "Internal server error" });
     }
   }
+  async searchRides(req, res) {
+    try {
+        const { pickUpLocation, dropLocation, capacity, date } = req.query;
+        
+        // Build the query object
+        const query = {
+            pickUpLocation,
+            dropLocation,
+            date
+        };
 
+        // Add the capacity condition
+        if (capacity) {
+            query.capacity = {
+                $lte: 4,
+                $gt: 1
+            };
+        }
+
+        const routes = await routeModel.find(query);
+        console.log(routes);
+        res.status(202).json(routes);
+    } catch (err) {
+        console.error("Error searching for rides:", err);
+        res.status(500).json({ err: err.message });
+    }
 }
+}
+
 
 module.exports = new RouteControllers();

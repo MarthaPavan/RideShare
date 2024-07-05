@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, InputGroup, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faCalendarDays, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { SearchList } from '../../components/SearchList'; // Ensure SearchList is properly implemented
@@ -8,11 +8,12 @@ import debounce from 'lodash.debounce';
 import './dashboard.css';
 
 const Dashboard = () => {
+    const [search,setSearch] = useState(false)
     const [rideDetails, setRideDetails] = useState({
-        startPoint: "",
-        endPoint: "",
+        pickUpLocation: "",
+        dropLocation: "",
         date: "",
-        seats: 1,
+        capacity: 1,
     });
     const [bookDetails, setBookDetails] = useState({});
     const [index, setIndex] = useState(0);
@@ -20,6 +21,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [rides, setRides] = useState([]);
+    
     // Helper function to get today's date in "YYYY-MM-DD" format
     const getTodayDate = () => {
         const today = new Date();
@@ -50,7 +52,7 @@ const Dashboard = () => {
         const { value } = e.target;
         setRideDetails(prevState => ({
             ...prevState,
-            startPoint: value
+            pickUpLocation: value
         }));
         setIndex(1);
         fetchRoutes(value);
@@ -61,7 +63,7 @@ const Dashboard = () => {
         const { value } = e.target;
         setRideDetails(prevState => ({
             ...prevState,
-            endPoint: value
+            dropLocation: value
         }));
         setIndex(2);
         fetchRoutes(value);
@@ -75,22 +77,36 @@ const Dashboard = () => {
         }));
         setLocations([]);
     };
-    const handleRequest = async (e) => {
+
+    const handleSearch = async (e) => {
         e.preventDefault();
-        console.log(rides[e.key])
-    }
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Validate inputs before submission
-        if (!rideDetails.startPoint || !rideDetails.endPoint || !rideDetails.date || !rideDetails.seats) {
-            setError("Please provide all the required details to proceed.");
+        
+        if (rideDetails.pickUpLocation === "" || rideDetails.dropLocation === "" || rideDetails.capacity === "" || rideDetails.date === "") {
+            setError("Please enter all the details");
             return;
         }
-        //fetch the available rides
-        const response = await axios.get("http://localhost:1000/rides/fetchrides", rideDetails);
-        console.log(response.data);
+        if (rideDetails.pickUpLocation === rideDetails.dropLocation) {
+            setError('Pickup and drop location are same');
+            return;
+        }
+        try {
+            const response = await axios.get(`http://localhost:1000/routes/search_routes`, {
+                params: {
+                    pickUpLocation: rideDetails.pickUpLocation,
+                    dropLocation: rideDetails.dropLocation,
+                    date: rideDetails.date,
+                    capacity: rideDetails.capacity
+                }
+            });
+            setRides(response.data);
+            setSearch(true)
+            setError(null); // Clear any existing errors
+        } catch (err) {
+            setError("Failed to fetch rides");
+            console.error(err);
+        }
     };
+
     // Handle double click to close search list
     const handleDoubleClick = () => {
         setLocations([]);
@@ -104,7 +120,7 @@ const Dashboard = () => {
                 </Col>
             </Row>
             <Row className='border border-light-subtle rounded bg-light-subtle shadow p-lg-5 ps-lg-0 pe-lg-0'>
-                <Form className='w-100' onSubmit={handleSubmit}>
+                <Form className='w-100' onSubmit={handleSearch}>
                     <Row lg={"auto"} className="align-items-center justify-content-between m-0">
                         <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0 position-relative">
                             <InputGroup className='h6'>
@@ -114,15 +130,15 @@ const Dashboard = () => {
                                 <Form.Control
                                     className='py-lg-2'
                                     type="text"
-                                    name="startPoint"
+                                    name="pickUpLocation"
                                     placeholder="Enter your location"
                                     aria-label="Start point"
-                                    value={rideDetails.startPoint}
+                                    value={rideDetails.pickUpLocation}
                                     onChange={handlePickUpChange}
                                 />
                                 {locations.length > 0 && index === 1 && (
                                     <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
-                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'startPoint')} inputName="startPoint" />
+                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'pickUpLocation')} inputName="pickUpLocation" />
                                     </div>
                                 )}
                             </InputGroup>
@@ -135,15 +151,15 @@ const Dashboard = () => {
                                 <Form.Control
                                     className='py-lg-2'
                                     type="text"
-                                    name="endPoint"
+                                    name="dropLocation"
                                     placeholder="Enter your destination"
                                     aria-label="End point"
-                                    value={rideDetails.endPoint}
+                                    value={rideDetails.dropLocation}
                                     onChange={handleDestinationChange}
                                 />
                                 {locations.length > 0 && index === 2 && !rideDetails.officeRide && (
                                     <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
-                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'endPoint')} inputName="endPoint" />
+                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'dropLocation')} inputName="dropLocation" />
                                     </div>
                                 )}
                             </InputGroup>
@@ -176,15 +192,15 @@ const Dashboard = () => {
                                 <Form.Control
                                     className='py-lg-2'
                                     type="number"
-                                    name="seats"
-                                    placeholder="Seats"
+                                    name="capacity"
+                                    placeholder="capacity"
                                     min={1}
                                     max={4}
-                                    aria-label="Seats"
-                                    value={rideDetails.seats}
+                                    aria-label="capacity"
+                                    value={rideDetails.capacity}
                                     onChange={(e) => setRideDetails(prevState => ({
                                         ...prevState,
-                                        seats: e.target.value
+                                        capacity: e.target.value
                                     }))}
                                 />
                             </InputGroup>
@@ -198,6 +214,35 @@ const Dashboard = () => {
                 </Form>
                 {error && <div className="text-danger">*{error}</div>}
             </Row>
+            {search &&
+            <Row className="mt-4">
+                <Col xs={12}>
+                    <Card>
+                        <Card.Header>Search Results</Card.Header>
+                        <Card.Body>
+                            {rides.length > 0 ? (
+                                rides.map((ride) => (
+                                    <Card key={ride._id} className="mb-3">
+                                        <Card.Body>
+                                            <Card.Text>
+                                                <strong>Driver:</strong> {ride.driver.fullName} <br />
+                                                <strong>Email:</strong> {ride.driver.emailId} <br />
+                                                <strong>Phone:</strong> {ride.driver.phoneNumber} <br />
+                                                <strong>Vehicle:</strong> {ride.driver.vehicleModel} (Reg: {ride.driver.registrationNumber})<br/>
+                                                <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}<br />
+                                                <strong>Capacity:</strong> {ride.capacity}<br />
+                                            </Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                ))
+                            ) : (
+                                <div>No available rides</div>
+                            )}
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+}
         </Container>
     );
 }

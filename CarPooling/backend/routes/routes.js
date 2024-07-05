@@ -13,4 +13,5 @@ route.delete("/deleteRoute/:routeId", verifyToken, routeController.deleteRoute);
 // Drivers
 route.get("/getDriver", verifyToken, getDriver);
 route.get('/driver-route/:email', routeController.getDriverRoute);
+route.get('/search_routes',routeController.searchRides)
 module.exports = route;

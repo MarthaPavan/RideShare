@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is imported
 
 const SignUpSuccess = () => {
   const navigate = useNavigate();
@@ -8,12 +9,13 @@ const SignUpSuccess = () => {
   };
 
   return (
-    <div className="text-center min-vh-100">
-      <h1>Account created successfully</h1>
-      <p>Click below to login</p>
-      <button className="btn btn-primary" onClick={handleClick}>
-        Login
-      </button>
+    <div className="d-flex justify-content-center align-items-center min-vh-100">
+      <div className="text-center ">
+        <h1 className="fw-bold">Account created successfully</h1>
+        <button className="btn btn-primary" onClick={handleClick}>
+          Login Here
+        </button>
+      </div>
     </div>
   );
 };

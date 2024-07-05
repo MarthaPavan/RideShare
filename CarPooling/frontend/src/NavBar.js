@@ -17,7 +17,7 @@ const NavBar = () => {
           <img src="/images/logo.svg" alt="logo" style={{ height: '65px', width: '65px' }} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav">
+        <Navbar.Collapse id="navbar-nav" className='mb-sm-2'>
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/" className="fs-5 custom-nav-link">
               Home

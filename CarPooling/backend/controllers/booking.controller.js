@@ -1,8 +1,10 @@
+const bookingModel = require("../models/bookingmodel");
+const Route = require("../models/route.model")
 class BookingController {
 
     async createBooking(req, res) {
         try {
-            const { userDetails, pickupLocation, dropLocation, date, seats, driverDetails, status } = req.body;
+            const { userDetails, pickUpLocation, dropLocation, date,capacity, driverDetails, status } = req.body;
             const parsedDate = new Date(date);
             if (isNaN(parsedDate)) {
                 return res.status(400).json({ message: "Invalid date format" });
@@ -10,16 +12,18 @@ class BookingController {
 
             const newBooking = await bookingModel.create({
                 userDetails: { ...userDetails },
-                pickupLocation,
+                pickUpLocation,
                 dropLocation,
                 date: parsedDate,
-                seats,
+                capacity,
                 driverDetails: { ...driverDetails },
                 status
             });
 
             if (newBooking) {
-                return res.status(201).json({ message: "Booking created successfully", booking: newBooking });
+                const route = await Route.findAndUpdateOne({})
+                return res.status(201).json({ message: "Booking made successfully", booking: newBooking });
+            
             } else {
                 return res.status(400).json({ message: "Failed to create booking" });
             }

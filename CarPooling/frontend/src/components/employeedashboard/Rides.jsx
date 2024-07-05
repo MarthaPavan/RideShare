@@ -102,7 +102,7 @@ const Rides = () => {
                                     <Card.Text><span className="fw-bold">Seats:</span> {ride.capacity}</Card.Text>
                                 </div>
                             </Card.Body>
-                            {visibleFooters[ride.routeId] && (
+                            {key=== 0 && visibleFooters[ride.routeId] && (
                                 <Card.Footer className="d-flex justify-content-end">
                                     <Button
                                         variant='danger'
@@ -131,7 +131,7 @@ const Rides = () => {
                         </Card>
                     );
                 })}
-                <Pagination className="justify-content-center">
+                <Pagination className="justify-content-center mb-2">
                     {Array.from({ length: Math.ceil(rides.length / ridesPerPage) }, (_, idx) => (
                         <Pagination.Item key={idx + 1} active={idx + 1 === currentPage} onClick={() => setCurrentPage(idx + 1)}>
                             {idx + 1}

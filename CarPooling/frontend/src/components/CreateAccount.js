@@ -145,7 +145,7 @@ function CreateAccount() {
             Already an existing user? <Link to="/Login">Login Here</Link>
           </p>
         </Col>
-        <Col className="m-5 p-5">
+        <Col className="m-5 p-5 d-none d-md-block">
           <Image src="/images/user_signup.jpg" fluid />
         </Col>
       </Row>

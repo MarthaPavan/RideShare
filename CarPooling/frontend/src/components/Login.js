@@ -73,7 +73,7 @@ const Login = () => {
       className="d-flex align-items-center justify-content-center vh-100"
     >
       <Row> 
-        <Col className="m-5 p-5">
+        <Col className="d-none d-md-block m-5 p-5">
           <Image
             src={"/images/login_page_image.jpg"}
             alt="People around a car"
@@ -120,13 +120,15 @@ const Login = () => {
               </Button>
             </div>
             <Form.Group>
-              <p className="text-dark m-2">Don't have an account?</p>
-              <Link
+              <div className = "d-inline-flex">
+              <p className="text-dark m-2">Don't have an account?<Link
                 to="/GetStarted"
-                className="d-flex align-items-center m-2 mb-lg-0 text-decoration-none"
+                className=" text-decoration-none"
               >
                 Sign Up
-              </Link>
+              </Link></p>
+              </div>
+
             </Form.Group>
           </Form>
         </Col>
