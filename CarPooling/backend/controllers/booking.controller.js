@@ -5,7 +5,7 @@ class BookingController {
 
     async createBooking(req, res) {
         try {
-            const { userDetails, routeId, date, capacity, status } = req.body;
+            const { userDetails, routeId, date, capacity} = req.body;
             const parsedDate = new Date(date);
             if (isNaN(parsedDate)) {
                 return res.status(400).json({ message: "Invalid date format" });
@@ -27,10 +27,9 @@ class BookingController {
                 userDetails: { ...userDetails },
                 route: route._id,
                 date: parsedDate,
-                capacity,
-                status
+                capacity
             });
-
+            
             if (newBooking) {
                 // Update the route's capacity
                 route.capacity -= capacity;

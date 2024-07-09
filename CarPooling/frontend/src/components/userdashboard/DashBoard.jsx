@@ -7,7 +7,7 @@ import axios from 'axios';
 import debounce from 'lodash.debounce';
 import './dashboard.css';
 
-const Dashboard = () => {
+const Dashboard = ({setKey}) => {
     const [search,setSearch] = useState(false)
     const [rideDetails, setRideDetails] = useState({
         pickUpLocation: "",
@@ -21,7 +21,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [rides, setRides] = useState([]);
-    
+    const user = localStorage.getItem("user");
     // Helper function to get today's date in "YYYY-MM-DD" format
     const getTodayDate = () => {
         const today = new Date();
@@ -99,6 +99,7 @@ const Dashboard = () => {
                 }
             });
             setRides(response.data);
+            console.log(response);
             setSearch(true)
             setError(null); // Clear any existing errors
         } catch (err) {
@@ -106,7 +107,29 @@ const Dashboard = () => {
             console.error(err);
         }
     };
-
+    const handleBooking = async (selectedRide) => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const response = await axios.post("http://localhost:1000/book/requestride", {
+                userDetails: {
+                    fullName: user.fullName,
+                    emailId: user.emailId,
+                    phoneNumber: user.phoneNumber
+                },
+                routeId: selectedRide.routeId,
+                date: selectedRide.date,
+                capacity: selectedRide.capacity
+            });
+            console.log(response.data);
+            //localStorage.setItem("index",2);
+            setKey(2);
+        } catch (error) {
+            console.error("Error booking ride:", error);
+            // Handle error scenario (e.g., display error message to user)
+        }
+    };
+    
+    
     // Handle double click to close search list
     const handleDoubleClick = () => {
         setLocations([]);
@@ -220,24 +243,26 @@ const Dashboard = () => {
                     <Card>
                         <Card.Header>Search Results</Card.Header>
                         <Card.Body>
-                            {rides.length > 0 ? (
-                                rides.map((ride) => (
-                                    <Card key={ride._id} className="mb-3">
-                                        <Card.Body>
-                                            <Card.Text>
-                                                <strong>Driver:</strong> {ride.driver.fullName} <br />
-                                                <strong>Email:</strong> {ride.driver.emailId} <br />
-                                                <strong>Phone:</strong> {ride.driver.phoneNumber} <br />
-                                                <strong>Vehicle:</strong> {ride.driver.vehicleModel} (Reg: {ride.driver.registrationNumber})<br/>
-                                                <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}<br />
-                                                <strong>Capacity:</strong> {ride.capacity}<br />
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                ))
-                            ) : (
-                                <div>No available rides</div>
-                            )}
+                        {rides.length > 0 ? (
+    rides.map((ride) => (
+        <Card key={ride._id} className="mb-3">
+            <Card.Body>
+                <Card.Text>
+                    <strong>Driver:</strong> {ride.driver.fullName} <br />
+                    <strong>Email:</strong> {ride.driver.emailId} <br />
+                    <strong>Phone:</strong> {ride.driver.phoneNumber} <br />
+                    <strong>Vehicle:</strong> {ride.driver.vehicleModel} (Reg: {ride.driver.registrationNumber})<br/>
+                    <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}<br />
+                    <strong>Capacity:</strong> {ride.capacity}<br />
+                </Card.Text>
+                <Button variant="primary" onClick={() => handleBooking(ride)}>Book Ride</Button>
+            </Card.Body>
+        </Card>
+    ))
+) : (
+    <div>No available rides</div>
+)}
+
                         </Card.Body>
                     </Card>
                 </Col>

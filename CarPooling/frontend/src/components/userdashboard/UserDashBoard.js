@@ -22,7 +22,7 @@ const UserDashBoard = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const components = [<Profile />, <Dashboard />, <Rides />, <Feedback />, <ContactUs />];
+  const components = [<Profile />, <Dashboard setKey={setIndex}/>, <Rides />, <Feedback />, <ContactUs />];
 
   useEffect(() => {
     const token = localStorage.getItem("token");
