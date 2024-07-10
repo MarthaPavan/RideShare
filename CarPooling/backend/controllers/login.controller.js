@@ -120,6 +120,30 @@ class LoginController {
       return res.status(500).json({ msg: err.message });
     }
   }
+
+  async forgotPassword(req, res)
+  {
+    try {
+      const { emailId, password } = req.body;
+      const salt = await bcryptjs.genSalt(10);
+      const hashedPassword = await bcryptjs.hash(password, salt);
+
+      const user = await userModel.findOneAndUpdate({emailId}, {
+        password: hashedPassword
+      });
+      if (user.role=='driver')
+      {
+        const driver = await driverModel.findOneAndUpdate({emailId}, {
+          password: hashedPassword
+        });
+      }
+      res.status(200).json({ msg: "password updated successfully" });
+
+    } catch (err)
+    {
+      res.status(500).json({ msg: err.message });
+    }
+  }
 }
 
 module.exports = new LoginController();

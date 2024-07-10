@@ -10,7 +10,8 @@ const route = express.Router();
 const storage = multer.memoryStorage(); // Store files in memory as Buffer objects
 const upload = multer({ storage });
 route.post("/login", loginController.userLogin);
-route.post("/signup",upload.single('image'), loginController.userRegister);
+route.post("/signup", upload.single('image'), loginController.userRegister);
+route.post("/forgot", loginController.forgotPassword);
 // route.put("/updateProfile", verifyToken, loginController.updateUserProfile);
 route.get("/fetch-profile-pic/:image", loginController.fetchProfilePic);
 module.exports = route;
