@@ -1,4 +1,5 @@
-const routeModel = require("../models/route.model");
+// Importing the Route model
+const {Route:routeModel } = require("../models/route.model");
 const driverModel = require("../models/drivers.model");
 
 class RouteControllers {

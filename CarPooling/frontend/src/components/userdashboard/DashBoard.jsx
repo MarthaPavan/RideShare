@@ -6,9 +6,9 @@ import { SearchList } from '../../components/SearchList'; // Ensure SearchList i
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import './dashboard.css';
-
-const Dashboard = ({setKey}) => {
-    const [search,setSearch] = useState(false)
+import {toast} from "react-hot-toast"
+const Dashboard = ({ setKey }) => {
+    const [search, setSearch] = useState(false);
     const [rideDetails, setRideDetails] = useState({
         pickUpLocation: "",
         dropLocation: "",
@@ -21,7 +21,8 @@ const Dashboard = ({setKey}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [rides, setRides] = useState([]);
-    const user = localStorage.getItem("user");
+    const user = JSON.parse(localStorage.getItem("user"));
+
     // Helper function to get today's date in "YYYY-MM-DD" format
     const getTodayDate = () => {
         const today = new Date();
@@ -99,17 +100,16 @@ const Dashboard = ({setKey}) => {
                 }
             });
             setRides(response.data);
-            console.log(response);
-            setSearch(true)
+            setSearch(true);
             setError(null); // Clear any existing errors
         } catch (err) {
             setError("Failed to fetch rides");
             console.error(err);
         }
     };
+
     const handleBooking = async (selectedRide) => {
         try {
-            const user = JSON.parse(localStorage.getItem("user"));
             const response = await axios.post("http://localhost:1000/book/requestride", {
                 userDetails: {
                     fullName: user.fullName,
@@ -118,18 +118,19 @@ const Dashboard = ({setKey}) => {
                 },
                 routeId: selectedRide.routeId,
                 date: selectedRide.date,
-                capacity: selectedRide.capacity
+                capacity: rideDetails.capacity
             });
             console.log(response.data);
-            //localStorage.setItem("index",2);
-            setKey(2);
+            if(response.status == 201){
+                toast.success("Ride booked successfully")
+                setKey(2);
+            }
         } catch (error) {
             console.error("Error booking ride:", error);
             // Handle error scenario (e.g., display error message to user)
         }
     };
-    
-    
+
     // Handle double click to close search list
     const handleDoubleClick = () => {
         setLocations([]);
@@ -180,7 +181,7 @@ const Dashboard = ({setKey}) => {
                                     value={rideDetails.dropLocation}
                                     onChange={handleDestinationChange}
                                 />
-                                {locations.length > 0 && index === 2 && !rideDetails.officeRide && (
+                                {locations.length > 0 && index === 2 && (
                                     <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
                                         <SearchList results={locations} onSelect={(result) => handleSelect(result, 'dropLocation')} inputName="dropLocation" />
                                     </div>
@@ -216,10 +217,10 @@ const Dashboard = ({setKey}) => {
                                     className='py-lg-2'
                                     type="number"
                                     name="capacity"
-                                    placeholder="capacity"
+                                    placeholder="Capacity"
                                     min={1}
                                     max={4}
-                                    aria-label="capacity"
+                                    aria-label="Capacity"
                                     value={rideDetails.capacity}
                                     onChange={(e) => setRideDetails(prevState => ({
                                         ...prevState,
@@ -231,43 +232,42 @@ const Dashboard = ({setKey}) => {
                     </Row>
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
-                            <Button type="submit" variant='warning' className=" w-100  fw-bold">Search</Button>
+                            <Button type="submit" variant='warning' className="w-100 fw-bold">Search</Button>
                         </Col>
                     </Row>
                 </Form>
                 {error && <div className="text-danger">*{error}</div>}
             </Row>
-            {search &&
-            <Row className="mt-4">
-                <Col xs={12}>
-                    <Card>
-                        <Card.Header>Search Results</Card.Header>
-                        <Card.Body>
-                        {rides.length > 0 ? (
-    rides.map((ride) => (
-        <Card key={ride._id} className="mb-3">
-            <Card.Body>
-                <Card.Text>
-                    <strong>Driver:</strong> {ride.driver.fullName} <br />
-                    <strong>Email:</strong> {ride.driver.emailId} <br />
-                    <strong>Phone:</strong> {ride.driver.phoneNumber} <br />
-                    <strong>Vehicle:</strong> {ride.driver.vehicleModel} (Reg: {ride.driver.registrationNumber})<br/>
-                    <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}<br />
-                    <strong>Capacity:</strong> {ride.capacity}<br />
-                </Card.Text>
-                <Button variant="primary" onClick={() => handleBooking(ride)}>Book Ride</Button>
-            </Card.Body>
-        </Card>
-    ))
-) : (
-    <div>No available rides</div>
-)}
-
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-}
+            {search && (
+                <Row className="mt-4">
+                    <Col xs={12}>
+                        <Card>
+                            <Card.Header>Available rides</Card.Header>
+                            <Card.Body>
+                                {rides.length > 0 ? (
+                                    rides.map((ride) => (
+                                        <Card key={ride._id} className="mb-3">
+                                            <Card.Body>
+                                                <Card.Text>
+                                                    <strong>Driver:</strong> {ride.driver.fullName} <br />
+                                                    <strong>Email:</strong> {ride.driver.emailId} <br />
+                                                    <strong>Phone:</strong> {ride.driver.phoneNumber} <br />
+                                                    <strong>Vehicle:</strong> {ride.driver.vehicleModel} (Reg: {ride.driver.registrationNumber})<br />
+                                                    <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}<br />
+                                                    <strong>Capacity:</strong> {ride.capacity}<br />
+                                                </Card.Text>
+                                                <Button variant="primary" onClick={() => handleBooking(ride)}>Book Ride</Button>
+                                            </Card.Body>
+                                        </Card>
+                                    ))
+                                ) : (
+                                    <div>No available rides</div>
+                                )}
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            )}
         </Container>
     );
 }

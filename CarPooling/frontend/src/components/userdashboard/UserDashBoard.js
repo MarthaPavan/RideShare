@@ -102,7 +102,7 @@ const UserDashBoard = () => {
                 </CNavItem>
                 <CNavItem href="#rides" active={index === 2} onClick={() => handleClick(2)}>
                   <FontAwesomeIcon icon={faCarSide} className="nav-icon" />
-                  Previous Rides
+                   Rides
                 </CNavItem>
                 <CNavItem href="#feedback" active={index === 3} onClick={() => handleClick(3)}>
                   <FontAwesomeIcon icon={faMessage} className="nav-icon" />
@@ -136,7 +136,7 @@ const UserDashBoard = () => {
                 </CNavItem>
                 <CNavItem href="#rides" active={index === 2} onClick={() => handleClick(2)}>
                   <FontAwesomeIcon icon={faCarSide} className="nav-icon" />
-                  Previous Rides
+                   Rides
                 </CNavItem>
                 <CNavItem href="#feedback" active={index === 3} onClick={() => handleClick(3)}>
                   <FontAwesomeIcon icon={faMessage} className="nav-icon" />

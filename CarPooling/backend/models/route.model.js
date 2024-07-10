@@ -52,4 +52,5 @@ const routeSchema = new mongoose.Schema({
 routeSchema.plugin(AutoIncrement, { inc_field: 'routeId' });
 
 const Route = mongoose.model("Route", routeSchema);
-module.exports = Route;
+module.exports = {Route,routeSchema};
+
