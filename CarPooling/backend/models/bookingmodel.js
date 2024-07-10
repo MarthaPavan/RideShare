@@ -1,7 +1,7 @@
 // Import necessary modules
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-const Route = require('../models/route.model');  // Adjust the path accordingly
+const {Route,routeSchema} = require('../models/route.model');  // Adjust the path accordingly
 
 // Define User Schema
 const userSchema = new mongoose.Schema({
@@ -42,7 +42,13 @@ const bookingSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    routeDetails:{
+        type:routeSchema,
+        required:true
     }
+
+    
 });
 
 bookingSchema.plugin(AutoIncrement, { inc_field: 'bookingId' });

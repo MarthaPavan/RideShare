@@ -1,52 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Card, Container, Nav, Row, Button, Pagination } from 'react-bootstrap';
-import { format } from 'date-fns'; // Assuming you're using date-fns for date formatting
+import { format } from 'date-fns';
 import axios from 'axios';
-import "./dashboard.css";
+import toast from 'react-hot-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltRight, faTrash } from '@fortawesome/free-solid-svg-icons';
+import "./dashboard.css";
 
 const Rides = () => {
     const [key, setKey] = useState(0);
     const [activeRides, setActiveRides] = useState([]);
     const [pastRides, setPastRides] = useState([]);
     const [transactions, setTransactions] = useState([]);
-    const [visibleFooters, setVisibleFooters] = useState({}); // State to track footer visibility
-    const [currentPage, setCurrentPage] = useState(1); // State for current page
-    const ridesPerPage = 5; // Number of rides per page
+    const [visibleFooters, setVisibleFooters] = useState({});
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentRides, setCurrentRides] = useState([]); // New state for current rides
+    const ridesPerPage = 5;
+    const emailId = JSON.parse(localStorage.getItem("user"))?.emailId;
 
     const fetchRides = async () => {
         try {
-            const response = await axios.get('http://localhost:1000/rides/fetchrides');
+            const response = await axios.get(`http://localhost:1000/book/getride/${emailId}`);
             const rides = response.data;
             const now = new Date();
 
-            // Filter rides based on current time
             const active = rides.filter(ride => new Date(ride.date) >= now);
             const past = rides.filter(ride => new Date(ride.date) < now);
 
             setActiveRides(active);
             setPastRides(past);
         } catch (error) {
-            console.error("Failed to fetch rides", error);
+            console.error("Failed to fetch rides:", error);
         }
     };
 
     useEffect(() => {
-        fetchRides();
-    }, []);
+        if (emailId) {
+            fetchRides();
+        } else {
+            console.error("No email ID found in local storage.");
+        }
+    }, [emailId]);
+
+    useEffect(() => {
+        const ridesToDisplay = key === 0 ? activeRides : key === 1 ? pastRides : transactions;
+        const indexOfLastRide = currentPage * ridesPerPage;
+        const indexOfFirstRide = indexOfLastRide - ridesPerPage;
+        setCurrentRides(ridesToDisplay.slice(indexOfFirstRide, indexOfLastRide));
+    }, [activeRides, pastRides, transactions, currentPage, key]);
 
     const changeKey = (index) => {
         setKey(index);
-        setCurrentPage(1); // Reset to first page when changing tabs
+        setCurrentPage(1);
     };
 
     const handleDelete = async (rideId) => {
         try {
-            await axios.delete(`http://localhost:1000/rides/delete/${rideId}`);
+            await axios.delete(`http://localhost:1000/book/deleteride/${rideId}`);
             fetchRides();
         } catch (error) {
-            console.error("Failed to delete ride", error);
+            console.error("Failed to delete ride:", error);
         }
     };
 
@@ -57,11 +70,16 @@ const Rides = () => {
         }));
     };
 
-    const renderRides = (rides) => {
-        // Calculate pagination
-        const indexOfLastRide = currentPage * ridesPerPage;
-        const indexOfFirstRide = indexOfLastRide - ridesPerPage;
-        const currentRides = rides.slice(indexOfFirstRide, indexOfLastRide);
+    const renderRides = () => {
+        if (currentRides.length === 0) {
+            return (
+                <Card className="my-3">
+                    <Card.Body>
+                        <Card.Text>No rides available.</Card.Text>
+                    </Card.Body>
+                </Card>
+            );
+        }
 
         return (
             <>
@@ -70,6 +88,9 @@ const Rides = () => {
                     const formattedDate = format(rideDate, 'dd-MM-yyyy');
                     const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+                    const pickUpLocation = ride.routeDetails?.pickUpLocation || "N/A";
+                    const dropLocation = ride.routeDetails?.dropLocation || "N/A";
+                    console.log(ride);
                     return (
                         <Card key={ride._id} className="my-3 position-relative" style={{ cursor: "pointer" }}>
                             <Card.Body onClick={() => toggleFooter(ride._id)}>
@@ -77,13 +98,13 @@ const Rides = () => {
                                     <Card.Title className="mb-3">
                                         <Row>
                                             <Col sm={4}>
-                                                <span className="fw-bold text-success">Pickup Location:</span> {ride.pickUpLocation}
+                                                <span className="fw-bold text-success">Pickup:</span> {pickUpLocation}
                                             </Col>
                                             <Col sm={4} className="text-center">
                                                 {key === 0 ? <FontAwesomeIcon icon={faLongArrowAltRight} beat /> : <FontAwesomeIcon icon={faLongArrowAltRight} />}
                                             </Col>
                                             <Col sm={4}>
-                                                <span className="fw-bold text-danger">Drop Location:</span> {ride.dropLocation}
+                                                <span className="fw-bold text-danger">Drop:</span> {dropLocation}
                                             </Col>
                                         </Row>
                                     </Card.Title>
@@ -99,7 +120,19 @@ const Rides = () => {
                                         className="m-2"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleDelete(ride._id);
+                                            toast.promise(
+                                                handleDelete(ride._id),
+                                                {
+                                                    loading: 'Deleting...',
+                                                    success: <b>Deleted successfully</b>,
+                                                    error: <b>Could not delete</b>,
+                                                },
+                                                {
+                                                    style: {
+                                                        position: "top-right"
+                                                    }
+                                                }
+                                            );
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faTrash} />
@@ -109,8 +142,8 @@ const Rides = () => {
                         </Card>
                     );
                 })}
-                <Pagination className="justify-content-center">
-                    {Array.from({ length: Math.ceil(rides.length / ridesPerPage) }, (_, idx) => (
+                <Pagination className="justify-content-center mb-2">
+                    {Array.from({ length: Math.ceil((key === 0 ? activeRides : pastRides).length / ridesPerPage) }, (_, idx) => (
                         <Pagination.Item key={idx + 1} active={idx + 1 === currentPage} onClick={() => setCurrentPage(idx + 1)}>
                             {idx + 1}
                         </Pagination.Item>
@@ -137,8 +170,8 @@ const Rides = () => {
             </Row>
             <Row className='flex-row justify-content-center m-3'>
                 <Col className="border rounded shadow-lg w-75 h-75" style={{ backgroundColor: "#E8E8E8" }}>
-                    {key === 0 && renderRides(activeRides)}
-                    {key === 1 && renderRides(pastRides)}
+                    {key === 0 && renderRides()}
+                    {key === 1 && renderRides()}
                     {key === 2 && (
                         <Card className="border-1 my-3">
                             <Card.Header>Transactions</Card.Header>

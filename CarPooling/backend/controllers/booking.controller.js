@@ -1,16 +1,17 @@
 const bookingModel = require("../models/bookingmodel");
-const Route = require("../models/route.model");
+// Importing the Route model
+const  {Route}  = require("../models/route.model");
+
 
 class BookingController {
-
     async createBooking(req, res) {
         try {
-            const { userDetails, routeId, date, capacity, status } = req.body;
+            const { userDetails, routeId, date, capacity } = req.body;
             const parsedDate = new Date(date);
             if (isNaN(parsedDate)) {
                 return res.status(400).json({ message: "Invalid date format" });
             }
-
+            console.log(capacity);
             // Find the route
             const route = await Route.findOne({ routeId: routeId });
             if (!route) {
@@ -26,11 +27,11 @@ class BookingController {
             const newBooking = await bookingModel.create({
                 userDetails: { ...userDetails },
                 route: route._id,
+                routeDetails: route,
                 date: parsedDate,
-                capacity,
-                status
+                capacity
             });
-
+            
             if (newBooking) {
                 // Update the route's capacity
                 route.capacity -= capacity;
@@ -48,7 +49,7 @@ class BookingController {
     async deleteBooking(req, res) {
         try {
             const { bookingId } = req.params;
-            const deletedBooking = await bookingModel.findOneAndDelete({ bookingId });
+            const deletedBooking = await bookingModel.findOneAndDelete({ _id:bookingId });
 
             if (deletedBooking) {
                 // Find the related route and update its capacity
@@ -64,6 +65,25 @@ class BookingController {
             }
         } catch (error) {
             return res.status(500).json({ message: error.message });
+        }
+    }
+
+    async getBooking(req, res) {
+        try {
+            const response = await bookingModel.find();
+            return res.status(200).json(response);
+        } catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+
+    async getBookingById(req, res) {
+        try {
+            const { emailId } = req.params;
+            const response = await bookingModel.find({ "userDetails.emailId": emailId });
+            return res.status(200).json(response);
+        } catch (err) {
+            return res.status(500).json({ message: err.message });
         }
     }
 }

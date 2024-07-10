@@ -15,7 +15,7 @@ const Rides = () => {
     const [visibleFooters, setVisibleFooters] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const ridesPerPage = 5;
-    const email = JSON.parse(localStorage.getItem('user')).emailId; // Replace with actual email or pass as a prop
+    const email = JSON.parse(localStorage.getItem('user')).emailId;
 
     const fetchRides = async () => {
         try {
@@ -102,7 +102,7 @@ const Rides = () => {
                                     <Card.Text><span className="fw-bold">Seats:</span> {ride.capacity}</Card.Text>
                                 </div>
                             </Card.Body>
-                            {key=== 0 && visibleFooters[ride.routeId] && (
+                            {key === 0 && visibleFooters[ride.routeId] && (
                                 <Card.Footer className="d-flex justify-content-end">
                                     <Button
                                         variant='danger'
@@ -142,6 +142,28 @@ const Rides = () => {
         );
     };
 
+    const renderTransactions = (transactions) => {
+        if (transactions.length === 0) {
+            return (
+                <Card className="my-3">
+                    <Card.Body>
+                        <Card.Text>No transactions available.</Card.Text>
+                    </Card.Body>
+                </Card>
+            );
+        }
+
+        // Render transactions if available
+        // This is just a placeholder, replace it with actual transaction rendering logic
+        return (
+            <Card className="my-3">
+                <Card.Body>
+                    <Card.Text>Transactions go here.</Card.Text>
+                </Card.Body>
+            </Card>
+        );
+    };
+
     return (
         <Container fluid className='min-vh-100'>
             <Row className='py-2 px-3'>
@@ -161,15 +183,7 @@ const Rides = () => {
                 <Col className="border rounded shadow-lg w-75 h-75" style={{ backgroundColor: "#E8E8E8" }}>
                     {key === 0 && renderRides(activeRides)}
                     {key === 1 && renderRides(pastRides)}
-                    {key === 2 && (
-                        <Card className="border-1 my-3">
-                            <Card.Header>Transactions</Card.Header>
-                            <Card.Body>
-                                {/* Assuming transactions would have a similar structure */}
-                                Transactions go here.
-                            </Card.Body>
-                        </Card>
-                    )}
+                    {key === 2 && renderTransactions(transactions)}
                 </Col>
             </Row>
         </Container>
