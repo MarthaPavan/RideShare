@@ -39,6 +39,15 @@ const routeSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  time: {
+    type: String,
+    required: true
+  },
+  notify:{
+    type: Boolean,
+    required: true,
+    default: false
+  },
   capacity: {
     type: Number,
     required: true
