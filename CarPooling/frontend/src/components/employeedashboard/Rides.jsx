@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Card, Container, Nav, Row, Button, Pagination } from 'react-bootstrap';
+import { Col, Card, Container, Nav, Row, Button, Pagination, Badge } from 'react-bootstrap';
 import { format } from 'date-fns';
 import axios from 'axios';
 import "./dashboard.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltRight, faTrash } from '@fortawesome/free-solid-svg-icons';
 import toast from 'react-hot-toast';
+import UserDetailsModal from './userDetailsModal'; // Import the UserDetailsModal component
 
 const Rides = () => {
     const [key, setKey] = useState(0);
@@ -58,6 +59,12 @@ const Rides = () => {
         }));
     };
 
+    useEffect(() => {
+        const indexOfLastRide = currentPage * ridesPerPage;
+        const indexOfFirstRide = indexOfLastRide - ridesPerPage;
+        const currentRides = (key === 0 ? activeRides : pastRides).slice(indexOfFirstRide, indexOfLastRide);
+    }, [currentPage, key, activeRides, pastRides]);
+
     const renderRides = (rides) => {
         if (rides.length === 0) {
             return (
@@ -78,11 +85,11 @@ const Rides = () => {
                 {currentRides.map(ride => {
                     const rideDate = new Date(ride.date);
                     const formattedDate = format(rideDate, 'dd-MM-yyyy');
-                    const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const formattedTime = ride.time;
 
                     return (
-                        <Card key={ride.routeId} className="my-3 position-relative" style={{ cursor: "pointer" }}>
-                            <Card.Body onClick={() => toggleFooter(ride.routeId)}>
+                        <Card key={ride._id} className="my-3 position-relative" style={{ cursor: "pointer" }}>
+                            <Card.Body onClick={() => toggleFooter(ride._id)}>
                                 <div>
                                     <Card.Title className="mb-3">
                                         <Row>
@@ -95,6 +102,9 @@ const Rides = () => {
                                             <Col sm={4}>
                                                 <span className="fw-bold text-danger">Drop Location:</span> {ride.dropLocation}
                                             </Col>
+                                            {ride.notify && (
+                                                <Badge bg="danger" className="position-absolute rounded-circle" style={{ width: '20px', height: '20px',top:"-10px",right:"-5px" }}> </Badge>
+                                            )}
                                         </Row>
                                     </Card.Title>
                                     <Card.Text className="mb-0"><span className="fw-bold">Date:</span> {formattedDate}</Card.Text>
@@ -102,7 +112,7 @@ const Rides = () => {
                                     <Card.Text><span className="fw-bold">Seats:</span> {ride.capacity}</Card.Text>
                                 </div>
                             </Card.Body>
-                            {key === 0 && visibleFooters[ride.routeId] && (
+                            {key === 0 && visibleFooters[ride._id] && (
                                 <Card.Footer className="d-flex justify-content-end">
                                     <Button
                                         variant='danger'
@@ -126,6 +136,7 @@ const Rides = () => {
                                     >
                                         <FontAwesomeIcon icon={faTrash} />
                                     </Button>
+                                    <UserDetailsModal routeId={ride._id} /> 
                                 </Card.Footer>
                             )}
                         </Card>

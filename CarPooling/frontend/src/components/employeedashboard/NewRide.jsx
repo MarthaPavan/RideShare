@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Container, Row, Col, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot, faCalendarDays, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faCalendarDays, faClock, faUsers } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { debounce } from "lodash";
 import { SearchList } from '../../components/SearchList';
@@ -16,6 +16,7 @@ const NewRide = ({ setIndex }) => {
         pickUpLocation: "",
         dropLocation: "",
         date: "",
+        time: "",
         capacity: 1,
         driver: { fullName, phoneNumber, emailId, registrationNumber, vehicleModel }
     });
@@ -50,7 +51,7 @@ const NewRide = ({ setIndex }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!rideDetails.pickUpLocation || !rideDetails.dropLocation || !rideDetails.date) {
+        if (!rideDetails.pickUpLocation || !rideDetails.dropLocation || !rideDetails.date || !rideDetails.time) {
             setError("Please fill all the fields");
             return;
         }
@@ -69,7 +70,7 @@ const NewRide = ({ setIndex }) => {
             setLoading(false);
         }
     };
-
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setRideDetails(prevState => ({
@@ -91,9 +92,9 @@ const NewRide = ({ setIndex }) => {
     };
 
     return (
-        <Container fluid className='px-5 min-vh-100 ' onDoubleClick={handleDoubleClick}>
+        <Container fluid className='px-5 min-vh-100' onDoubleClick={handleDoubleClick}>
             <Row>
-                <Col xs={12} className='d-flex justify-content-center align-items-center mb-4 '>
+                <Col xs={12} className='d-flex justify-content-center align-items-center mb-4'>
                     <h1 className='create-ride-heading'>Create a Ride</h1>
                 </Col>
             </Row>
@@ -161,6 +162,22 @@ const NewRide = ({ setIndex }) => {
                         <Col xs={12} md={4} lg={3} className="mb-1 mb-md-0">
                             <InputGroup className='h6'>
                                 <InputGroup.Text>
+                                    <FontAwesomeIcon icon={faClock} />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    className='py-lg-2'
+                                    type="time"
+                                    name="time"
+                                    min = {1}
+                                    aria-label="Time"
+                                    value={rideDetails.time}
+                                    onChange={handleInputChange}
+                                />
+                            </InputGroup>
+                        </Col>
+                        <Col xs={12} md={4} lg={3} className="mb-1 mb-md-0">
+                            <InputGroup className='h6'>
+                                <InputGroup.Text>
                                     <FontAwesomeIcon icon={faUsers} />
                                 </InputGroup.Text>
                                 <Form.Control
@@ -181,9 +198,9 @@ const NewRide = ({ setIndex }) => {
                     <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center mb-sm-2'>
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
                             <Button type="submit" variant='warning' className="w-100 fw-bold" disabled={ride}>
-                                {loading ? <div className="flex align-content-center ju">
+                                {loading ? <div className="flex align-content-center">
                                         <Spinner animation="border" variant="light" size="sm" />
-                                </div> :"Create"}
+                                </div> : "Create"}
                             </Button>
                         </Col>
                     </Row>

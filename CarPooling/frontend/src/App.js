@@ -27,7 +27,7 @@ import { Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 const App = () => {
 
-  
+    const token = localStorage.getItem("token");
 
   return (
     <AuthProvider>
@@ -79,7 +79,7 @@ const App = () => {
           },
         }}
       />
-        <Footer />
+      {!token&&<Footer />}
       </Router>
     </AuthProvider>
   );

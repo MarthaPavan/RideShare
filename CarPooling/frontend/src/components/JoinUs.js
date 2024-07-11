@@ -70,7 +70,7 @@ const JoinUs = () => {
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred during signup. Please try again.");
+      alert("An error occurred during signup. Please try again./User already exists");
     }
   };
 
@@ -100,7 +100,12 @@ const JoinUs = () => {
       <Row className="text-center my-5 h-100">
         <Col className="m-4 p-3 h-100 border md-w-100 border-1 border-dark-subtle shadow bg-bg-warning-subtle">
           <h1 className="mb-2 display-6 fw-bold text-text-dark-emphasis" >Join <span className="text-warning fw-bold">Us</span></h1>
-          <h2 className="mb-2 lead">Create Account</h2>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h2>Create Account</h2>
+            {form.image && (
+              <Image src={form.image} className="rounded-circle" style={{ width: "100px", height: "100px" }} />
+            )}
+          </div>
           
           <Form onSubmit={handleSignUp}>
             <Form.Group>
