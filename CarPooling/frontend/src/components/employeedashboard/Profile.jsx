@@ -109,8 +109,8 @@ const Profile = () => {
                         </Button>
                     </Col>
                     <Col>
-                        <h1 className="display-6 pt-2">{user.fullName}</h1>
-                        {user.phoneNumber && <p><i className="fa-solid fa fa-phone"></i> {user.phoneNumber}</p>}
+                        <h1 className="display-6 pt-2">{JSON.parse(localStorage.getItem('user')).fullName}</h1>
+                        {user.phoneNumber && <p><i className="fa-solid fa fa-phone"></i> {JSON.parse(localStorage.getItem('user')).phoneNumber}</p>}
                     </Col>
                 </Row>
 

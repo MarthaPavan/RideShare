@@ -132,11 +132,11 @@ function CreateAccount() {
                 accept="image/*"
               />
             </div>
-            {form.image && (
+            {/* {form.image && (
               <div className="mb-3">
                 <Image src={form.image} thumbnail fluid alt="Profile Preview" />
               </div>
-            )}
+            )} */}
             <Button variant="success" type="submit" className="w-100 mt-3">
               Sign Up
             </Button>
