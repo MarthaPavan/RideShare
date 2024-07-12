@@ -86,7 +86,7 @@ const Rides = () => {
                 {currentRides.map(ride => {
                     const rideDate = ride.date instanceof Date ? ride.date : new Date(ride.date);
                     const formattedDate = format(rideDate, 'dd-MM-yyyy');
-                    const formattedTime = rideDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const formattedTime = ride.time;
 
                     const pickUpLocation = ride.routeDetails?.pickUpLocation || "N/A";
                     const dropLocation = ride.routeDetails?.dropLocation || "N/A";

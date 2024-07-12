@@ -6,4 +6,5 @@ book.post("/requestride", bookingController.createBooking);
 book.delete("/deleteride/:bookingId", bookingController.deleteBooking); // Added delete route
 book.get("/getrides",bookingController.getBooking);
 book.get("/getride/:emailId",bookingController.getBookingById);
+book.get("/getUserDetails",bookingController.getBookingUser);
 module.exports = book;

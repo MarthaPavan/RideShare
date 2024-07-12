@@ -63,7 +63,7 @@ function CreateAccount() {
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred during registration. Please try again later.");
+      alert("An error occurred during registration. Please try again later./User already exists");
     }
   };
 
@@ -74,7 +74,7 @@ function CreateAccount() {
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2>Sign Up</h2>
             {form.image && (
-              <Image src={form.image} className="rounded-circle" style={{ width: "50px", height: "50px" }} />
+              <Image src={form.image} className="rounded-circle" style={{ width: "100px", height: "100px" }} />
             )}
           </div>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -132,11 +132,7 @@ function CreateAccount() {
                 accept="image/*"
               />
             </div>
-            {/* {form.image && (
-              <div className="mb-3">
-                <Image src={form.image} thumbnail fluid alt="Profile Preview" />
-              </div>
-            )} */}
+            
             <Button variant="success" type="submit" className="w-100 mt-3">
               Sign Up
             </Button>

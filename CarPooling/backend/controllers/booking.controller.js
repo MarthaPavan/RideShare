@@ -35,6 +35,7 @@ class BookingController {
             if (newBooking) {
                 // Update the route's capacity
                 route.capacity -= capacity;
+                route.notify=true;
                 await route.save();
 
                 return res.status(201).json({ message: "Booking made successfully", booking: newBooking });
@@ -56,6 +57,8 @@ class BookingController {
                 const route = await Route.findById(deletedBooking.route);
                 if (route) {
                     route.capacity += deletedBooking.capacity;
+                    if(route.capacity===4)
+                        route.notify=false;
                     await route.save();
                 }
 
@@ -86,6 +89,18 @@ class BookingController {
             return res.status(500).json({ message: err.message });
         }
     }
+    async getBookingUser(req, res) {
+        try {
+            const { routeId } = req.query;
+            const response = await bookingModel.find({
+                "route": routeId
+            });
+            return res.status(200).json(response);
+        } catch (err) {
+            return res.status(500).json({ message: err.message });
+        }
+    }
+    
 }
 
 module.exports = new BookingController();

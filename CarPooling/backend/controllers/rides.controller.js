@@ -1,10 +1,10 @@
-const RouteModel = require('../models/route.model');
+const {Route:RouteModel} = require('../models/route.model');
 
 class RideController {
   // Method to create a new ride
   async createRide(req, res) {
     try {
-      const { driver, pickUpLocation, dropLocation, date, capacity } = req.body;
+      const { driver, pickUpLocation, dropLocation, date, capacity,time } = req.body;
 
       // Ensure date is parsed to a JavaScript Date object
       const parsedDate = new Date(date);
@@ -15,6 +15,7 @@ class RideController {
         dropLocation: dropLocation,
         date: parsedDate,
         capacity: capacity,
+        time:time,
         driver: driver // Assuming driver is an object containing driver details
       });
 
@@ -122,32 +123,6 @@ class RideController {
       }
     }
     
-    // Method to delete a driver from a route
-    async deleteDriversRide(req, res) {
-      try {
-        const routeId = parseInt(req.params.routeId);
-        if (isNaN(routeId)){
-          return res.status(400).json({ msg: "Invalid route ID" });
-        }
-        const driverId = req.params.driverId; // Assuming driverId is passed in the URL para
-        // Find the route by routeId
-        const route = await RouteModel.findOne({ routeId: routeId });
-  
-        if (!route) {
-          return res.status(404).json({ msg: "Route not found" });
-        }
-  
-        // Filter out the driver from the driver array
-        route.driver = route.driver.filter(driver => driver._id.toString() !== driverId);
-  
-        // Save the updated route
-        await route.save();
-  
-        res.status(200).json({ msg: "You have cancelled your ride offering", route: route });
-      } catch (err) {
-        res.status(500).json({ msg: err.message });
-      }
-    }
 }
 
 module.exports = new RideController();
