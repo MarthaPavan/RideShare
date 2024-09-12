@@ -51,7 +51,7 @@ function CreateAccount() {
     }
 
     try {
-      const res = await axios.post("http://localhost:1000/get-started/signup", formData, {
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/get-started/signup`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

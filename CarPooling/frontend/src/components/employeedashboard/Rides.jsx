@@ -20,7 +20,7 @@ const Rides = () => {
 
     const fetchRides = async () => {
         try {
-            const response = await axios.get(`http://localhost:1000/routes/driver-route/${email}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/driver-route/${email}`);
             const rides = response.data;
             const now = new Date();
 
@@ -103,7 +103,7 @@ const Rides = () => {
                                                 <span className="fw-bold text-danger">Drop Location:</span> {ride.dropLocation}
                                             </Col>
                                             {ride.notify && (
-                                                <Badge bg="danger" className="position-absolute rounded-circle" style={{ width: '20px', height: '20px',top:"-10px",right:"-5px" }}> </Badge>
+                                                <Badge bg="danger" className="position-absolute rounded-circle" style={{ width: '20px', height: '20px', top: "-10px", right: "-5px" }}> </Badge>
                                             )}
                                         </Row>
                                     </Card.Title>
@@ -136,7 +136,7 @@ const Rides = () => {
                                     >
                                         <FontAwesomeIcon icon={faTrash} />
                                     </Button>
-                                    <UserDetailsModal routeId={ride._id} /> 
+                                    <UserDetailsModal routeId={ride._id} />
                                 </Card.Footer>
                             )}
                         </Card>

@@ -27,7 +27,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://localhost:1000/get-started/fetch-profile-pic/${user.image}`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/fetch-profile-pic/${user.image}`, {
           responseType: "blob",
         });
         const imageUrl = URL.createObjectURL(response.data);

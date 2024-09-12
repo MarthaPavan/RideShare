@@ -56,7 +56,7 @@ const JoinUs = () => {
     try {
       console.log(form);
       const response = await axios.post(
-        "http://localhost:1000/get-started/signup",
+        `${process.env.REACT_APP_BASE_URL}/get-started/signup`,
         formData,{
           headers: {
             "Content-Type": "multipart/form-data",
