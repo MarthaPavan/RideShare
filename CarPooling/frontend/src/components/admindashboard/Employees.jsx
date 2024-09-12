@@ -3,7 +3,6 @@ import { useTable, useSortBy, usePagination } from 'react-table';
 import { Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 import './styles.css'; // Import your custom CSS for additional styling
-require('dotenv').config();
 const Employees = () => {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
