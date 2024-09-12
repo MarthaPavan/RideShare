@@ -5,7 +5,6 @@ import axios from 'axios';
 import './styles.css'; // Import your custom CSS for additional styling
 require('dotenv').config();
 const Employees = () => {
-  const basePath = process_
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const token = localStorage.getItem('token');
