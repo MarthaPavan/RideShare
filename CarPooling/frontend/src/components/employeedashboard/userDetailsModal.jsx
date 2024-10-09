@@ -6,12 +6,12 @@ import toast from 'react-hot-toast';
 const UserDetailsModal = ({ routeId }) => {
     const [show, setShow] = useState(false);
     const [userDetails, setUserDetails] = useState([]);
-
+    const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
     const handleClose = () => setShow(false);
     const handleShow = async () => {
         try {
             console.log(routeId);
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/book/getUserDetails?routeId=${routeId}`);
+            const response = await axios.get(`${base_url}/book/getUserDetails?routeId=${routeId}`);
             console.log(response.data);
             setUserDetails(response.data);
             setShow(true);

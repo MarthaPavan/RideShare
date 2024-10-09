@@ -13,7 +13,7 @@ function CreateAccount() {
     phoneNumber: "",
     role: "user",
   });
-
+  const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
   const [selectedFile, setSelectedFile] = useState(null); // State to store selected image file
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ function CreateAccount() {
     }
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/get-started/signup`, formData, {
+      const res = await axios.post(`${base_url}/get-started/signup`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -132,7 +132,7 @@ function CreateAccount() {
                 accept="image/*"
               />
             </div>
-            
+
             <Button variant="success" type="submit" className="w-100 mt-3">
               Sign Up
             </Button>

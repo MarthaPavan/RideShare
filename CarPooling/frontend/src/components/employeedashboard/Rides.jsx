@@ -17,10 +17,10 @@ const Rides = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const ridesPerPage = 5;
     const email = JSON.parse(localStorage.getItem('user')).emailId;
-
+    const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
     const fetchRides = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/driver-route/${email}`);
+            const response = await axios.get(`${base_url}/routes/driver-route/${email}`);
             const rides = response.data;
             const now = new Date();
 
@@ -45,7 +45,7 @@ const Rides = () => {
 
     const handleDelete = async (routeId) => {
         try {
-            await axios.delete(`http://localhost:1000/rides/deleteride/${routeId}`);
+            await axios.delete(`${base_url}/rides/deleteride/${routeId}`);
             fetchRides();
         } catch (error) {
             console.error("Failed to delete ride", error);

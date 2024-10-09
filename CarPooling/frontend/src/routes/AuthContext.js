@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -11,7 +10,7 @@ const AuthProvider = ({ children }) => {
   );
   const [name, setName] = useState(localStorage.getItem("name") || "");
   const [loading, setLoading] = useState(true);
-
+  const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
   // Sync token, role, user, and name with local storage when they change
   useEffect(() => {
     localStorage.setItem("token", token);
@@ -49,7 +48,7 @@ const AuthProvider = ({ children }) => {
   const loginAction = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:1000/get-started/login", data);
+      const response = await axios.post(`${base_url}/get-started/login`, data);
       if (response.status === 200) {
         const { role, token, user } = response.data;
 
