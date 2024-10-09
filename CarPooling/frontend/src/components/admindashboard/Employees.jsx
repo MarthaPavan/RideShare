@@ -8,7 +8,7 @@ const Employees = () => {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const token = localStorage.getItem('token');
-  const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   useEffect(() => {
     const fetchData = async () => {
       try {

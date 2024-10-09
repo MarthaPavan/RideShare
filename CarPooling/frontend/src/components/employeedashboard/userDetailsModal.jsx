@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 const UserDetailsModal = ({ routeId }) => {
     const [show, setShow] = useState(false);
     const [userDetails, setUserDetails] = useState([]);
-    const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     const handleClose = () => setShow(false);
     const handleShow = async () => {
         try {

@@ -16,7 +16,7 @@ const Dashboard = ({ setKey }) => {
         date: "",
         capacity: 1,
     });
-    const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     const [bookDetails, setBookDetails] = useState({});
     const [index, setIndex] = useState(0);
     const [locations, setLocations] = useState([]);

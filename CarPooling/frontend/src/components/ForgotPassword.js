@@ -11,7 +11,7 @@ const ForgotPassword = () => {
   });
   const [error, setError] = useState(false)
   const navigate = useNavigate();
-  const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   const handleChange = (e) => {
     setInputValue((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };

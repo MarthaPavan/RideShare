@@ -14,7 +14,7 @@ const Profile = () => {
         registrationNumber: '',
         vehicleModel: '',
     });
-    const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     useEffect(() => {
         if (storedUser) {
             setUser(JSON.parse(storedUser));

@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
   );
   const [name, setName] = useState(localStorage.getItem("name") || "");
   const [loading, setLoading] = useState(true);
-  const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   // Sync token, role, user, and name with local storage when they change
   useEffect(() => {
     localStorage.setItem("token", token);

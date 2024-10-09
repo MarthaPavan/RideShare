@@ -17,7 +17,7 @@ const Rides = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const ridesPerPage = 5;
     const email = JSON.parse(localStorage.getItem('user')).emailId;
-    const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     const fetchRides = async () => {
         try {
             const response = await axios.get(`${base_url}/routes/driver-route/${email}`);

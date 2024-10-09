@@ -8,7 +8,7 @@ const Routes = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(false);
   const [routeId, setRouteId] = useState(null);
-  const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   const fetchData = async () => {
     try {
       const response = await axios.get(`${base_url}/routes/getRoute`);

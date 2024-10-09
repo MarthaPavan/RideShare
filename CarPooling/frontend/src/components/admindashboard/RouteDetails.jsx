@@ -7,7 +7,7 @@ const RouteDetails = ({ id, onDelete }) => {
   const [route, setRoute] = useState(null);
   const [selectedDriver, setSelectedDriver] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false); // State for delete confirmation modal
-  const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   useEffect(() => {
     const fetchRouteDetails = async () => {
       try {

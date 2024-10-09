@@ -19,7 +19,7 @@ const NewRide = ({ setIndex }) => {
         capacity: 1,
         driver: { fullName, phoneNumber, emailId, registrationNumber, vehicleModel }
     });
-    const base_url = process.env.REACT_APP_BASE_URL | "http://localhost:3000";
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     const [loading, setLoading] = useState(false);
     const [ride, setRide] = useState(false);
     const [error, setError] = useState(null);
