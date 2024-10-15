@@ -39,7 +39,7 @@ const handleChange = (e) => {
   return (
     <Container className="d-flex justify-content-center align-items-center vh-100">
       <Row>
-        <Col>
+        <Col className="d-none d-md-block">
           <Image
             src={"/images/driver_signup_page.jpg"}
             alt="Forgot Password"

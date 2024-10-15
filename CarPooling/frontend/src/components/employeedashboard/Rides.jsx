@@ -102,7 +102,7 @@ const Rides = () => {
                                             <Col sm={4}>
                                                 <span className="fw-bold text-danger">Drop Location:</span> {ride.dropLocation}
                                             </Col>
-                                            {ride.notify && (
+                                            {ride.notify&& key===0 && (
                                                 <Badge bg="danger" className="position-absolute rounded-circle" style={{ width: '20px', height: '20px',top:"-10px",right:"-5px" }}> </Badge>
                                             )}
                                         </Row>
@@ -112,8 +112,9 @@ const Rides = () => {
                                     <Card.Text><span className="fw-bold">Seats:</span> {ride.capacity}</Card.Text>
                                 </div>
                             </Card.Body>
-                            {key === 0 && visibleFooters[ride._id] && (
+                            {visibleFooters[ride._id] && (
                                 <Card.Footer className="d-flex justify-content-end">
+                                    {key===0 &&
                                     <Button
                                         variant='danger'
                                         className="m-2"
@@ -136,6 +137,7 @@ const Rides = () => {
                                     >
                                         <FontAwesomeIcon icon={faTrash} />
                                     </Button>
+                                }
                                     <UserDetailsModal routeId={ride._id} /> 
                                 </Card.Footer>
                             )}

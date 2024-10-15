@@ -1,5 +1,5 @@
 const {Route:RouteModel} = require('../models/route.model');
-
+const bookingModel = require("../models/bookingmodel");
 class RideController {
   // Method to create a new ride
   async createRide(req, res) {
@@ -112,7 +112,7 @@ class RideController {
         
         // Find the route by routeId and delete it
         const deletedRoute = await RouteModel.findOneAndDelete({ routeId: routeId });
-  
+        const book = await bookingModel.findOneAndDelete({"routeDetails.routeId":routeId});
         if (!deletedRoute) {
           return res.status(404).json({ msg: "Route not found" });
         }

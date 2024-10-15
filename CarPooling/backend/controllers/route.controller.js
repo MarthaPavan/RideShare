@@ -1,7 +1,7 @@
 // Importing the Route model
 const {Route:routeModel } = require("../models/route.model");
 const driverModel = require("../models/drivers.model");
-
+const bookingModel = require("../models/bookingmodel");
 class RouteControllers {
   async saveRoute(req, res) {
     try {
@@ -41,6 +41,7 @@ class RouteControllers {
       const routeId = parseInt(req.params.routeId);
       console.log(req.body);
       const route = await routeModel.findOneAndDelete({ routeId: routeId });
+      const book = await bookingModel.findOneAndDelete({"routeDetails.routeId":routeId});
       res.status(200).json(route);
     } catch (err) {
       res.status(404).json({ msg: err.message });

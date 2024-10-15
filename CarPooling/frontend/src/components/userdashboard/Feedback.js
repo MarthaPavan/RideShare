@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Table } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios"; // Corrected import
 
 const FeedbackForm = () => {
   const [feedback, setFeedback] = useState("");
@@ -10,6 +11,9 @@ const FeedbackForm = () => {
     driverBehavior: "",
     overallRide: "",
   });
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const email = user ? user.emailId : "";
 
   const handleSatisfactionChange = (e) => {
     const { name, value } = e.target;
@@ -21,13 +25,28 @@ const FeedbackForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFeedback("");
-    setSatisfaction({
-      cleanliness: "",
-      comfort: "",
-      driverBehavior: "",
-      overallRide: "",
-    });
+    const feedbackData = {
+      email,
+      feedback,
+      satisfaction,
+    };
+
+    axios.post("http://localhost:1000/mail/sendfeedback", feedbackData)
+      .then(response => {
+        console.log('Feedback sent:', response.data);
+        // Optionally show a success message or reset the form
+        setFeedback("");
+        setSatisfaction({
+          cleanliness: "",
+          comfort: "",
+          driverBehavior: "",
+          overallRide: "",
+        });
+      })
+      .catch(error => {
+        console.error('Error sending feedback:', error);
+        // Optionally show an error message to the user
+      });
   };
 
   const maxLength = 200; // Maximum number of characters for the text area
@@ -50,7 +69,7 @@ const FeedbackForm = () => {
             {feedback.length}/{maxLength} characters
           </Form.Text>
         </Form.Group>
-        
+
         <Table striped bordered hover className="mt-4">
           <thead>
             <tr>
@@ -63,64 +82,23 @@ const FeedbackForm = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Cleanliness</td>
-              {["Very Unsatisfied", "Unsatisfied", "Neutral", "Satisfied", "Very Satisfied"].map((label, index) => (
-                <td key={index}>
-                  <Form.Check
-                    type="radio"
-                    name="cleanliness"
-                    value={label}
-                    checked={satisfaction.cleanliness === label}
-                    onChange={handleSatisfactionChange}
-                  />
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td>Comfort</td>
-              {["Very Unsatisfied", "Unsatisfied", "Neutral", "Satisfied", "Very Satisfied"].map((label, index) => (
-                <td key={index}>
-                  <Form.Check
-                    type="radio"
-                    name="comfort"
-                    value={label}
-                    checked={satisfaction.comfort === label}
-                    onChange={handleSatisfactionChange}
-                  />
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td>Driver's Behavior</td>
-              {["Very Unsatisfied", "Unsatisfied", "Neutral", "Satisfied", "Very Satisfied"].map((label, index) => (
-                <td key={index}>
-                  <Form.Check
-                    type="radio"
-                    name="driverBehavior"
-                    value={label}
-                    checked={satisfaction.driverBehavior === label}
-                    onChange={handleSatisfactionChange}
-                  />
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td>Overall Ride</td>
-              {["Very Unsatisfied", "Unsatisfied", "Neutral", "Satisfied", "Very Satisfied"].map((label, index) => (
-                <td key={index}>
-                  <Form.Check
-                    type="radio"
-                    name="overallRide"
-                    value={label}
-                    checked={satisfaction.overallRide === label}
-                    onChange={handleSatisfactionChange}
-                  />
-                </td>
-              ))}
-            </tr>
+            {["Cleanliness", "Comfort", "Driver's Behavior", "Overall Ride"].map((aspect, index) => (
+              <tr key={index}>
+                <td>{aspect}</td>
+                {["Very Unsatisfied", "Unsatisfied", "Neutral", "Satisfied", "Very Satisfied"].map((label, i) => (
+                  <td key={i}>
+                    <Form.Check
+                      type="radio"
+                      name={aspect.replace(/\s+/g, '')} // Remove spaces for the name attribute
+                      value={label}
+                      checked={satisfaction[aspect.replace(/\s+/g, '')] === label}
+                      onChange={handleSatisfactionChange}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
-          
         </Table>
 
         <Button variant="primary" type="submit" className="mt-4">Submit</Button>

@@ -39,7 +39,7 @@ class LoginController {
   
       const existingUser = await userModel.findOne({ emailId });
       if (existingUser) {
-        return res.status(400).json({ msg: "User already exists" });
+        return res.status(500).json({ msg: "User already exists" });
       }
   
       let savedImage = null;

@@ -13,12 +13,20 @@ function CreateAccount() {
     phoneNumber: "",
     role: "user",
   });
-
+  const [error, setError] = useState("");
   const [selectedFile, setSelectedFile] = useState(null); // State to store selected image file
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if(name === 'phoneNumber')
+    {
+      if(form.name.length > 10)
+      {
+        setError("Invalid phone number")
+        return;
+      }
+    }
     setForm((prevState) => ({ ...prevState, [name]: value }));
   };
 
@@ -59,14 +67,12 @@ function CreateAccount() {
       if (res.status === 200 && res.data.msg === "success") {
         navigate("/SignUpSuccess");
       } else {
-        alert("Registration failed. Please try again.");
+        setError(res.data.msg);
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred during registration. Please try again later./User already exists");
+     }
     }
-  };
-
   return (
     <Container fluid className="min-vh-100">
       <Row className="flex-fill align-items-center justify-content-center">
@@ -132,7 +138,10 @@ function CreateAccount() {
                 accept="image/*"
               />
             </div>
-            
+            {
+              error &&
+              <div className="text-danger">{error}</div>
+            }
             <Button variant="success" type="submit" className="w-100 mt-3">
               Sign Up
             </Button>

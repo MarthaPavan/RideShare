@@ -1,0 +1,47 @@
+.login-container {
+    background: linear-gradient(to right, #74ebd5, #acb6e5);
+    min-height: 100vh;
+  }
+  
+  .card {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 1rem;
+  }
+  
+  .form-control {
+    border: none;
+    border-bottom: 2px solid #ced4da;
+    border-radius: 0;
+    background-color: transparent;
+    padding-left: 0;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-primary {
+    color: #007bff !important;
+  }
+  
+  .card-footer {
+    background-color: transparent;
+    border-top: none;
+  }

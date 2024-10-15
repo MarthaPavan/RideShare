@@ -27,6 +27,7 @@ const JoinUs = () => {
 
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
+  const [error,setError]  = useState("")
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -68,6 +69,10 @@ const JoinUs = () => {
       if (response.status === 200 && response.data.msg === "success"){
         navigate("/SignUpSuccess");
       }
+      else
+      {
+        setError(response.data.msg)
+      }
     } catch (err) {
       console.error(err);
       alert("An error occurred during signup. Please try again./User already exists");
@@ -75,6 +80,13 @@ const JoinUs = () => {
   };
 
   const handleChange = (e) => {
+    if(e.target.name === 'phoneNumber')
+    {
+      if(e.target.value.length > 10){
+        setError("Invalid phonenumber")
+        return;
+      }
+    }
     setForm((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
@@ -128,13 +140,14 @@ const JoinUs = () => {
                   required
                 />
                 <Form.Control
-                  type="tel"
-                  name="phoneNumber"
-                  placeholder="Mobile Number"
-                  value={form.phoneNumber}
-                  onChange={handleChange}
-                  required
-                />
+                    type="tel"
+                    name="phoneNumber"
+                    placeholder="Mobile Number"
+                    pattern="\d{10}"
+                    value={form.phoneNumber}
+                    onChange={handleChange}
+                    required
+                  />
               </InputGroup>
               <br />
               <Form.Control
@@ -183,6 +196,9 @@ const JoinUs = () => {
               </Link>
             </div>
             <br />
+            {error && 
+              <div className="text-danger">{error}</div>
+            }
             <Button variant="primary" className="align-items-end" type="submit">
               Register
             </Button>
