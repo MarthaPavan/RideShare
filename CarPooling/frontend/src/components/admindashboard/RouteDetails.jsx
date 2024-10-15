@@ -11,7 +11,7 @@ const RouteDetails = ({ id, onDelete }) => {
   useEffect(() => {
     const fetchRouteDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:1000/routes/getRoute/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/getRoute/${id}`);
         setRoute(response.data);
       } catch (error) {
         console.error("Error fetching route details: ", error);

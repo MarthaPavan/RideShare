@@ -12,7 +12,7 @@ const Routes = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:1000/routes/getRoute");
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/getRoute`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -89,60 +89,60 @@ const Routes = () => {
   return (
     <div className='min-vh-100 mt-5'>
       <div className='table-container'>
-      <h3 className='display-6 text-center'><i className="fa-solid fa-map"></i> Routes</h3>
-      {!page && (
-        <>
-          <Table responsive bordered hover {...getTableProps()} className='text-center'>
-            <thead className='table-header'>
-              {headerGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                      {column.render('Header')}
-                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {rows.map(row => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()} onClick={() => handleClick(row.original.routeId)} className='table-row'>
-                    {row.cells.map(cell => (
-                      <td {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </td>
+        <h3 className='display-6 text-center'><i className="fa-solid fa-map"></i> Routes</h3>
+        {!page && (
+          <>
+            <Table responsive bordered hover {...getTableProps()} className='text-center'>
+              <thead className='table-header'>
+                {headerGroups.map(headerGroup => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map(column => (
+                      <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        {column.render('Header')}
+                        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                      </th>
                     ))}
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-          <div className="pagination-container">
-            <span>
-              Showing {startRow} to {endRow} of {rowCount} entries
-            </span>
-            <Pagination className='pagination'>
-              <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
-              <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
-              {pageOptions.map((page, index) => (
-                <Pagination.Item key={index} active={pageIndex === index} onClick={() => gotoPage(index)}>
-                  {index + 1}
-                </Pagination.Item>
-              ))}
-              <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
-              <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
-            </Pagination>
-          </div>
-        </>
-      )}
-      {page && <RouteDetails id={routeId} onDelete={handleBackClick} />}
-      {page && 
-        <Button variant="primary" onClick={handleBackClick}>Back</Button>
-      }
-    </div>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map(row => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()} onClick={() => handleClick(row.original.routeId)} className='table-row'>
+                      {row.cells.map(cell => (
+                        <td {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+            <div className="pagination-container">
+              <span>
+                Showing {startRow} to {endRow} of {rowCount} entries
+              </span>
+              <Pagination className='pagination'>
+                <Pagination.First onClick={() => gotoPage(0)} disabled={!canPreviousPage} />
+                <Pagination.Prev onClick={() => previousPage()} disabled={!canPreviousPage} />
+                {pageOptions.map((page, index) => (
+                  <Pagination.Item key={index} active={pageIndex === index} onClick={() => gotoPage(index)}>
+                    {index + 1}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next onClick={() => nextPage()} disabled={!canNextPage} />
+                <Pagination.Last onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} />
+              </Pagination>
+            </div>
+          </>
+        )}
+        {page && <RouteDetails id={routeId} onDelete={handleBackClick} />}
+        {page &&
+          <Button variant="primary" onClick={handleBackClick}>Back</Button>
+        }
+      </div>
     </div>
   );
 };

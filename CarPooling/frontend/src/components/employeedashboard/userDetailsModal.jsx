@@ -11,7 +11,7 @@ const UserDetailsModal = ({ routeId }) => {
     const handleShow = async () => {
         try {
             console.log(routeId);
-            const response = await axios.get(`http://localhost:1000/book/getUserDetails?routeId=${routeId}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/book/getUserDetails?routeId=${routeId}`);
             console.log(response.data);
             setUserDetails(response.data);
             setShow(true);

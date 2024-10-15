@@ -34,7 +34,7 @@ const NewRide = ({ setIndex }) => {
         try {
             setLoading(true);
             setError(null); // Clear any existing errors
-            const response = await axios.get(`http://localhost:1000/mapapi/autocomplete?input=${query}`, {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/mapapi/autocomplete?input=${query}`, {
                 headers: { accept: 'application/json' }
             });
             setLocations(response.data);
@@ -70,7 +70,7 @@ const NewRide = ({ setIndex }) => {
             setLoading(false);
         }
     };
-    
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setRideDetails(prevState => ({
@@ -168,7 +168,7 @@ const NewRide = ({ setIndex }) => {
                                     className='py-lg-2'
                                     type="time"
                                     name="time"
-                                    min = {1}
+                                    min={1}
                                     aria-label="Time"
                                     value={rideDetails.time}
                                     onChange={handleInputChange}
@@ -199,7 +199,7 @@ const NewRide = ({ setIndex }) => {
                         <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
                             <Button type="submit" variant='warning' className="w-100 fw-bold" disabled={ride}>
                                 {loading ? <div className="flex align-content-center">
-                                        <Spinner animation="border" variant="light" size="sm" />
+                                    <Spinner animation="border" variant="light" size="sm" />
                                 </div> : "Create"}
                             </Button>
                         </Col>

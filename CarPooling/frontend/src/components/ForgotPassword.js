@@ -22,7 +22,7 @@ const handleChange = (e) => {
         setError("Enter all the details")
         return;
       }
-      const res = await axios.post("http://localhost:1000/get-started/forgot", inputValue)
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/get-started/forgot`, inputValue)
       if (res.status === 200)
       {
         toast.success("Password updated✅")

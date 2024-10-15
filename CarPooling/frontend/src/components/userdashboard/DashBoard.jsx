@@ -6,7 +6,7 @@ import { SearchList } from '../../components/SearchList'; // Ensure SearchList i
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import './dashboard.css';
-import {toast} from "react-hot-toast"
+import { toast } from "react-hot-toast"
 const Dashboard = ({ setKey }) => {
     const [search, setSearch] = useState(false);
     const [rideDetails, setRideDetails] = useState({
@@ -37,7 +37,7 @@ const Dashboard = ({ setKey }) => {
         try {
             setLoading(true);
             setError(null); // Clear any existing errors
-            const response = await axios.get(`http://localhost:1000/mapapi/autocomplete?input=${query}`, {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/mapapi/autocomplete?input=${query}`, {
                 headers: { accept: 'application/json' }
             });
             setLocations(response.data);
@@ -81,7 +81,7 @@ const Dashboard = ({ setKey }) => {
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        
+
         if (rideDetails.pickUpLocation === "" || rideDetails.dropLocation === "" || rideDetails.capacity === "" || rideDetails.date === "") {
             setError("Please enter all the details");
             return;
@@ -121,7 +121,7 @@ const Dashboard = ({ setKey }) => {
                 capacity: rideDetails.capacity
             });
             console.log(response.data);
-            if(response.status == 201){
+            if (response.status == 201) {
                 toast.success("Ride booked successfully")
                 setKey(2);
             }

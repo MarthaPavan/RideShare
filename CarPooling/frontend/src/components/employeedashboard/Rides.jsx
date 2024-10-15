@@ -20,7 +20,7 @@ const Rides = () => {
 
     const fetchRides = async () => {
         try {
-            const response = await axios.get(`http://localhost:1000/routes/driver-route/${email}`);
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/driver-route/${email}`);
             const rides = response.data;
             const now = new Date();
 
