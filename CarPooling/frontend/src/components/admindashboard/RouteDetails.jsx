@@ -7,11 +7,11 @@ const RouteDetails = ({ id, onDelete }) => {
   const [route, setRoute] = useState(null);
   const [selectedDriver, setSelectedDriver] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false); // State for delete confirmation modal
-
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   useEffect(() => {
     const fetchRouteDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/getRoute/${id}`);
+        const response = await axios.get(`${base_url}/routes/getRoute/${id}`);
         setRoute(response.data);
       } catch (error) {
         console.error("Error fetching route details: ", error);

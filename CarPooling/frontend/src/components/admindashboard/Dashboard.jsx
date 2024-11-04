@@ -55,12 +55,12 @@ const Dashboard = () => {
         backgroundColor: [
           '#FF6384',
           '#36A2EB',
-          
+
         ],
         hoverBackgroundColor: [
           '#FF6384',
           '#36A2EB',
-          
+
         ],
       },
     ],

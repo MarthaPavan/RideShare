@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Image } from "react-bootstrap"
 import axios from "axios";
-import {toast} from "react-hot-toast"
+
+import { toast } from "react-hot-toast"
 const ForgotPassword = () => {
   const [inputValue, setInputValue] = useState({
     emailId: "",
     password: ""
   });
-  const [error,setError] = useState(false)
+  const [error, setError] = useState(false)
   const navigate = useNavigate();
-const handleChange = (e) => {
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+  const handleChange = (e) => {
     setInputValue((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
@@ -22,9 +24,8 @@ const handleChange = (e) => {
         setError("Enter all the details")
         return;
       }
-      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/get-started/forgot`, inputValue)
-      if (res.status === 200)
-      {
+      const res = await axios.post(`${base_url}/get-started/forgot`, inputValue)
+      if (res.status === 200) {
         toast.success("Password updated✅")
         navigate("/Login")
       }
@@ -32,8 +33,8 @@ const handleChange = (e) => {
     catch (error) {
       setError("Couldn't update the password")
     }
-    
-    
+
+
   };
 
   return (
@@ -61,7 +62,7 @@ const handleChange = (e) => {
                 placeholder="Enter your Email Id"
                 name="emailId"
                 value={inputValue.emailId}
-                
+
                 onChange={handleChange}
                 required
               />
@@ -74,7 +75,7 @@ const handleChange = (e) => {
                 onChange={handleChange}
                 required
               />{
-                error && 
+                error &&
                 <div className="text-danger">error</div>
               }
             </Form.Group>

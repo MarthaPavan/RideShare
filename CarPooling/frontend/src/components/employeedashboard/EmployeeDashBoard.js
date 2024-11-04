@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row, Col, Button, Offcanvas, Toast,ToastContainer } from "react-bootstrap";
+import { Row, Col, Button, Offcanvas, Toast, ToastContainer } from "react-bootstrap";
 import { CSidebarNav, CNavItem, CSidebar, CSidebarHeader, CSidebarBrand } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import * as icon from "@coreui/icons";
@@ -20,7 +20,7 @@ const EmployeeDashBoard = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const components = [<Profile />, <DashBoard />, <NewRide setIndex={setIndex} />, <Rides />];
-
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   const [showToast, setShowToast] = useState(false); // State for showing toast
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
 
@@ -31,12 +31,12 @@ const EmployeeDashBoard = () => {
       sessionStorage.setItem("welcomeToastShown", "true");
       setToastMessage(`Welcome back, ${user ? user : "User"}`);
       setShowToast(true);
-      
+
     }
   }, [user]);
 
   const handleLogout = () => {
-    
+
     setToastMessage("Logged out successfully");
     setShowToast(true);
     sessionStorage.setItem("welcomeToastShown", "false");

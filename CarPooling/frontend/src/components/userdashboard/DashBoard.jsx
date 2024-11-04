@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faCalendarDays, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { SearchList } from '../../components/SearchList'; // Ensure SearchList is properly implemented
 import axios from 'axios';
+
 import debounce from 'lodash.debounce';
 import './dashboard.css';
 import { toast } from "react-hot-toast"
@@ -15,6 +16,7 @@ const Dashboard = ({ setKey }) => {
         date: "",
         capacity: 1,
     });
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     const [bookDetails, setBookDetails] = useState({});
     const [index, setIndex] = useState(0);
     const [locations, setLocations] = useState([]);
@@ -37,7 +39,7 @@ const Dashboard = ({ setKey }) => {
         try {
             setLoading(true);
             setError(null); // Clear any existing errors
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/mapapi/autocomplete?input=${query}`, {
+            const response = await axios.get(`${base_url}/mapapi/autocomplete?input=${query}`, {
                 headers: { accept: 'application/json' }
             });
             setLocations(response.data);

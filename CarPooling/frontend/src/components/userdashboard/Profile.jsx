@@ -16,7 +16,7 @@ const Profile = () => {
     role: "",
     isVerified: false,
   });
-
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -27,7 +27,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/fetch-profile-pic/${user.image}`, {
+        const response = await axios.get(`${base_url}/fetch-profile-pic/${user.image}`, {
           responseType: "blob",
         });
         const imageUrl = URL.createObjectURL(response.data);

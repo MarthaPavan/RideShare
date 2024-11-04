@@ -7,7 +7,6 @@ import { debounce } from "lodash";
 import { SearchList } from '../../components/SearchList';
 import toast from "react-hot-toast";
 import './dashboard.css';
-
 const NewRide = ({ setIndex }) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const { fullName, phoneNumber, emailId, registrationNumber, vehicleModel } = user;
@@ -20,7 +19,7 @@ const NewRide = ({ setIndex }) => {
         capacity: 1,
         driver: { fullName, phoneNumber, emailId, registrationNumber, vehicleModel }
     });
-
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     const [loading, setLoading] = useState(false);
     const [ride, setRide] = useState(false);
     const [error, setError] = useState(null);
@@ -34,7 +33,7 @@ const NewRide = ({ setIndex }) => {
         try {
             setLoading(true);
             setError(null); // Clear any existing errors
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/mapapi/autocomplete?input=${query}`, {
+            const response = await axios.get(`${base_url}/mapapi/autocomplete?input=${query}`, {
                 headers: { accept: 'application/json' }
             });
             setLocations(response.data);
