@@ -12,22 +12,45 @@ header {
   /* Lower value if other components should overlay */
 }
 
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-family-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.hover-shadow {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.transition {
+  transition: all 0.3s ease-in-out;
+}
+
 .custom-navbar {
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
 .custom-nav-link {
-  color: #f8f9fa !important; /* Light color */
+  color: #f8f9fa !important;
+  /* Light color */
 }
 
 .custom-navbar .navbar-brand img {
-  height: 60px; /* Slightly reduce the logo size */
+  height: 60px;
+  /* Slightly reduce the logo size */
   width: 60px;
 }
 
 .custom-navbar .navbar-nav .nav-link {
-  font-size: 1.2rem; /* Adjust font size if needed */
+  font-size: 1.2rem;
+  /* Adjust font size if needed */
 }
 
 
@@ -122,10 +145,33 @@ Link {
 }
 
 .custom-button:hover {
-  background-color: #e0a800; /* Darker shade for hover effect */
+  background-color: #e0a800;
+  /* Darker shade for hover effect */
   border-color: #d39e00;
 }
 
 .custom-button:focus {
   box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-text span {
+  display: block;
+  text-align: center;
 }

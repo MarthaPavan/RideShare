@@ -4,15 +4,14 @@ import { Table, Pagination, Button } from 'react-bootstrap';
 import axios from 'axios';
 import RouteDetails from './RouteDetails';
 import './styles.css';
-
 const Routes = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(false);
   const [routeId, setRouteId] = useState(null);
-
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/getRoute`);
+      const response = await axios.get(`${base_url}/routes/getRoute`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data: ", error);

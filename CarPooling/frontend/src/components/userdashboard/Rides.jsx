@@ -6,7 +6,6 @@ import toast from 'react-hot-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltRight, faTrash } from '@fortawesome/free-solid-svg-icons';
 import "./dashboard.css";
-
 const Rides = () => {
     const [key, setKey] = useState(0);
     const [activeRides, setActiveRides] = useState([]);
@@ -17,10 +16,10 @@ const Rides = () => {
     const [currentRides, setCurrentRides] = useState([]); // New state for current rides
     const ridesPerPage = 5;
     const emailId = JSON.parse(localStorage.getItem("user"))?.emailId;
-
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
     const fetchRides = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/book/getride/${emailId}`);
+            const response = await axios.get(`${base_url}/book/getride/${emailId}`);
             const rides = response.data;
             const now = new Date();
 
@@ -56,7 +55,7 @@ const Rides = () => {
 
     const handleDelete = async (rideId) => {
         try {
-            await axios.delete(`http://localhost:1000/book/deleteride/${rideId}`);
+            await axios.delete(`${base_url}/book/deleteride/${rideId}`);
             fetchRides();
         } catch (error) {
             console.error("Failed to delete ride:", error);

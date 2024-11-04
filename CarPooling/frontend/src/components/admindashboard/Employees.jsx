@@ -2,16 +2,17 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
+
 import './styles.css'; // Import your custom CSS for additional styling
 const Employees = () => {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const token = localStorage.getItem('token');
-
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/routes/getDriver`, {
+        const response = await axios.get(`${base_url}/routes/getDriver`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

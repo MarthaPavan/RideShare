@@ -16,7 +16,7 @@ const AdminDashBoard = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const components = [<Dashboard />, <Employees />, <Routes onDelete={() => setIndex(2)} />];
-
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
