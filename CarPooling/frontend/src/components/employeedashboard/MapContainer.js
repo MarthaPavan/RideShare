@@ -36,11 +36,11 @@ const MapContainer = ({ pickup, dropoff, showRoute }) => {
     }, [pickup, dropoff, showRoute]);
 
     return (
-        <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "AIzaSyBvE_eSf4_HpT7bk2j9_zLQW_n8Cyiuuo8"}>
+        <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
             <GoogleMap
                 mapContainerStyle={{ height: "100%", width: "100%" }}
                 center={center}
-                zoom={10} 
+                zoom={10}
             >
                 {directions && <DirectionsRenderer directions={directions} />}
             </GoogleMap>
