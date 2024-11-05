@@ -20,7 +20,7 @@ const Dashboard = ({ setKey }) => {
     const [rideDetails, setRideDetails] = useState({
         pickUpLocation: "",
         dropLocation: "",
-        date: getTodayDate(), // Set initial date to today
+        date: getTodayDate(), 
         capacity: 1,
     });
 
@@ -94,14 +94,17 @@ const Dashboard = ({ setKey }) => {
             return;
         }
         try {
+            console.log(rideDetails);
+            const formatedDate = rideDetails.date.toISOString().split('T')[0];
             const response = await axios.get(`http://localhost:1000/routes/search_routes`, {
                 params: {
                     pickUpLocation: rideDetails.pickUpLocation,
                     dropLocation: rideDetails.dropLocation,
-                    date: rideDetails.date,
+                    date: formatedDate,
                     capacity: rideDetails.capacity
                 }
             });
+            console.log(response);
             setRides(response.data);
             setSearch(true);
             setError(null); // Clear any existing errors

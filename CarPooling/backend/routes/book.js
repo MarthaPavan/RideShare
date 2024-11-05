@@ -7,4 +7,6 @@ book.delete("/deleteride/:bookingId", bookingController.deleteBooking); // Added
 book.get("/getrides",bookingController.getBooking);
 book.get("/getride/:emailId",bookingController.getBookingById);
 book.get("/getUserDetails",bookingController.getBookingUser);
+book.get('/stats', bookingController.getBookingStats);
+
 module.exports = book;
