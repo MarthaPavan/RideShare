@@ -13,18 +13,21 @@ function CreateAccount() {
     phoneNumber: "",
     role: "user",
   });
-  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
-  const [selectedFile, setSelectedFile] = useState(null); // State to store selected image file
+  const [error, setError] = useState(null);
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:1000";
+  const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if(name === 'phoneNumber')
-    {
-      if(form.name.length > 10)
-      {
-        setError("Invalid phone number")
+
+    // Phone number validation
+    if (name === "phoneNumber") {
+      if (value.length > 10) {
+        setError("Invalid phone number");
         return;
+      } else {
+        setError(null); // Clear error if input is valid
       }
     }
     setForm((prevState) => ({ ...prevState, [name]: value }));
@@ -34,7 +37,7 @@ function CreateAccount() {
     const file = e.target.files[0];
     setSelectedFile(file);
 
-    // Read the file and set as data URL
+    // File preview
     const reader = new FileReader();
     reader.onloadend = () => {
       setForm((prevState) => ({ ...prevState, image: reader.result }));
@@ -67,12 +70,14 @@ function CreateAccount() {
       if (res.status === 200 && res.data.msg === "success") {
         navigate("/SignUpSuccess");
       } else {
-        setError(res.data.msg);
+        setError(res.data.msg || "Error during sign-up. Please try again.");
       }
     } catch (err) {
+      setError("Error sending feedback. Please try again later.");
       console.error(err);
-     }
     }
+  };
+
   return (
     <Container fluid className="min-vh-100">
       <Row className="flex-fill align-items-center justify-content-center">
@@ -83,6 +88,7 @@ function CreateAccount() {
               <Image src={form.image} className="rounded-circle" style={{ width: "100px", height: "100px" }} />
             )}
           </div>
+          {error && <p className="text-danger">{error}</p>}
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <p>It's quick and easy.</p>
             <div className="mb-3">
@@ -138,7 +144,7 @@ function CreateAccount() {
                 accept="image/*"
               />
             </div>
-            
+
             <Button variant="success" type="submit" className="w-100 mt-3">
               Sign Up
             </Button>

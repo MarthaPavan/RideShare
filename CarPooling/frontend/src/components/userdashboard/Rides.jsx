@@ -16,7 +16,7 @@ const Rides = () => {
     const [currentRides, setCurrentRides] = useState([]); // New state for current rides
     const ridesPerPage = 5;
     const emailId = JSON.parse(localStorage.getItem("user"))?.emailId;
-    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:1000";
     const fetchRides = async () => {
         try {
             const response = await axios.get(`${base_url}/book/getride/${emailId}`);

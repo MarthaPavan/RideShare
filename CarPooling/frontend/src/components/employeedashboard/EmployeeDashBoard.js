@@ -20,7 +20,7 @@ const EmployeeDashBoard = () => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const components = [<Profile />, <DashBoard />, <NewRide setIndex={setIndex} />, <Rides />];
-  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:1000";
   const [showToast, setShowToast] = useState(false); // State for showing toast
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
 

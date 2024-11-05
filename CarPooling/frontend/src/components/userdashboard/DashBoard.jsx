@@ -1,35 +1,36 @@
 import React, { useState, useCallback } from 'react';
-import { Container, Row, Col, Form, Button, InputGroup, Card } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faCalendarDays, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { SearchList } from '../../components/SearchList'; // Ensure SearchList is properly implemented
+import { Container, Row, Col } from 'react-bootstrap';
+import { MapPin, Clock, User, Plus } from 'lucide-react';
+import debounce from 'lodash/debounce';
+import { toast } from "react-hot-toast";
+import { SearchList } from '../../components/SearchList';
 import axios from 'axios';
-
-import debounce from 'lodash.debounce';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css"; // Add this line to import CSS
 import './dashboard.css';
-import { toast } from "react-hot-toast"
+import MapContainer from './MapContainer';
 const Dashboard = ({ setKey }) => {
-    const [search, setSearch] = useState(false);
-    const [rideDetails, setRideDetails] = useState({
-        pickUpLocation: "",
-        dropLocation: "",
-        date: "",
-        capacity: 1,
-    });
-    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
-    const [bookDetails, setBookDetails] = useState({});
-    const [index, setIndex] = useState(0);
-    const [locations, setLocations] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [rides, setRides] = useState([]);
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    // Helper function to get today's date in "YYYY-MM-DD" format
+    // Function to get today's date in YYYY-MM-DD format
     const getTodayDate = () => {
         const today = new Date();
         return today.toISOString().split('T')[0];
     };
+
+    const [search, setSearch] = useState(false);
+    const [rideDetails, setRideDetails] = useState({
+        pickUpLocation: "",
+        dropLocation: "",
+        date: getTodayDate(), // Set initial date to today
+        capacity: 1,
+    });
+
+    const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:1000";
+    const [locations, setLocations] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [index, setIndex] = useState(0);
+    const [rides, setRides] = useState([]);
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const todayDate = getTodayDate();
 
@@ -38,7 +39,7 @@ const Dashboard = ({ setKey }) => {
         if (!query) return;
         try {
             setLoading(true);
-            setError(null); // Clear any existing errors
+            setError(null);
             const response = await axios.get(`${base_url}/mapapi/autocomplete?input=${query}`, {
                 headers: { accept: 'application/json' }
             });
@@ -89,7 +90,7 @@ const Dashboard = ({ setKey }) => {
             return;
         }
         if (rideDetails.pickUpLocation === rideDetails.dropLocation) {
-            setError('Pickup and drop location are same');
+            setError('Pickup and drop location are the same');
             return;
         }
         try {
@@ -123,8 +124,8 @@ const Dashboard = ({ setKey }) => {
                 capacity: rideDetails.capacity
             });
             console.log(response.data);
-            if (response.status == 201) {
-                toast.success("Ride booked successfully")
+            if (response.status === 201) {
+                toast.success("Ride booked successfully");
                 setKey(2);
             }
         } catch (error) {
@@ -139,139 +140,147 @@ const Dashboard = ({ setKey }) => {
     };
 
     return (
-        <Container fluid className='px-5 min-vh-100' onDoubleClick={handleDoubleClick}>
-            <Row>
-                <Col xs={12} className='d-flex justify-content-center align-items-center mb-4'>
-                    <h1 className='text-center'>Book a Ride </h1>
+        <Container fluid className="p-0 h-100">
+            <Row className="h-100 m-0">
+                {/* Left Panel */}
+                <Col md={4} className="p-4 bg-white" style={{ height: '100vh', overflowY: 'auto' }}>
+                    <h1 className="h3 mb-4">Get a ride</h1>
+
+                    {/* Pickup Location */}
+                    <div className="mb-3 position-relative">
+                        <div className="d-flex align-items-center bg-light rounded p-3">
+                            <MapPin className="me-3" size={24} />
+                            <input 
+                                type="text"
+                                placeholder="Pickup location"
+                                className="form-control border-0 bg-transparent"
+                                value={rideDetails.pickUpLocation}
+                                onChange={handlePickUpChange}
+                            />
+                        </div>
+                        {locations.length > 0 && index === 1 && (
+                            <div className="position-absolute w-100 z-3 mt-1">
+                                <SearchList 
+                                    results={locations} 
+                                    onSelect={(result) => handleSelect(result, 'pickUpLocation')} 
+                                    inputName="pickUpLocation"
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Dropoff Location */}
+                    <div className="mb-3 position-relative">
+                        <div className="d-flex align-items-center bg-light rounded p-3">
+                            <div className="me-3 d-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px' }}>
+                                <div className="bg-dark" style={{ width: '12px', height: '12px' }}></div>
+                            </div>
+                            <input 
+                                type="text"
+                                placeholder="Dropoff location"
+                                className="form-control border-0 bg-transparent"
+                                value={rideDetails.dropLocation}
+                                onChange={handleDestinationChange}
+                            />
+                            <Plus size={24} />
+                        </div>
+                        {locations.length > 0 && index === 2 && (
+                            <div className="position-absolute w-100 z-3 mt-1">
+                                <SearchList 
+                                    results={locations} 
+                                    onSelect={(result) => handleSelect(result, 'dropLocation')} 
+                                    inputName="dropLocation"
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Date and Time Selection */}
+                    <div className="mb-3">
+                        <div className="d-flex align-items-center bg-light rounded p-3">
+                            <Clock className="me-3" size={24} />
+                            <DatePicker
+                                selected={new Date(rideDetails.date)} // Ensure it's a Date object
+                                onChange={(date) => setRideDetails(prev => ({ ...prev, date }))}
+                                showTimeSelect
+                                timeIntervals={15}
+                                timeCaption="Time"
+                                dateFormat="Pp"
+                                className="form-control border-0 bg-transparent"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Passenger Selection */}
+                    <div className="mb-3">
+                        <div className="d-flex align-items-center bg-light rounded p-3">
+                            <User className="me-3" size={24} />
+                            <select 
+                                className="form-select border-0 bg-transparent"
+                                value={rideDetails.capacity}
+                                onChange={(e) => setRideDetails(prev => ({
+                                    ...prev, 
+                                    capacity: parseInt(e.target.value)
+                                }))}
+                            >
+                                <option value={1}>For me</option>
+                                <option value={2}>2 passengers</option>
+                                <option value={3}>3 passengers</option>
+                                <option value={4}>4 passengers</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Search Button */}
+                    <button 
+                        className="btn btn-light w-100 p-3 mb-3"
+                        onClick={handleSearch}
+                    >
+                        Search
+                    </button>
+
+                    {error && (
+                        <div className="alert alert-danger">
+                            {error}
+                        </div>
+                    )}
+
+
+                </Col>
+
+                {/* Right Panel (Map) */}
+                <Col md={8} className="p-0">
+                    <MapContainer 
+                        pickup={rideDetails.pickUpLocation}
+                        dropoff={rideDetails.dropLocation}
+                        showRoute={search} 
+                    />                
                 </Col>
             </Row>
-            <Row className='border border-light-subtle rounded bg-light-subtle shadow p-lg-5 ps-lg-0 pe-lg-0'>
-                <Form className='w-100' onSubmit={handleSearch}>
-                    <Row lg={"auto"} className="align-items-center justify-content-between m-0">
-                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0 position-relative">
-                            <InputGroup className='h6'>
-                                <InputGroup.Text>
-                                    <FontAwesomeIcon icon={faLocationDot} style={{ color: "#00b500" }} />
-                                </InputGroup.Text>
-                                <Form.Control
-                                    className='py-lg-2'
-                                    type="text"
-                                    name="pickUpLocation"
-                                    placeholder="Enter your location"
-                                    aria-label="Start point"
-                                    value={rideDetails.pickUpLocation}
-                                    onChange={handlePickUpChange}
-                                />
-                                {locations.length > 0 && index === 1 && (
-                                    <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
-                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'pickUpLocation')} inputName="pickUpLocation" />
-                                    </div>
-                                )}
-                            </InputGroup>
-                        </Col>
-                        <Col xs={12} md={4} lg={3} className="mb-0 mb-md-0 position-relative">
-                            <InputGroup className='h6'>
-                                <InputGroup.Text>
-                                    <FontAwesomeIcon icon={faLocationDot} style={{ color: "#ff0000" }} />
-                                </InputGroup.Text>
-                                <Form.Control
-                                    className='py-lg-2'
-                                    type="text"
-                                    name="dropLocation"
-                                    placeholder="Enter your destination"
-                                    aria-label="End point"
-                                    value={rideDetails.dropLocation}
-                                    onChange={handleDestinationChange}
-                                />
-                                {locations.length > 0 && index === 2 && (
-                                    <div className="position-absolute w-100" style={{ zIndex: 10, top: '100%', left: '10px' }}>
-                                        <SearchList results={locations} onSelect={(result) => handleSelect(result, 'dropLocation')} inputName="dropLocation" />
-                                    </div>
-                                )}
-                            </InputGroup>
-                        </Col>
-                        <Col xs={12} md={4} lg={3} className="m-0 mb-md-0">
-                            <InputGroup className='h6'>
-                                <InputGroup.Text>
-                                    <FontAwesomeIcon icon={faCalendarDays} />
-                                </InputGroup.Text>
-                                <Form.Control
-                                    className='py-lg-2'
-                                    type="date"
-                                    name="date"
-                                    placeholder={todayDate}
-                                    min={todayDate} // Set min date to today
-                                    aria-label="Date"
-                                    value={rideDetails.date}
-                                    onChange={(e) => setRideDetails(prevState => ({
-                                        ...prevState,
-                                        date: e.target.value
-                                    }))}
-                                />
-                            </InputGroup>
-                        </Col>
-                        <Col xs={12} md={4} lg={3} className="mb-1 mb-md-0">
-                            <InputGroup className='h6'>
-                                <InputGroup.Text>
-                                    <FontAwesomeIcon icon={faUsers} />
-                                </InputGroup.Text>
-                                <Form.Control
-                                    className='py-lg-2'
-                                    type="number"
-                                    name="capacity"
-                                    placeholder="Capacity"
-                                    min={1}
-                                    max={4}
-                                    aria-label="Capacity"
-                                    value={rideDetails.capacity}
-                                    onChange={(e) => setRideDetails(prevState => ({
-                                        ...prevState,
-                                        capacity: e.target.value
-                                    }))}
-                                />
-                            </InputGroup>
-                        </Col>
-                    </Row>
-                    <Row className='w-100 mt-3 d-flex align-items-lg-center justify-content-center'>
-                        <Col xs={12} md={4} lg={2} className="mb-1 mb-md-0 d-flex justify-content-center">
-                            <Button type="submit" variant='warning' className="w-100 fw-bold">Search</Button>
-                        </Col>
-                    </Row>
-                </Form>
-                {error && <div className="text-danger">*{error}</div>}
+            <Row>
+                {/* Available Rides */}
+                {search && rides.length > 0 && (
+                <div className="mt-4">
+                <h2 className="h4 mb-3">Available Rides</h2>
+                {rides.map((ride) => (
+                <div key={ride.routeId} className="ride-card p-3 mb-3 bg-light rounded">
+                <h5>{ride.driverName}</h5>
+                <p>{ride.pickUpLocation} to {ride.dropLocation}</p>
+                <p>{ride.date}</p>
+                <p>Capacity: {ride.capacity}</p>
+                <button 
+                    className="btn btn-primary"
+                    onClick={() => handleBooking(ride)}
+                >
+                    Book
+                </button>
+                </div>
+                ))}
+                </div>
+                )}
             </Row>
-            {search && (
-                <Row className="mt-4">
-                    <Col xs={12}>
-                        <Card>
-                            <Card.Header>Available rides</Card.Header>
-                            <Card.Body>
-                                {rides.length > 0 ? (
-                                    rides.map((ride) => (
-                                        <Card key={ride._id} className="mb-3">
-                                            <Card.Body>
-                                                <Card.Text>
-                                                    <strong>Driver:</strong> {ride.driver.fullName} <br />
-                                                    <strong>Email:</strong> {ride.driver.emailId} <br />
-                                                    <strong>Phone:</strong> {ride.driver.phoneNumber} <br />
-                                                    <strong>Vehicle:</strong> {ride.driver.vehicleModel} (Reg: {ride.driver.registrationNumber})<br />
-                                                    <strong>Date:</strong> {new Date(ride.date).toLocaleDateString()}<br />
-                                                    <strong>Capacity:</strong> {ride.capacity}<br />
-                                                </Card.Text>
-                                                <Button variant="primary" onClick={() => handleBooking(ride)}>Book Ride</Button>
-                                            </Card.Body>
-                                        </Card>
-                                    ))
-                                ) : (
-                                    <div>No available rides</div>
-                                )}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-            )}
         </Container>
     );
-}
+};
 
 export default Dashboard;

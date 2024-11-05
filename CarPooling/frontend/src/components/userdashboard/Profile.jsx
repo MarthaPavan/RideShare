@@ -16,7 +16,7 @@ const Profile = () => {
     role: "",
     isVerified: false,
   });
-  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:1000";
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
