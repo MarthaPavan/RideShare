@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSpring, animated } from 'react-spring';
 import { Car, Users, DollarSign, Leaf } from 'lucide-react';
 import { Image } from 'react-bootstrap';
@@ -46,6 +47,7 @@ const HowItWorksStep = ({ number, title, description, delay }) => {
 };
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   const titleProps = useSpring({
     opacity: 1,
     transform: 'translateY(0)',
@@ -66,8 +68,8 @@ const LandingPage = () => {
                 Join <span className="gradient-text focus-ring fs-3 fw-bold">RideShare</span> today and revolutionize your daily commute!
               </p>
               <div>
-                <button className="btn btn-warning btn-lg me-3 mb-3 hover-effect">Get Started</button>
-                <button className="btn btn-outline-light btn-lg mb-3 hover-effect">Learn More</button>
+                <button className="btn btn-warning btn-lg me-3 mb-3 hover-effect" onClick = {()=>{navigate("/GetStarted")}}>Get Started</button>
+                <button className="btn btn-outline-light btn-lg mb-3 hover-effect" onClick = {()=>{navigate("/About")}}>Learn More</button>
               </div>
             </div>
             <div className="col-lg-6">
