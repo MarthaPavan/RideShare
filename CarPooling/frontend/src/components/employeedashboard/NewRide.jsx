@@ -25,16 +25,21 @@ const NewRide = ({ setKey }) => {
     const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:1000";
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [locations, setLocations] = useState([]);
+    const [pickupLocations, setPickupLocations] = useState([]);
+    const [dropLocations, setDropLocations] = useState([]);
 
-    const fetchRoutes = useCallback(debounce(async (query) => {
+    const fetchRoutes = useCallback(debounce(async (query, type) => {
         if (!query) return;
         try {
             setLoading(true);
             const response = await axios.get(`${base_url}/mapapi/autocomplete?input=${query}`, {
                 headers: { accept: 'application/json' }
             });
-            setLocations(response.data);
+            if (type === "pickup") {
+                setPickupLocations(response.data);
+            } else {
+                setDropLocations(response.data);
+            }
         } catch (error) {
             setError("Failed to fetch locations. Please try again later.");
         } finally {
@@ -48,8 +53,10 @@ const NewRide = ({ setKey }) => {
             ...prevState,
             [name]: value
         }));
-        if (name === "pickUpLocation" || name === "dropLocation") {
-            fetchRoutes(value);
+        if (name === "pickUpLocation") {
+            fetchRoutes(value, "pickup");
+        } else if (name === "dropLocation") {
+            fetchRoutes(value, "drop");
         }
     };
 
@@ -58,7 +65,11 @@ const NewRide = ({ setKey }) => {
             ...prevState,
             [name]: result
         }));
-        setLocations([]);
+        if (name === "pickUpLocation") {
+            setPickupLocations([]);
+        } else {
+            setDropLocations([]);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -87,8 +98,9 @@ const NewRide = ({ setKey }) => {
         <Container fluid className="p-0 h-100">
             <Row className="h-100 m-0">
                 <Col md={4} className="p-4 bg-white" style={{ height: '100vh', overflowY: 'auto' }}>
-                    <h1 className="h3 mb-4">Book a New Ride</h1>
+                    <h1 className="h3 mb-4">Offer a New Ride</h1>
 
+                    {/* Pickup Location */}
                     <div className="mb-3 position-relative">
                         <div className="d-flex align-items-center bg-light rounded p-3">
                             <MapPin className="me-3" size={24} />
@@ -101,16 +113,17 @@ const NewRide = ({ setKey }) => {
                                 onChange={handleInputChange}
                             />
                         </div>
-                        {locations.length > 0 && (
-                            <div className="position-absolute w-100 z-3 mt-1">
+                        {pickupLocations.length > 0 && (
+                            <div className="dropdown-menu show w-100 mt-1">
                                 <SearchList 
-                                    results={locations} 
+                                    results={pickupLocations} 
                                     onSelect={(result) => handleSelect(result, 'pickUpLocation')} 
                                 />
                             </div>
                         )}
                     </div>
 
+                    {/* Drop Location */}
                     <div className="mb-3 position-relative">
                         <div className="d-flex align-items-center bg-light rounded p-3">
                             <div className="me-3 d-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px' }}>
@@ -126,8 +139,17 @@ const NewRide = ({ setKey }) => {
                             />
                             <Plus size={24} />
                         </div>
+                        {dropLocations.length > 0 && (
+                            <div className="dropdown-menu show w-100 mt-1">
+                                <SearchList 
+                                    results={dropLocations} 
+                                    onSelect={(result) => handleSelect(result, 'dropLocation')} 
+                                />
+                            </div>
+                        )}
                     </div>
 
+                    {/* Date Picker */}
                     <div className="mb-3">
                         <div className="d-flex align-items-center bg-light rounded p-3">
                             <Clock className="me-3" size={24} />
@@ -137,11 +159,12 @@ const NewRide = ({ setKey }) => {
                                 className="form-control border-0 bg-transparent"
                                 value={rideDetails.date}
                                 onChange={handleInputChange}
-                                min={new Date().toISOString().split('T')[0]} // Prevent past dates
+                                min={new Date().toISOString().split('T')[0]}
                             />
                         </div>
                     </div>
 
+                    {/* Time Picker */}
                     <div className="mb-3">
                         <div className="d-flex align-items-center bg-light rounded p-3">
                             <Clock className="me-3" size={24} />
@@ -155,6 +178,7 @@ const NewRide = ({ setKey }) => {
                         </div>
                     </div>
 
+                    {/* Capacity Selector */}
                     <div className="mb-3">
                         <div className="d-flex align-items-center bg-light rounded p-3">
                             <User className="me-3" size={24} />
@@ -162,7 +186,7 @@ const NewRide = ({ setKey }) => {
                                 className="form-select border-0 bg-transparent"
                                 value={rideDetails.capacity}
                                 onChange={(e) => setRideDetails(prev => ({ ...prev, capacity: parseInt(e.target.value) }))}>
-                                <option value={1}>For me</option>
+                                <option value={1}>1 passenger</option>
                                 <option value={2}>2 passengers</option>
                                 <option value={3}>3 passengers</option>
                                 <option value={4}>4 passengers</option>
@@ -170,6 +194,7 @@ const NewRide = ({ setKey }) => {
                         </div>
                     </div>
 
+                    {/* Submit Button */}
                     <button 
                         className="btn btn-light w-100 p-3 mb-3"
                         onClick={handleSubmit}
@@ -185,11 +210,12 @@ const NewRide = ({ setKey }) => {
                     )}
                 </Col>
 
+                {/* Map Section */}
                 <Col md={8} className="p-0">
                     <MapContainer 
                         pickup={rideDetails.pickUpLocation}
                         dropoff={rideDetails.dropLocation}
-                        showRoute={!!(rideDetails.pickUpLocation && rideDetails.dropLocation)} // Determine whether to show route
+                        showRoute={!!(rideDetails.pickUpLocation && rideDetails.dropLocation)}
                     />
                 </Col>
             </Row>

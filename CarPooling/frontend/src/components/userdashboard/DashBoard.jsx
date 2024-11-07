@@ -96,7 +96,7 @@ const Dashboard = ({ setKey }) => {
         try {
             console.log(rideDetails);
             const formatedDate = rideDetails.date.toISOString().split('T')[0];
-            const response = await axios.get(`http://localhost:1000/routes/search_routes`, {
+            const response = await axios.get(`${base_url}/routes/search_routes`, {
                 params: {
                     pickUpLocation: rideDetails.pickUpLocation,
                     dropLocation: rideDetails.dropLocation,
@@ -116,7 +116,7 @@ const Dashboard = ({ setKey }) => {
 
     const handleBooking = async (selectedRide) => {
         try {
-            const response = await axios.post("http://localhost:1000/book/requestride", {
+            const response = await axios.post(`${base_url}/book/requestride`, {
                 userDetails: {
                     fullName: user.fullName,
                     emailId: user.emailId,

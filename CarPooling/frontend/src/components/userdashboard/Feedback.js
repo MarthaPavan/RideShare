@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 
 const FeedbackForm = () => {
+  const base_url = process.env.REACT_APP_BASE_URL || "http://localhost:1000";
   const [feedback, setFeedback] = useState("");
   const [satisfaction, setSatisfaction] = useState({
     cleanliness: "",
@@ -93,7 +94,7 @@ const FeedbackForm = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:1000/mail/sendfeedback", feedbackData);
+      const response = await axios.post(`${base_url}/mail/sendfeedback`, feedbackData);
       console.log('Feedback sent:', response.data);
       
       // Show success message
